@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		F5BE3E5B2265DF3200D624EE /* ComplexNumbers */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComplexNumbers; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5BE3E5E2265DF3200D624EE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F5BE3E662265E6FD00D624EE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +42,7 @@
 		F5BE3E522265DF3200D624EE = {
 			isa = PBXGroup;
 			children = (
+				F5BE3E662265E6FD00D624EE /* .gitignore */,
 				F5BE3E5D2265DF3200D624EE /* ComplexNumbers */,
 				F5BE3E5C2265DF3200D624EE /* Products */,
 			);
