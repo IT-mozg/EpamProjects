@@ -8,39 +8,18 @@
 
 import Foundation
 
-struct Complex{
-    let valid: Double
-    let imaginary: Double
-    
-    init(validPart: Double, imaginaryPart: Double) {
-        valid = validPart
-        imaginary = imaginaryPart
-    }
+do{
+    //let result = try findResultsOfEquation(ax2: 2, bx: 6, c: 3)
+    let result = try findResultWithComplex(ax2: 9, bx: 6, c: 3)
+    print("x1: \(result.first) x2: \(result.second)")
+}catch EquationError.AssociatedValue{
+    print("Descriminant less than 0")
+}catch EquationError.LinearEquation{
+    print("a equals 0")
+}catch EquationError.CorectDesc{
+    print("Descriminant is corect")
 }
 
-func addComplex(_ first: Complex, _ second: Complex) -> Complex{
-    let validPart = first.valid + second.valid
-    let imaginaryPart = first.imaginary + second.imaginary
-    return Complex(validPart: validPart, imaginaryPart: imaginaryPart)
-}
-
-func subComplex(_ first: Complex, _ second: Complex) -> Complex{
-    let validPart = first.valid - second.valid
-    let imaginaryPart = first.imaginary - second.imaginary
-    return Complex(validPart: validPart, imaginaryPart: imaginaryPart)
-}
-
-func multComplex(_ f: Complex, _ s: Complex) -> Complex{
-    let validPart = f.valid * s.valid + f.imaginary * s.imaginary
-    let imaginaryPart = f.valid * s.valid - f.imaginary * s.imaginary
-    return Complex(validPart: validPart, imaginaryPart: imaginaryPart)
-}
-
-func divComplex(_ f: Complex, _ s: Complex) -> Complex{
-    let validPart = Double(f.valid * s.valid + f.imaginary * s.imaginary) / (pow(Double(s.valid), 2) + pow(Double(s.imaginary), 2))
-    let imaginaryPart = Double(f.valid * s.valid - f.imaginary * s.imaginary) / (pow(Double(s.valid), 2) + pow(Double(s.imaginary), 2))
-    return Complex(validPart: validPart, imaginaryPart: imaginaryPart)
-}
 var complex = addComplex(Complex(validPart: -3, imaginaryPart: 5), Complex(validPart: 4, imaginaryPart: -8))
 print(complex)
 complex = subComplex(Complex(validPart: -5, imaginaryPart: 2), Complex(validPart: 3, imaginaryPart: -5))

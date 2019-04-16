@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		F5BE3E5F2265DF3200D624EE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E5E2265DF3200D624EE /* main.swift */; };
+		F5BE3E6B2265ED6E00D624EE /* Complex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E6A2265ED6E00D624EE /* Complex.swift */; };
+		F5BE3E6D2265EE9300D624EE /* Equation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E6C2265EE9300D624EE /* Equation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +28,8 @@
 		F5BE3E5B2265DF3200D624EE /* ComplexNumbers */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComplexNumbers; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5BE3E5E2265DF3200D624EE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		F5BE3E662265E6FD00D624EE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		F5BE3E6A2265ED6E00D624EE /* Complex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complex.swift; sourceTree = "<group>"; };
+		F5BE3E6C2265EE9300D624EE /* Equation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +46,8 @@
 		F5BE3E522265DF3200D624EE = {
 			isa = PBXGroup;
 			children = (
+				F5BE3E6C2265EE9300D624EE /* Equation.swift */,
+				F5BE3E6A2265ED6E00D624EE /* Complex.swift */,
 				F5BE3E662265E6FD00D624EE /* .gitignore */,
 				F5BE3E5D2265DF3200D624EE /* ComplexNumbers */,
 				F5BE3E5C2265DF3200D624EE /* Products */,
@@ -121,7 +127,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5BE3E6B2265ED6E00D624EE /* Complex.swift in Sources */,
 				F5BE3E5F2265DF3200D624EE /* main.swift in Sources */,
+				F5BE3E6D2265EE9300D624EE /* Equation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
