@@ -20,5 +20,33 @@ enum MyOptional<T>{
     init() {
         self = .None
     }
+    
+    func unwrap() -> Any{
+        switch self{
+            case .Some(let x):
+                return x
+            default:
+                assert(true, "Found nil while unwrapping")
+        }
+        return MyOptional.None
+    }
+    
+    
 }
-var someOptionalInteger = MyOptional(10)
+postfix operator >!
+postfix func >! <T>(value: MyOptional<T> ) -> Any {
+    return value.unwrap()
+}
+
+
+func addOptional(_ a: MyOptional<Int>, _ b: MyOptional<Int>) -> MyOptional<Int>{
+    let m = a>!
+    let n = b>!
+    let x = (m as! Int) + (n as! Int)
+    return MyOptional(x)
+}
+var q = MyOptional(23)
+var w = MyOptional(12)
+
+
+
