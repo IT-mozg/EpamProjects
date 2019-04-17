@@ -68,4 +68,6 @@ class LinkedList<T>{
         node.Next = nil
     }
     
+    
+    
 }

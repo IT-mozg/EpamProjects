@@ -20,12 +20,33 @@ list.append(2)
 list.append(3)
 list.append(4)
 list.append(5)
+
 list.insert(index: 6, data: 16)
 list.insert(index: 0, data: 66)
 list.insert(index: 3, data: 15)
-list.delete(0)
-list.delete(2)
-list.delete(6)
-for i in 0..<list.count{
-    print(list.getData(i)!)
+//
+//for i in 0..<list.count{
+//    print(list.getData(i)!)
+//}
+
+let queue = Queue<Int>()
+queue.queue(0)
+queue.queue(1)
+queue.queue(2)
+queue.queue(3)
+queue.queue(4)
+
+//for i in 0..<queue.count{
+//    print(queue.dequeue())
+//}
+
+let stack = Stack<Int>()
+stack.push(0)
+stack.push(1)
+stack.push(2)
+stack.push(3)
+stack.push(4)
+
+for i in 0..<stack.count{
+    print(stack.pop())
 }
