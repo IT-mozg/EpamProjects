@@ -9,7 +9,7 @@
 import Foundation
 
 enum EquationError: Error{
-    case AssociatedValue
+    case AssociatedValue(desc: Double)
     case LinearEquation
     case CorectDesc
 }
@@ -24,7 +24,7 @@ func findResultsOfEquation(ax2 a: Int, bx b: Int, c: Int) throws -> (x1: Double,
     }
     let desc = getDesc(ax2: a, bx: b, c: c)
     if desc < 0 {
-        throw EquationError.AssociatedValue
+        throw EquationError.AssociatedValue(desc: desc)
     }
     let x1 = (Double(-b) - sqrt(desc)) / Double(2 * a)
     let x2 = (Double(-b) + sqrt(desc)) / Double(2 * a)

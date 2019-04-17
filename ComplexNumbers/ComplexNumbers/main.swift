@@ -12,8 +12,8 @@ do{
     //let result = try findResultsOfEquation(ax2: 2, bx: 6, c: 3)
     let result = try findResultWithComplex(ax2: 9, bx: 6, c: 3)
     print("x1: \(result.first) x2: \(result.second)")
-}catch EquationError.AssociatedValue{
-    print("Descriminant less than 0")
+}catch EquationError.AssociatedValue(let desc){
+    print("Descriminant: \(desc) less than 0")
 }catch EquationError.LinearEquation{
     print("a equals 0")
 }catch EquationError.CorectDesc{
