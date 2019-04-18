@@ -18,7 +18,7 @@ do{
 }catch MyOptionalError.UnexpectedNone{
     print()
 }
-print(e.unwrap())
+
 let list = LinkedList<Int>()
 
 list.append(0)
