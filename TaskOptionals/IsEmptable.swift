@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol List{
+protocol IsEmptable{
     var isEmpty: Bool {get set}
 }

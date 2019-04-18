@@ -10,8 +10,15 @@ import Foundation
 
 print("Hello, World!")
 
-//print(addOptional(q, w)>!)
-
+var q = MyOptional(23)
+var w = MyOptional(12)
+var e: MyOptional<Int>
+do{
+    e = try add(q, w)
+}catch MyOptionalError.UnexpectedNone{
+    print()
+}
+print(e.unwrap())
 let list = LinkedList<Int>()
 
 list.append(0)
@@ -47,6 +54,7 @@ stack.push(2)
 stack.push(3)
 stack.push(4)
 
-for i in 0..<stack.count{
+
+while !stack.isEmpty{
     print(stack.pop())
 }

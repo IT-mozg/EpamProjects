@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Queue<T>: LinkedList<T>, List{
+class Queue<T>: LinkedList<T>, IsEmptable{
     var isEmpty: Bool = true
     
     func queue(_ data: T){
