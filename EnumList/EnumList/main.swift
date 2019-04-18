@@ -9,11 +9,14 @@
 import Foundation
 
 var list = EnumList<Int>()
-list.append(value: 0)
-list.append(value: 1)
-list.append(value: 2)
-list.append(value: 3)
+list = list.append(value: 0)!
 
-print(list.getAt(index: 0))
+list = list.append(value: 1)!
+
+list = list.append(value: 2)!
+
+list = list.append(value: 3)!
+
+
 print(list.getAt(index: 1))
-print(list.getAt(index: 2))
+print(list.getAt(index: 0))
