@@ -33,6 +33,10 @@ DerivedData/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.gitignore.io/api/xcode
+<<<<<<< HEAD
 #
+=======
+
+>>>>>>> 2a060797c5481fdaf4ec70992d61eb687a76a7de
 Task3/Task3.xcodeproj/project.xcworkspace/
 Task3/Task3.xcodeproj/xcuserdata.*
