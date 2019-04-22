@@ -88,3 +88,26 @@ d.updateValue(key: 8, value: 8)
 print(d.getAt(key: 5))
 d.remove(key: 5)
 print(d.getAt(key: 5))
+
+var hashTable = HashTable<String, String>(capacity: 5)
+hashTable["firstName"] = "Vlad"
+hashTable["lastName"] = "Tkachuk"
+hashTable["age"] = "20"
+
+if let firstName = hashTable["firstName"] {
+    print(firstName)
+}
+if let lastName = hashTable["lastName"] {
+    print(lastName)
+}
+if let age = hashTable["age"] {
+    print(age)
+}
+
+var set = Set<Int>()
+set.addValue(value: 5)
+set.addValue(value: 3)
+set.addValue(value: 5)
+print(set.getAt(value: 5))
+set.remove(value: 5)
+print(set.getAt(value: 5))
