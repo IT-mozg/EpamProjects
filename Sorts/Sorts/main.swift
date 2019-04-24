@@ -12,12 +12,15 @@ var array : [Int]
     var arr: [Int] = []
     var k :Int
     for _ in 0..<N{
-        k = Int(arc4random_uniform(100) + 1)
+        k = Int(arc4random_uniform(30) + 1)
         arr.append(k)
     }
     return arr
 }
-array = setArray(N:100)
+array = setArray(N:16)
+
+
+
 func sink(arr:[Int], i: Int, max: Int) -> [Int]{
     var i = i
     var A = arr
@@ -66,4 +69,35 @@ func sortHeap(array: [Int]) -> [Int]{
     }
     return A
 }
-print(sortHeap(array: array))
+//print(sortHeap(array: array))
+
+func insertSort(array: [Int], step: Int) -> [Int]{
+    var a = array
+    var j, big_i, x: Int
+    for i in 0..<a.count
+    {
+        big_i = i + step
+        if big_i >= a.count{
+            break
+        }
+        x = a[big_i]
+        j = big_i-step
+        while j >= 0 && a[j] > x{
+            a[j+step] = a[j]
+            j -= step
+        }
+        a[j+step] = x
+    }
+    return a
+}
+func shellSort(array: [Int]) -> [Int]{
+    var arr = array
+    var step = arr.count/2
+    while step > 0 {
+        arr = insertSort(array: arr, step: step)
+        step /= 2
+    }
+    return arr
+}
+
+print(shellSort(array: array))
