@@ -8,7 +8,7 @@
 
 import Foundation
 var array : [Int]
- func setArray(N: Int) -> [Int]{
+ func generateArray(N: Int) -> [Int]{
     var arr: [Int] = []
     var k :Int
     for _ in 0..<N{
@@ -17,32 +17,32 @@ var array : [Int]
     }
     return arr
 }
-array = setArray(N:16)
+array = generateArray(N:16)
 
 
 
-func sink(arr:[Int], i: Int, max: Int) -> [Int]{
-    var i = i
+func sink(arr:[Int], index: Int, max: Int) -> [Int]{
+    var i = index
     var A = arr
-    var big_i, childl, childr: Int
+    var bigInteger, leftChild, rightChild: Int
     while i < max {
-        big_i = i
-        childl = i * 2 + 1
-        childr = childl + 1
+        bigInteger = i
+        leftChild = i * 2 + 1
+        rightChild = leftChild + 1
         
-        if childl < max && A[childl] > A[big_i]{
-            big_i = childl
+        if leftChild < max && A[leftChild] > A[bigInteger]{
+            bigInteger = leftChild
         }
-        if childr < max && A[childr] > A[big_i]{
-            big_i = childr
+        if rightChild < max && A[rightChild] > A[bigInteger]{
+            bigInteger = rightChild
         }
         
-        if i == big_i{
+        if i == bigInteger{
             return A
         }
         
-        A.swapAt(i, big_i)
-        i = big_i
+        A.swapAt(i, bigInteger)
+        i = bigInteger
     }
     return A
 }
@@ -73,15 +73,15 @@ func sortHeap(array: [Int]) -> [Int]{
 
 func insertSort(array: [Int], step: Int) -> [Int]{
     var a = array
-    var j, big_i, x: Int
+    var j, bigInteger, x: Int
     for i in 0..<a.count
     {
-        big_i = i + step
-        if big_i >= a.count{
+        bigInteger = i + step
+        if bigInteger >= a.count{
             break
         }
-        x = a[big_i]
-        j = big_i-step
+        x = a[bigInteger]
+        j = bigInteger-step
         while j >= 0 && a[j] > x{
             a[j+step] = a[j]
             j -= step
