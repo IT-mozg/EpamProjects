@@ -8,16 +8,16 @@
 
 import Foundation
 var array : [Int]
- func generateArray(N: Int) -> [Int]{
+ func getArray(count: Int) -> [Int]{
     var arr: [Int] = []
     var k :Int
-    for _ in 0..<N{
+    for _ in 0..<count{
         k = Int(arc4random_uniform(30) + 1)
         arr.append(k)
     }
     return arr
 }
-array = generateArray(N:16)
+array = getArray(count:16)
 
 
 
@@ -52,7 +52,7 @@ func buildHeap(array: [Int]) -> [Int]{
   //  print(A)
     var i = Int(floor(Double(A.count / 2))) - 1
     while i >= 0{
-        A = sink(arr: A, i: i, max: A.count)
+        A = sink(arr: A, index: i, max: A.count)
         i -= 1
        // print(A)
     }
@@ -64,7 +64,7 @@ func sortHeap(array: [Int]) -> [Int]{
     var end = A.count - 1
     while end >= 0 {
         A.swapAt(0, end)
-        A = sink(arr: A, i: 0, max: end)
+        A = sink(arr: A, index: 0, max: end)
         end -= 1
     }
     return A
