@@ -9,3 +9,5 @@ Sorts/Sorts.xcodeproj/xcuserdata.*
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
+Calcucator/Calcucator.xcodeproj/project.xcworkspace/
+Calcucator/Calcucator.xcodeproj/xcuserdata.*
