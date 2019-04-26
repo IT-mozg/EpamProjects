@@ -69,7 +69,6 @@ func sortHeap(array: [Int]) -> [Int]{
     }
     return A
 }
-//print(sortHeap(array: array))
 
 func insertSort(array: [Int], step: Int) -> [Int]{
     var a = array
