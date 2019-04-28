@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum MyOptionalError: Error{
+    case UnexpectedNone
+}
+
 enum MyOptional<T>{
     
     case Some(T)
@@ -21,32 +25,31 @@ enum MyOptional<T>{
         self = .None
     }
     
-    func unwrap() -> Any{
+    func unwrap() throws -> T{
         switch self{
             case .Some(let x):
                 return x
             default:
                 assert(true, "Found nil while unwrapping")
         }
-        return MyOptional.None
+        throw MyOptionalError.UnexpectedNone
     }
     
-    
+   
 }
 postfix operator >!
-postfix func >! <T>(value: MyOptional<T> ) -> Any {
-    return value.unwrap()
+postfix func >! <T>(value: MyOptional<T> ) throws -> T {
+    return try value.unwrap()
 }
 
 
-func addOptional(_ a: MyOptional<Int>, _ b: MyOptional<Int>) -> MyOptional<Int>{
-    let m = a>!
-    let n = b>!
-    let x = (m as! Int) + (n as! Int)
-    return MyOptional(x)
+func add(_ a: MyOptional<Int>, _ b: MyOptional<Int>) throws -> MyOptional<Int>{
+    let m = try a.unwrap()
+    let n = try b.unwrap()
+    return MyOptional(m+n)
 }
-var q = MyOptional(23)
-var w = MyOptional(12)
+
+
 
 
 

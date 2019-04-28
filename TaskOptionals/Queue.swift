@@ -8,18 +8,22 @@
 
 import Foundation
 
-class Queue<T>: LinkedList<T>, List{
+class Queue<T>: IsEmptable{
     var isEmpty: Bool = true
+    private var list: LinkedList<T>
     
+    init(){
+        list = LinkedList<T>()
+    }
     func queue(_ data: T){
-        super.append(data)
+        list.append(data)
         isEmpty = false
     }
     
     func dequeue() -> T{
-        let data = getData(0)!
-        delete(0)
-        isEmpty = count == 0
+        let data = list.getData(0)!
+        list.delete(0)
+        isEmpty = list.count == 0
         return data
     }
 }

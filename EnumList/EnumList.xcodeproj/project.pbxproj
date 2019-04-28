@@ -7,17 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F5BE3E7B2267002100D624EE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E7A2267002100D624EE /* main.swift */; };
-		F5BE3E822267004100D624EE /* MyOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E812267004100D624EE /* MyOptional.swift */; };
-		F5BE3E8422674A5600D624EE /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E8322674A5600D624EE /* LinkedList.swift */; };
-		F5BE3E8622674BB100D624EE /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E8522674BB100D624EE /* Node.swift */; };
-		F5BE3E882267609E00D624EE /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E872267609E00D624EE /* Queue.swift */; };
-		F5BE3E8A2267648500D624EE /* IsEmptable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E892267648500D624EE /* IsEmptable.swift */; };
-		F5BE3E8C22676B3F00D624EE /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E8B22676B3F00D624EE /* Stack.swift */; };
+		F5BE3E9A22685E2500D624EE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3E9922685E2500D624EE /* main.swift */; };
+		F5BE3EA122685E3B00D624EE /* EnumList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BE3EA022685E3B00D624EE /* EnumList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		F5BE3E752267002100D624EE /* CopyFiles */ = {
+		F5BE3E9422685E2500D624EE /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -29,18 +24,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F5BE3E772267002100D624EE /* TaskOptionals */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TaskOptionals; sourceTree = BUILT_PRODUCTS_DIR; };
-		F5BE3E7A2267002100D624EE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		F5BE3E812267004100D624EE /* MyOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOptional.swift; sourceTree = "<group>"; };
-		F5BE3E8322674A5600D624EE /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
-		F5BE3E8522674BB100D624EE /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
-		F5BE3E872267609E00D624EE /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
-		F5BE3E892267648500D624EE /* IsEmptable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsEmptable.swift; sourceTree = "<group>"; };
-		F5BE3E8B22676B3F00D624EE /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		F5BE3E9622685E2500D624EE /* EnumList */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EnumList; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5BE3E9922685E2500D624EE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F5BE3EA022685E3B00D624EE /* EnumList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		F5BE3E742267002100D624EE /* Frameworks */ = {
+		F5BE3E9322685E2500D624EE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -50,107 +40,97 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F5BE3E6E2267002100D624EE = {
+		F5BE3E8D22685E2500D624EE = {
 			isa = PBXGroup;
 			children = (
-				F5BE3E8B22676B3F00D624EE /* Stack.swift */,
-				F5BE3E892267648500D624EE /* IsEmptable.swift */,
-				F5BE3E872267609E00D624EE /* Queue.swift */,
-				F5BE3E8522674BB100D624EE /* Node.swift */,
-				F5BE3E812267004100D624EE /* MyOptional.swift */,
-				F5BE3E8322674A5600D624EE /* LinkedList.swift */,
-				F5BE3E792267002100D624EE /* TaskOptionals */,
-				F5BE3E782267002100D624EE /* Products */,
+				F5BE3EA022685E3B00D624EE /* EnumList.swift */,
+				F5BE3E9822685E2500D624EE /* EnumList */,
+				F5BE3E9722685E2500D624EE /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		F5BE3E782267002100D624EE /* Products */ = {
+		F5BE3E9722685E2500D624EE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F5BE3E772267002100D624EE /* TaskOptionals */,
+				F5BE3E9622685E2500D624EE /* EnumList */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F5BE3E792267002100D624EE /* TaskOptionals */ = {
+		F5BE3E9822685E2500D624EE /* EnumList */ = {
 			isa = PBXGroup;
 			children = (
-				F5BE3E7A2267002100D624EE /* main.swift */,
+				F5BE3E9922685E2500D624EE /* main.swift */,
 			);
-			path = TaskOptionals;
+			path = EnumList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F5BE3E762267002100D624EE /* TaskOptionals */ = {
+		F5BE3E9522685E2500D624EE /* EnumList */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F5BE3E7E2267002100D624EE /* Build configuration list for PBXNativeTarget "TaskOptionals" */;
+			buildConfigurationList = F5BE3E9D22685E2500D624EE /* Build configuration list for PBXNativeTarget "EnumList" */;
 			buildPhases = (
-				F5BE3E732267002100D624EE /* Sources */,
-				F5BE3E742267002100D624EE /* Frameworks */,
-				F5BE3E752267002100D624EE /* CopyFiles */,
+				F5BE3E9222685E2500D624EE /* Sources */,
+				F5BE3E9322685E2500D624EE /* Frameworks */,
+				F5BE3E9422685E2500D624EE /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = TaskOptionals;
-			productName = TaskOptionals;
-			productReference = F5BE3E772267002100D624EE /* TaskOptionals */;
+			name = EnumList;
+			productName = EnumList;
+			productReference = F5BE3E9622685E2500D624EE /* EnumList */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		F5BE3E6F2267002100D624EE /* Project object */ = {
+		F5BE3E8E22685E2500D624EE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Vlad Tkachuk";
 				TargetAttributes = {
-					F5BE3E762267002100D624EE = {
+					F5BE3E9522685E2500D624EE = {
 						CreatedOnToolsVersion = 10.1;
 					};
 				};
 			};
-			buildConfigurationList = F5BE3E722267002100D624EE /* Build configuration list for PBXProject "TaskOptionals" */;
+			buildConfigurationList = F5BE3E9122685E2500D624EE /* Build configuration list for PBXProject "EnumList" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = F5BE3E6E2267002100D624EE;
-			productRefGroup = F5BE3E782267002100D624EE /* Products */;
+			mainGroup = F5BE3E8D22685E2500D624EE;
+			productRefGroup = F5BE3E9722685E2500D624EE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F5BE3E762267002100D624EE /* TaskOptionals */,
+				F5BE3E9522685E2500D624EE /* EnumList */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		F5BE3E732267002100D624EE /* Sources */ = {
+		F5BE3E9222685E2500D624EE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5BE3E882267609E00D624EE /* Queue.swift in Sources */,
-				F5BE3E8422674A5600D624EE /* LinkedList.swift in Sources */,
-				F5BE3E8C22676B3F00D624EE /* Stack.swift in Sources */,
-				F5BE3E7B2267002100D624EE /* main.swift in Sources */,
-				F5BE3E822267004100D624EE /* MyOptional.swift in Sources */,
-				F5BE3E8622674BB100D624EE /* Node.swift in Sources */,
-				F5BE3E8A2267648500D624EE /* IsEmptable.swift in Sources */,
+				F5BE3EA122685E3B00D624EE /* EnumList.swift in Sources */,
+				F5BE3E9A22685E2500D624EE /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		F5BE3E7C2267002100D624EE /* Debug */ = {
+		F5BE3E9B22685E2500D624EE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -211,7 +191,7 @@
 			};
 			name = Debug;
 		};
-		F5BE3E7D2267002100D624EE /* Release */ = {
+		F5BE3E9C22685E2500D624EE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -265,7 +245,7 @@
 			};
 			name = Release;
 		};
-		F5BE3E7F2267002100D624EE /* Debug */ = {
+		F5BE3E9E22685E2500D624EE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -275,7 +255,7 @@
 			};
 			name = Debug;
 		};
-		F5BE3E802267002100D624EE /* Release */ = {
+		F5BE3E9F22685E2500D624EE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -288,25 +268,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F5BE3E722267002100D624EE /* Build configuration list for PBXProject "TaskOptionals" */ = {
+		F5BE3E9122685E2500D624EE /* Build configuration list for PBXProject "EnumList" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F5BE3E7C2267002100D624EE /* Debug */,
-				F5BE3E7D2267002100D624EE /* Release */,
+				F5BE3E9B22685E2500D624EE /* Debug */,
+				F5BE3E9C22685E2500D624EE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F5BE3E7E2267002100D624EE /* Build configuration list for PBXNativeTarget "TaskOptionals" */ = {
+		F5BE3E9D22685E2500D624EE /* Build configuration list for PBXNativeTarget "EnumList" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F5BE3E7F2267002100D624EE /* Debug */,
-				F5BE3E802267002100D624EE /* Release */,
+				F5BE3E9E22685E2500D624EE /* Debug */,
+				F5BE3E9F22685E2500D624EE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = F5BE3E6F2267002100D624EE /* Project object */;
+	rootObject = F5BE3E8E22685E2500D624EE /* Project object */;
 }
