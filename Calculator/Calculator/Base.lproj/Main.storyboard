@@ -63,8 +63,7 @@
                                         </state>
                                         <connections>
                                             <action selector="divideButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="aGV-0M-5Qa"/>
-                                            <action selector="equalitySingPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ITB-mI-nnL"/>
-                                            <action selector="twoOperandsSignPresed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n2f-U6-T5O"/>
+                                            <action selector="twoOperandsSignPresed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OCG-Tb-rT1"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uMO-mG-5Dt">
@@ -108,9 +107,8 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="equalitySingPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jBv-ut-wqC"/>
                                             <action selector="muitiplyButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="85x-Xu-u07"/>
-                                            <action selector="twoOperandsSignPresed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KhE-72-PZ4"/>
+                                            <action selector="twoOperandsSignPresed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iZN-gY-5QS"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gic-6K-kJn">
@@ -154,9 +152,8 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="equalitySingPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pKs-Oe-eiJ"/>
                                             <action selector="subtractButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="LkZ-L7-jCG"/>
-                                            <action selector="twoOperandsSignPresed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ggh-ru-tMB"/>
+                                            <action selector="twoOperandsSignPresed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TET-Fu-kZA"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gPm-ki-qiW">
@@ -201,8 +198,7 @@
                                         </state>
                                         <connections>
                                             <action selector="addButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Da-E6-aEz"/>
-                                            <action selector="equalitySingPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oLt-vo-ODb"/>
-                                            <action selector="twoOperandsSignPresed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="edz-K7-UJ9"/>
+                                            <action selector="twoOperandsSignPresed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xpq-52-tiJ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zAR-Ly-Jn3">
