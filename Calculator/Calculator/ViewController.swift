@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 class ViewController: UIViewController {
 
     @IBOutlet weak var resultPanelLabel: UILabel!
@@ -15,7 +14,7 @@ class ViewController: UIViewController {
     var isDouble = false
     var firstOperand: Double = 0
     var secondOperand: Double = 0
-    var operationSing = ""
+    var operationSing = Operation.none
     
     var currentInput:Double{
         get{
@@ -38,6 +37,7 @@ class ViewController: UIViewController {
         resultPanelLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/4)
     }
     
+    //MARK: Number pressed
     @IBAction func numbers(_ sender: UIButton) {
         let number = sender.currentTitle!
         if isEntered{
@@ -55,30 +55,41 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+    //MARK: Two operands operations
     @IBAction func twoOperandsSignPresed(_ sender: UIButton) {
-        operationSing = sender.currentTitle!
         firstOperand = currentInput
         isEntered = false
         isDouble = false
     }
-    
-    func operateWithTwoOperands(operate: (Double, Double)->Double){
+    @IBAction func divideButtonPressed() {
+        operationSing = .div
+    }
+    @IBAction func muitiplyButtonPressed() {
+        operationSing = .mult
+    }
+    @IBAction func subtractButtonPressed() {
+        operationSing = .sub
+    }
+    @IBAction func addButtonPressed() {
+        operationSing = .add
+    }
+    private func operateWithTwoOperands(operate: (Double, Double)->Double){
         currentInput = operate(firstOperand, secondOperand)
         isEntered = false
     }
     
+    //MARK: Single operations
     @IBAction func equalitySingPressed(_ sender: UIButton) {
         secondOperand = currentInput
         isDouble = false
         switch operationSing {
-        case "+":
+        case .add:
             operateWithTwoOperands {$0 + $1}
-        case "-":
+        case .sub:
             operateWithTwoOperands {$0 - $1}
-        case "x":
+        case .mult:
             operateWithTwoOperands {$0 * $1}
-        case "/":
+        case .div:
             if secondOperand == 0{
                 evokeAlert(title: "Error", message: "Division by zero", style: .actionSheet)
                 break
@@ -96,7 +107,7 @@ class ViewController: UIViewController {
         resultPanelLabel.text = "0"
         isEntered = false
         isDouble = false
-        operationSing = ""
+        operationSing = .none
     }
     
     @IBAction func plusMinusButtonPressed(_ sender: UIButton) {
@@ -107,7 +118,12 @@ class ViewController: UIViewController {
         isEntered = false
     }
     @IBAction func squareRootButtonPressed(_ sender: UIButton) {
-        currentInput = sqrt(currentInput)
+        if currentInput < 0 {
+            evokeAlert(title: "Error", message: "Number is less than zero", style: .alert)
+        }
+        else{
+            currentInput = sqrt(currentInput)
+        }
     }
     
     @IBAction func pointButtonPressed(_ sender: UIButton) {
@@ -119,7 +135,7 @@ class ViewController: UIViewController {
             isDouble = true
         }
     }
-    
+    //MARK: alert
     func evokeAlert(title: String, message: String, style: UIAlertController.Style){
         let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
         let action = UIAlertAction(title: "ok", style: .default) { (action) in
