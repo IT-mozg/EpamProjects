@@ -16,7 +16,10 @@ class TableViewController: UITableViewController {
     var sortTypesArray = ["Insertion", "Merge"]
     var counter = 0
     var countOfSections = 1
-    var numberOfRowsInSection = 0
+    var numberOfRowsInSection = 10
+    var maxSize = 10
+    var isSplited = false
+    var currentSection = 0
     
     private func getArray(count: Int) -> [Int]{
         var arr: [Int] = []
@@ -37,7 +40,7 @@ class TableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        array[0] = getArray(count: 10)
+        array[0] = getArray(count: maxSize)
         numberOfRowsInSection = array.count
         nextButtonItem.title = "Next"
         setSegmentControlConfiguration()
@@ -54,8 +57,15 @@ class TableViewController: UITableViewController {
         tableView.moveRow(at: from, to: indexPath)
     }
     
-    private func moveRowsForMergeSort(){
-        
+    private func deleteSections(){
+        for i in 0..<array.count{
+            tableView.deleteSections(IndexSet(arrayLiteral: i), with: .none)
+        }
+    }
+    private func insertSections(){
+        for i in 0..<array.count{
+            tableView.insertSections(IndexSet(arrayLiteral: i), with: .top)
+        }
     }
     
     @IBAction func sortArrayNextButtonPressed(_ sender: UIBarButtonItem) {
@@ -63,8 +73,32 @@ class TableViewController: UITableViewController {
         case 0:
             moveRowsForInsert()
         case 1:
-            let indexSet = IndexSet(arrayLiteral: 7)
-            tableView.insertSections(indexSet, with: .bottom)
+            
+            tableView.beginUpdates()
+            if !isSplited{
+                deleteSections()
+                array = splitArray(array: array)
+                countOfSections = array.count
+                insertSections()
+                if array.count == maxSize{
+                    isSplited = true
+                }
+            }
+            else{
+                if currentSection >= array.count || currentSection+1 >= array.count{
+                    currentSection = 0
+                }
+                    deleteSections()
+                    let arr = mergeArr(leftArr: array[currentSection], rightArr: array[currentSection+1])
+                    array.remove(at: currentSection)
+                    array.remove(at: currentSection)
+                    array.insert(arr, at: currentSection)
+                    countOfSections = array.count
+                    insertSections()
+                    currentSection += 1
+                
+            }
+            tableView.endUpdates()
         default:
             break
         }
@@ -74,16 +108,16 @@ class TableViewController: UITableViewController {
     @IBAction func changeSortType(_ sender: UISegmentedControl) {
         counter = 0
         array = [[]]
-        array[0] = getArray(count: 10)
+        array[0] = getArray(count: maxSize)
         countOfSections = 1
         numberOfRowsInSection = array.count
-        
+        currentSection = 0
+        isSplited = false
         tableView.reloadData()
     }
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return array[section].count
     }
 
@@ -96,7 +130,7 @@ class TableViewController: UITableViewController {
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return array.count
+        return countOfSections
     }
     
 }
@@ -124,45 +158,23 @@ extension TableViewController{
         }
         return nil
     }
-    private func mergeSort(array: [[Int]], _ p: Int, _ r: Int, _ section: Int) -> [[Int]]{
-        var arr = array
-        //if p >= r {return arr}
-        if array[section].count <= 2 {
-            return array
-        }
-        let q = (r+p)/2
-        
-        arr = splitArray(array: arr, at: section)
-        tableView.reloadData()
-        
-        arr = mergeSort(array: arr, p, q, section)
-        arr = mergeSort(array: arr, q+1, r, section+1)
-        return arr
-    }
     
-    private func merge(array: [Int], _ p: Int, _ q: Int, _ r: Int) -> [Int]{
-        var arr = array
-        let n1 = q-p+1
-        let n2 = r - q
-        var left = Array(repeating: 0, count: n1+1)
-        var right = Array(repeating: 0, count: n2+1)
+    private func mergeArr(leftArr: [Int], rightArr: [Int]) -> [Int]{
+        var arr: [Int] = []
+        var left = leftArr
+        var right = rightArr
         
-        for i in 1...n1{
-            left[i-1] = arr[p+i-1]
-        }
-        for i in 1...n2{
-            right[i-1] = arr[q+i]
-        }
-        left[n1] = Int.max
-        right[n2] = Int.max
+        left.append(Int.max)
+        right.append(Int.max)
         var i = 0
         var j = 0
-        for k in p...r{
+        let maxSize = leftArr.count + rightArr.count
+        for _ in 0..<maxSize{
             if left[i] <= right[j]{
-                arr[k] = left[i]
+                arr.append(left[i])
                 i += 1
             }else{
-                arr[k] = right[j]
+                arr.append(right[j])
                 j += 1
             }
         }
@@ -170,9 +182,18 @@ extension TableViewController{
         return arr
     }
     
-    func splitArray(array: [[Int]], at: Int) -> [[Int]]{
-        let divided = array[at].divideInHalf()
-        return insert(toArray: array, from: divided, at: at)
+    func splitArray(array: [[Int]]) -> [[Int]]{
+        var arr = array
+        var a = 0
+        while  a < arr.count{
+            if arr[a].count < 2{
+                a += 1
+                continue
+            }
+            arr = insert(toArray: arr, from: arr[a].split(), at: a)
+            a += 2
+        }
+        return arr
     }
     
     func insert(toArray: [[Int]], from: [[Int]], at: Int) -> [[Int]]{
@@ -188,22 +209,11 @@ extension TableViewController{
 }
 
 extension Array {
-    func chunked(into size: Int) -> [[Element]] {
-        return stride(from: 0, to: count, by: size).map {
-            Array(self[$0 ..< Swift.min($0 + size, count)])
-        }
-    }
-    
-    func divideInHalf() -> [[Element]]{
-        var arr: [[Element]] = [[],[]]
-        let count = self.count
-        for i in 0..<count{
-            if i < count/2{
-                arr[0].append(self[i])
-            }else{
-                arr[1].append(self[i])
-            }
-        }
-        return arr
+    func split() -> [[Element]] {
+        let ct = self.count
+        let half = ct / 2
+        let leftSplit = self[0 ..< half]
+        let rightSplit = self[half ..< ct]
+        return [Array(leftSplit), Array(rightSplit)]
     }
 }
