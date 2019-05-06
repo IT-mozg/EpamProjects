@@ -73,7 +73,6 @@ class TableViewController: UITableViewController {
         case 0:
             moveRowsForInsert()
         case 1:
-            
             tableView.beginUpdates()
             if !isSplited{
                 deleteSections()
@@ -89,10 +88,10 @@ class TableViewController: UITableViewController {
                     currentSection = 0
                 }
                     deleteSections()
-                    let arr = mergeArr(leftArr: array[currentSection], rightArr: array[currentSection+1])
+                    let mergedArray = mergeArr(leftArr: array[currentSection], rightArr: array[currentSection+1])
                     array.remove(at: currentSection)
                     array.remove(at: currentSection)
-                    array.insert(arr, at: currentSection)
+                    array.insert(mergedArray, at: currentSection)
                     countOfSections = array.count
                     insertSections()
                     currentSection += 1
@@ -138,14 +137,14 @@ class TableViewController: UITableViewController {
 //MARK: sorts
 extension TableViewController{
     private func insert() -> (old: Int, new: Int)?{
-        var j, x: Int
+        var j, firstValue: Int
         j = 0
         var tmp: Int
         while counter < array[0].count{
-            x = array[0][counter]
+            firstValue = array[0][counter]
             j = counter-1
             while j >= 0{
-                if array[0][j] > x{
+                if array[0][j] > firstValue{
                     tmp = array[0][j+1]
                     array[0][j+1] = array[0][j]
                     array[0][j] = tmp
@@ -184,36 +183,36 @@ extension TableViewController{
     
     func splitArray(array: [[Int]]) -> [[Int]]{
         var arr = array
-        var a = 0
-        while  a < arr.count{
-            if arr[a].count < 2{
-                a += 1
+        var index = 0
+        while  index < arr.count{
+            if arr[index].count < 2{
+                index += 1
                 continue
             }
-            arr = insert(toArray: arr, from: arr[a].split(), at: a)
-            a += 2
+            arr = insert(toArray: arr, from: arr[index].split(), at: index)
+            index += 2
         }
         return arr
     }
     
     func insert(toArray: [[Int]], from: [[Int]], at: Int) -> [[Int]]{
-        var a = toArray
-        a.remove(at: at)
+        var newToArray = toArray
+        newToArray.remove(at: at)
         var index = from.count-1
         while index >= 0{
-            a.insert(from[index], at: at)
+            newToArray.insert(from[index], at: at)
             index -= 1
         }
-        return a
+        return newToArray
     }
 }
 
 extension Array {
     func split() -> [[Element]] {
-        let ct = self.count
-        let half = ct / 2
+        let count = self.count
+        let half = count / 2
         let leftSplit = self[0 ..< half]
-        let rightSplit = self[half ..< ct]
+        let rightSplit = self[half ..< count]
         return [Array(leftSplit), Array(rightSplit)]
     }
 }
