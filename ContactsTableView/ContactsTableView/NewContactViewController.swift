@@ -46,6 +46,17 @@ class NewContactViewController: UIViewController {
             navigationItem.rightBarButtonItem?.title = "Add"
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
+        
+        firstNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        phoneTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+    }
+    
+    @objc private func textFieldChanged(){
+        if !firstNameTextField.text!.isEmpty && !phoneTextField.text!.isEmpty{
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
     }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
@@ -99,5 +110,13 @@ extension NewContactViewController: UIImagePickerControllerDelegate, UINavigatio
         photoContactImageView.contentMode = .scaleAspectFill
         photoContactImageView.clipsToBounds = true
         dismiss(animated: true, completion: nil)
+    }
+}
+
+//MARK: TextFieldDelegate
+extension NewContactViewController: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
