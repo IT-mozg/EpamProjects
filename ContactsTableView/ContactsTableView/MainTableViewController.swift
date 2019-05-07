@@ -10,16 +10,19 @@ import UIKit
 let mainCellID = "MainCell"
 
 class MainTableViewController: UITableViewController {
-    var contacts: [Contact] = [
-        Contact(firstName: "Stive", lastName: "Jobs", email: "asd@asd.asd", phoneNumber: "+380935942213", imagePhoto: "avatar"),
-        Contact(firstName: "Stive", lastName: "Jobs", email: "asd@asd.asd", phoneNumber: "+380935942213", imagePhoto: "avatar"),
-        Contact(firstName: "Stive", lastName: "Jobs", email: "asd@asd.asd", phoneNumber: "+380935942213", imagePhoto: "avatar"),
-        Contact(firstName: "Stive", lastName: "Jobs", email: "asd@asd.asd", phoneNumber: "+380935942213", imagePhoto: "avatar"),
-        Contact(firstName: "Stive", lastName: "Jobs", email: "asd@asd.asd", phoneNumber: "+380935942213", imagePhoto: "avatar")]
+    var contacts: [Contact] = []
 
     @IBOutlet weak var backgroundView: UIView!
     
     override func viewDidAppear(_ animated: Bool) {
+        checkContacts()
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
+    
+    private func checkContacts(){
         if contacts.isEmpty{
             backgroundView.isHidden = false
             tableView.backgroundView = backgroundView
@@ -27,10 +30,6 @@ class MainTableViewController: UITableViewController {
         else{
             backgroundView.isHidden = true
         }
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
     }
 
     // MARK: - Table view data source
@@ -49,17 +48,12 @@ class MainTableViewController: UITableViewController {
         
         cell.firstNameLabel.text = contacts[indexPath.row].firstName
         cell.lastNameLabel.text = contacts[indexPath.row].lastName
-        cell.contactImage?.image = UIImage(named: contacts[indexPath.row].imagePhoto)
-
+        cell.contactImage?.image = contacts[indexPath.row].imagePhoto
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 85
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -84,4 +78,33 @@ extension MainTableViewController: NewContactViewControllerDelegate{
     }
     
     
+}
+
+//MARK: TableViewControllerDelegate
+extension MainTableViewController{
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let controller = storyboard?.instantiateViewController(withIdentifier: "ContactInfoViewController") as? ContactInfoViewController{
+            controller.contact = contacts[indexPath.row]
+            navigationController?.pushViewController(controller, animated: true)
+            //self.present(controller, animated: true, completion: nil)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .default, title: "Delete") { (action, indexPath) in
+            self.contacts.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .left)
+        }
+        let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
+        }
+        delete.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        edit.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+        return [delete,edit]
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        checkContacts()
+    }
 }

@@ -15,6 +15,7 @@
 		F5236CD922806AA700FF98E9 /* MainContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CD822806AA700FF98E9 /* MainContactTableViewCell.swift */; };
 		F5236CDB22806B7D00FF98E9 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CDA22806B7D00FF98E9 /* Contact.swift */; };
 		F5236CDD2280819600FF98E9 /* NewContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CDC2280819600FF98E9 /* NewContactViewController.swift */; };
+		F5236CDF2281780C00FF98E9 /* ContactInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		F5236CD822806AA700FF98E9 /* MainContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContactTableViewCell.swift; sourceTree = "<group>"; };
 		F5236CDA22806B7D00FF98E9 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		F5236CDC2280819600FF98E9 /* NewContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewContactViewController.swift; sourceTree = "<group>"; };
+		F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactInfoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				F5236CD822806AA700FF98E9 /* MainContactTableViewCell.swift */,
 				F5236CD62280671600FF98E9 /* MainTableViewController.swift */,
 				F5236CDC2280819600FF98E9 /* NewContactViewController.swift */,
+				F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */,
 				F5236CC82280666700FF98E9 /* Main.storyboard */,
 				F5236CCB2280666800FF98E9 /* Assets.xcassets */,
 				F5236CCD2280666800FF98E9 /* LaunchScreen.storyboard */,
@@ -149,6 +152,7 @@
 				F5236CD72280671600FF98E9 /* MainTableViewController.swift in Sources */,
 				F5236CC52280666700FF98E9 /* AppDelegate.swift in Sources */,
 				F5236CD922806AA700FF98E9 /* MainContactTableViewCell.swift in Sources */,
+				F5236CDF2281780C00FF98E9 /* ContactInfoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
