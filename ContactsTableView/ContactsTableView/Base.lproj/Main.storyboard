@@ -168,12 +168,28 @@
                                     </label>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Wb-QW-NtC">
+                                <rect key="frame" x="178" y="826" width="59" height="36"/>
+                                <color key="backgroundColor" red="1" green="0.1979223779" blue="0.076535550810000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="59" id="e6Q-Ba-xGD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="OriyaSangamMN-Bold" family="Oriya Sangam MN" pointSize="17"/>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteButtonPressed:" destination="OPW-lh-ZoX" eventType="touchUpInside" id="nBH-QH-AiT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="HMs-oz-fzA" firstAttribute="top" secondItem="2Ne-Cl-8ac" secondAttribute="top" constant="15" id="145-WZ-eEf"/>
                             <constraint firstItem="HC3-gE-LZo" firstAttribute="leading" secondItem="HMs-oz-fzA" secondAttribute="trailing" constant="15" id="4Tr-n1-AKN"/>
+                            <constraint firstItem="2Wb-QW-NtC" firstAttribute="centerX" secondItem="2Ne-Cl-8ac" secondAttribute="centerX" id="TJx-Nc-2YO"/>
                             <constraint firstItem="HC3-gE-LZo" firstAttribute="top" secondItem="2Ne-Cl-8ac" secondAttribute="top" constant="10" id="foc-Su-yTH"/>
+                            <constraint firstItem="2Ne-Cl-8ac" firstAttribute="bottom" secondItem="2Wb-QW-NtC" secondAttribute="bottom" id="r9W-U0-oXR"/>
                             <constraint firstItem="HMs-oz-fzA" firstAttribute="leading" secondItem="2Ne-Cl-8ac" secondAttribute="leading" constant="16" id="w7J-1f-GRZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2Ne-Cl-8ac"/>
@@ -213,7 +229,7 @@
         <!--Add new-->
         <scene sceneID="QBG-yZ-wuX">
             <objects>
-                <viewController id="xfx-XT-LXI" customClass="NewContactViewController" customModule="ContactsTableView" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewContactViewController" id="xfx-XT-LXI" customClass="NewContactViewController" customModule="ContactsTableView" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="IXH-rY-u8o">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -317,7 +333,7 @@
                                 <action selector="cancelButtonPressed:" destination="xfx-XT-LXI" id="0BU-sO-diH"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Moe-Ir-kRs">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="Moe-Ir-kRs">
                             <connections>
                                 <action selector="addNewContactButtonPressed:" destination="xfx-XT-LXI" id="XnG-oA-DQ9"/>
                             </connections>

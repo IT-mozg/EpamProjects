@@ -9,11 +9,18 @@
 import UIKit
 
 protocol NewContactViewControllerDelegate: class{
-    func addNewContact(_ contactController: NewContactViewController, newItem: Contact)
+    func addNewContact(newItem: Contact)
+}
+
+protocol NewContactViewControllerDataCource: class {
+    func updateContact(updatedContact: Contact, at indexPath: IndexPath)
 }
 
 class NewContactViewController: UIViewController {
     weak var delegate: NewContactViewControllerDelegate?
+    weak var dataSource: NewContactViewControllerDataCource?
+    var editingContact: Contact?
+    var indexPath: IndexPath?
     
     @IBOutlet weak var photoContactImageView: UIImageView!
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -21,15 +28,30 @@ class NewContactViewController: UIViewController {
     @IBOutlet weak var phoneTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        if let contact = editingContact{
+            navigationItem.rightBarButtonItem?.title = "Save"
+            firstNameTextField.text = contact.firstName
+            lastNameTextField.text = contact.lastName
+            phoneTextField.text = contact.phoneNumber
+            emailTextField.text = contact.email
+            photoContactImageView.image = contact.imagePhoto
+        }else{
+            navigationItem.rightBarButtonItem?.title = "Add"
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
     }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
+    
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
         
         guard let firstName = firstNameTextField.text else { return }
@@ -37,7 +59,8 @@ class NewContactViewController: UIViewController {
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
         let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: photoContactImageView!.image!)
-        delegate?.addNewContact(self, newItem: newItem)
+        dataSource?.updateContact(updatedContact: newItem, at: indexPath!)
+        delegate?.addNewContact(newItem: newItem)
        // dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
     }
