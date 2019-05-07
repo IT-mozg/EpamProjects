@@ -12,15 +12,12 @@ protocol NewContactViewControllerDelegate: class{
     func addNewContact(newItem: Contact)
 }
 
-protocol NewContactViewControllerDataCource: class {
-    func updateContact(updatedContact: Contact, at indexPath: IndexPath)
-}
-
+typealias UpdateClosure = (_ contact: Contact) -> ()
 class NewContactViewController: UIViewController {
     weak var delegate: NewContactViewControllerDelegate?
-    weak var dataSource: NewContactViewControllerDataCource?
+    
     var editingContact: Contact?
-    var indexPath: IndexPath?
+    var update: UpdateClosure?
     
     @IBOutlet weak var photoContactImageView: UIImageView!
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -70,8 +67,12 @@ class NewContactViewController: UIViewController {
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
         let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: photoContactImageView!.image!)
-        dataSource?.updateContact(updatedContact: newItem, at: indexPath!)
-        delegate?.addNewContact(newItem: newItem)
+        if editingContact != nil{
+            update?(newItem)
+        }else{
+            //dataSource?.updateContact(updatedContact: newItem, at: indexPath!)
+            delegate?.addNewContact(newItem: newItem)
+        }
        // dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
     }

@@ -23,11 +23,8 @@ class ContactInfoViewController: UIViewController {
     var contact: Contact?
     var indexPath: IndexPath?
     weak var delegate: ContactInfoViewControllerDelegate?
-    weak var dataSource: NewContactViewControllerDataCource?
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
+    var update: ((_ contact: Contact)->())?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +44,13 @@ class ContactInfoViewController: UIViewController {
     
     @objc private func editButtonPressed(){
         if let controller = storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
-            controller.dataSource = self
+            controller.update = {updatedContact in
+                self.contact = updatedContact
+                self.update?(updatedContact)
+                self.presentContact()
+            }
             controller.editingContact = contact
-            controller.indexPath = indexPath
             navigationController?.pushViewController(controller, animated: true)
-            //self.present(controller, animated: true, completion: nil)
         }
     }
 
@@ -67,13 +66,5 @@ class ContactInfoViewController: UIViewController {
         alertController.addAction(noAlertAction)
         alertController.addAction(yesAlertAction)
         present(alertController, animated: true)
-    }
-}
-
-extension ContactInfoViewController: NewContactViewControllerDataCource{
-    func updateContact(updatedContact: Contact, at indexPath: IndexPath) {
-        contact = updatedContact
-        presentContact()
-        dataSource?.updateContact(updatedContact: contact!, at: indexPath)
     }
 }

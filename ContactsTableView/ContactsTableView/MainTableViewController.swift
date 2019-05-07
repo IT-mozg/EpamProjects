@@ -63,21 +63,25 @@ class MainTableViewController: UITableViewController {
             }
         }
     }
-   
-
 }
 
 //MARK: TableViewControllerDelegate
 extension MainTableViewController{
     
+    private func updateContact(updatedContact: Contact, indexPath: IndexPath){
+        self.contacts[indexPath.row] = updatedContact
+        self.tableView.reloadData()
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let controller = storyboard?.instantiateViewController(withIdentifier: "ContactInfoViewController") as? ContactInfoViewController{
             controller.indexPath = indexPath
             controller.delegate = self
-            controller.dataSource = self
+            controller.update = { updatedContact in
+                self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
+            }
             controller.contact = contacts[indexPath.row]
             navigationController?.pushViewController(controller, animated: true)
-            //self.present(controller, animated: true, completion: nil)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -89,19 +93,15 @@ extension MainTableViewController{
         let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
             if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
                 controller.editingContact = self.contacts[indexPath.row]
-                controller.dataSource = self
-                controller.indexPath = indexPath
+                controller.update = { updatedContact in
+                    self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
+                }
                 self.navigationController?.pushViewController(controller, animated: true)
-                //self.present(controller, animated: true, completion: nil)
             }
         }
         delete.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
         edit.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
         return [delete,edit]
-    }
-    
-    internal func updateContact(contact: Contact){
-        
     }
     
     private func deleteRowContact(at indexPath: IndexPath){
@@ -122,13 +122,6 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         let indexPath = IndexPath(item: count, section: 0)
         self.tableView.insertRows(at: [indexPath], with: .automatic)
         navigationController?.popViewController(animated: true)
-    }
-}
-
-extension MainTableViewController: NewContactViewControllerDataCource{
-    func updateContact(updatedContact: Contact, at indexPath: IndexPath) {
-        contacts[indexPath.row] = updatedContact
-        tableView.reloadData()
     }
 }
 
