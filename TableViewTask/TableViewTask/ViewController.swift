@@ -41,6 +41,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let dvc = storyboard?.instantiateViewController(withIdentifier: "StructureViewController") as! StructureViewController
         dvc.structure = structures[indexPath.row]
         self.navigationController?.pushViewController(dvc, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
