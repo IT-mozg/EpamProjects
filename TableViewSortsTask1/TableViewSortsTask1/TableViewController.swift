@@ -87,6 +87,7 @@ class TableViewController: UITableViewController {
                 if currentSection >= array.count || currentSection+1 >= array.count{
                     currentSection = 0
                 }
+                if countOfSections > 1{
                     deleteSections()
                     let mergedArray = mergeArr(leftArr: array[currentSection], rightArr: array[currentSection+1])
                     array.remove(at: currentSection)
@@ -95,7 +96,7 @@ class TableViewController: UITableViewController {
                     countOfSections = array.count
                     insertSections()
                     currentSection += 1
-                
+                }
             }
             tableView.endUpdates()
         default:
