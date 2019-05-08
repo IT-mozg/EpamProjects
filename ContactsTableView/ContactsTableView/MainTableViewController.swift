@@ -21,15 +21,26 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         checkContacts()
+        
     }
     
     private func checkContacts(){
         tableView.backgroundView = backgroundView
         backgroundView.isHidden = !contacts.isEmpty
+        if !contacts.isEmpty{
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
+        }
+        else{
+            navigationItem.rightBarButtonItem = nil
+        }
     }
     
     
     @IBAction func addNewButtonPressed(_ sender: Any) {
+        addButtonItemPressed()
+    }
+    
+    @objc func addButtonItemPressed(){
         if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
             if let viewController = navigationController.viewControllers.first as? NewContactViewController{
                 viewController.delegate = self
@@ -37,7 +48,6 @@ class MainTableViewController: UITableViewController {
             }
         }
     }
-    
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -55,14 +65,6 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 85
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "addNewContact"{
-//            if let destination = segue.destination as? NewContactViewController{
-//                destination.delegate = self
-//            }
-//        }
-//    }
 }
 
 //MARK: TableViewControllerDelegate
@@ -135,6 +137,6 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         contacts.append(newItem)
         let indexPath = IndexPath(item: count, section: 0)
         self.tableView.insertRows(at: [indexPath], with: .automatic)
-        navigationController?.popViewController(animated: true)
+        checkContacts()
     }
 }
