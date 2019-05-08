@@ -46,10 +46,10 @@ class NewContactViewController: UIViewController {
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
         
-        firstNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
-        lastNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
-        phoneTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
-        emailTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+        lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+        phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
     }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
@@ -131,11 +131,65 @@ extension NewContactViewController: UITextFieldDelegate{
         return true
     }
     
-    @objc private func textFieldChanged(){
-        if !firstNameTextField.text!.isEmpty && !phoneTextField.text!.isEmpty{
+    // MARK: Validation
+    @objc private func validateTextFields() -> Bool{
+        var firstNameChecker = false
+        var lastNameChecker = false
+        var phoneChecker = false
+        var emailChecker = false
+        if !firstNameTextField.text!.isEmpty{
+            firstNameChecker = isValidFirstNameTextField()
+        }
+        if !lastNameTextField.text!.isEmpty{
+            lastNameChecker = isValidLastNameTextField()
+        }
+        if !phoneTextField.text!.isEmpty{
+            phoneChecker = isValidPhoneTextField()
+        }
+        if !emailTextField.text!.isEmpty{
+            emailChecker = isValidEmailTextField()
+        }
+        if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
             navigationItem.rightBarButtonItem?.isEnabled = true
-        }else{
-            navigationItem.rightBarButtonItem?.isEnabled = false
+            return true
+        }
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        return false
+    }
+    
+    private func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{
+        if let text = textField.text{
+            if validate(text){
+                navigationItem.rightBarButtonItem?.isEnabled = true
+                textField.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+                return true
+            }
+        }
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        textField.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        return false
+    }
+    
+    @objc private func isValidFirstNameTextField() -> Bool{
+        return isValidTextField(textField: firstNameTextField){ (text) -> (Bool) in
+            return Validation.isValidName(text)
+        }
+    }
+    
+    @objc private func isValidLastNameTextField() -> Bool{
+        return isValidTextField(textField: lastNameTextField){ (text) -> (Bool) in
+            return Validation.isValidName(text)
+        }
+    }
+    @objc private func isValidEmailTextField() -> Bool{
+        return isValidTextField(textField: emailTextField){ (text) -> (Bool) in
+            return Validation.isValidEmail(text)
+        }
+    }
+    
+    @objc private func isValidPhoneTextField() -> Bool{
+        return isValidTextField(textField: phoneTextField){ (text) -> (Bool) in
+            return Validation.isValidPhoneNumber(text)
         }
     }
     
