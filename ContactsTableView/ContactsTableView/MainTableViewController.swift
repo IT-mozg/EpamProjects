@@ -27,6 +27,17 @@ class MainTableViewController: UITableViewController {
         tableView.backgroundView = backgroundView
         backgroundView.isHidden = !contacts.isEmpty
     }
+    
+    
+    @IBAction func addNewButtonPressed(_ sender: Any) {
+        if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
+            if let viewController = navigationController.viewControllers.first as? NewContactViewController{
+                viewController.delegate = self
+                self.present(navigationController, animated: true, completion: nil)
+            }
+        }
+    }
+    
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -45,13 +56,13 @@ class MainTableViewController: UITableViewController {
         return 85
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "addNewContact"{
-            if let destination = segue.destination as? NewContactViewController{
-                destination.delegate = self
-            }
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "addNewContact"{
+//            if let destination = segue.destination as? NewContactViewController{
+//                destination.delegate = self
+//            }
+//        }
+//    }
 }
 
 //MARK: TableViewControllerDelegate

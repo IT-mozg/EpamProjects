@@ -53,7 +53,7 @@ class NewContactViewController: UIViewController {
     }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
@@ -68,12 +68,11 @@ class NewContactViewController: UIViewController {
         let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: contactImage)
         if editingContact != nil{
             update?(newItem)
+            navigationController?.popViewController(animated: true)
         }else{
-            //dataSource?.updateContact(updatedContact: newItem, at: indexPath!)
             delegate?.addNewContact(newItem: newItem)
+            dismiss(animated: true, completion: nil)
         }
-       // dismiss(animated: true, completion: nil)
-        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func pickImageButtonPressed(_ sender: UIButton) {
