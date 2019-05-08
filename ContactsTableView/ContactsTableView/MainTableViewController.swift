@@ -16,21 +16,17 @@ class MainTableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        checkContacts()
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        checkContacts()
     }
     
     private func checkContacts(){
-        if contacts.isEmpty{
-            backgroundView.isHidden = false
-            tableView.backgroundView = backgroundView
-        }
-        else{
-            backgroundView.isHidden = true
-        }
+        tableView.backgroundView = backgroundView
+        backgroundView.isHidden = !contacts.isEmpty
     }
 
     // MARK: - Table view data source
@@ -41,9 +37,8 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: mainCellID, for: indexPath) as! MainContactTableViewCell
         
-        cell.firstNameLabel.text = contacts[indexPath.row].firstName
-        cell.lastNameLabel.text = contacts[indexPath.row].lastName
-        cell.contactImage?.image = contacts[indexPath.row].imagePhoto
+        cell.updateWith(model: contacts[indexPath.row])
+        
         return cell
     }
     
@@ -65,7 +60,7 @@ extension MainTableViewController{
     
     private func updateContact(updatedContact: Contact, indexPath: IndexPath){
         self.contacts[indexPath.row] = updatedContact
-        self.tableView.reloadData()
+        self.tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -132,11 +127,3 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         navigationController?.popViewController(animated: true)
     }
 }
-
-// MARK: ContactInfoViewControllerDelegate
-//extension MainTableViewController: ContactInfoViewControllerDelegate{
-//    func deleteContact(at id: UUID) {
-//        deleteRowContact(at: id)
-//        checkContacts()
-//    }
-//}

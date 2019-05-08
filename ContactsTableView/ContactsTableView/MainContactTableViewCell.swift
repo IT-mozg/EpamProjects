@@ -14,5 +14,10 @@ class MainContactTableViewCell: UITableViewCell {
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var lastNameLabel: UILabel!
     
+    func updateWith(model: Contact){
+        firstNameLabel.text = model.firstName
+        lastNameLabel.text = model.lastName
+        contactImage?.image = model.imagePhoto
+    }
 
 }
