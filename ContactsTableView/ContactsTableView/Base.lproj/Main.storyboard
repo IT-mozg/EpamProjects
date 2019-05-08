@@ -24,7 +24,7 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDf-e2-hTY">
                                     <rect key="frame" x="107" y="181" width="200" height="54"/>
-                                    <color key="backgroundColor" red="0.57919406890000003" green="0.1280144453" blue="0.57268613580000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" red="0.64088350534439087" green="0.25516152381896973" blue="0.63014954328536987" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="A9f-9q-j42"/>
                                     </constraints>
@@ -169,7 +169,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Wb-QW-NtC">
-                                <rect key="frame" x="178" y="826" width="59" height="36"/>
+                                <rect key="frame" x="177.66666666666666" y="826" width="59" height="36"/>
                                 <color key="backgroundColor" red="1" green="0.1979223779" blue="0.076535550810000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="59" id="e6Q-Ba-xGD"/>
@@ -204,7 +204,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hgQ-iF-k8F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1089.8550724637682" y="873.88392857142856"/>
+            <point key="canvasLocation" x="1090" y="893"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dcs-ur-7en">
@@ -236,7 +236,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Kz-JW-P5D">
                                 <rect key="frame" x="0.0" y="140" width="414" height="200"/>
-                                <color key="backgroundColor" red="0.075398869812488556" green="0.7822195291519165" blue="0.20279747247695923" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.64088350534439087" green="0.25516152381896973" blue="0.63014954328536987" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="pickImageButtonPressed:" destination="xfx-XT-LXI" eventType="touchUpInside" id="XAd-BW-pOJ"/>
                                 </connections>
@@ -304,7 +304,7 @@
                                         <rect key="frame" x="0.0" y="76" width="283" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                         <connections>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="Vqq-vo-lWX"/>
                                         </connections>
@@ -313,7 +313,7 @@
                                         <rect key="frame" x="0.0" y="114" width="283" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                                         <connections>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="lvI-zc-x7G"/>
                                         </connections>

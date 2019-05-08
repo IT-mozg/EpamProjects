@@ -9,9 +9,18 @@ import UIKit
 import Foundation
 
 struct Contact{
+    var contactId: UUID = UUID()
     var firstName: String
     var lastName: String
     var email: String
     var phoneNumber: String
     var imagePhoto: UIImage
+    
+    init(firstName: String, lastName: String, email: String, phoneNumber: String, imagePhoto: UIImage){
+        self.firstName = firstName
+        self.lastName = lastName
+        self.email = email
+        self.phoneNumber = phoneNumber
+        self.imagePhoto = imagePhoto
+    }
 }

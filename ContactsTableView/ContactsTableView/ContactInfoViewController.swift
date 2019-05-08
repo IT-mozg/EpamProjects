@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ContactInfoViewControllerDelegate:class{
-    func deleteContact(at indexPath: IndexPath)
+    func deleteContact(at id: UUID)
 }
 
 class ContactInfoViewController: UIViewController {
@@ -20,8 +20,8 @@ class ContactInfoViewController: UIViewController {
     @IBOutlet weak var photoImageView: UIImageView!
     var editBarButtonItem: UIBarButtonItem!
     
-    var contact: Contact?
-    var indexPath: IndexPath?
+    var contact: Contact!
+    
     weak var delegate: ContactInfoViewControllerDelegate?
     
     var update: ((_ contact: Contact)->())?
@@ -59,7 +59,7 @@ class ContactInfoViewController: UIViewController {
         let noAlertAction = UIAlertAction(title: "No", style: .default, handler: nil)
         let yesAlertAction = UIAlertAction(title: "Yes", style: .default) { (action) in
             if let delegate = self.delegate{
-                delegate.deleteContact(at: self.indexPath!)
+                delegate.deleteContact(at: self.contact.contactId)
                 self.navigationController?.popViewController(animated: true)
             }
         }

@@ -75,7 +75,6 @@ extension MainTableViewController{
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let controller = storyboard?.instantiateViewController(withIdentifier: "ContactInfoViewController") as? ContactInfoViewController{
-            controller.indexPath = indexPath
             controller.delegate = self
             controller.update = { updatedContact in
                 self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
@@ -88,7 +87,7 @@ extension MainTableViewController{
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .default, title: "Delete") { (action, indexPath) in
-            self.deleteRowContact(at: indexPath)
+            self.deleteRowContact(indexPath: indexPath)
         }
         let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
             if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
@@ -100,12 +99,22 @@ extension MainTableViewController{
             }
         }
         delete.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        edit.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+        edit.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         return [delete,edit]
     }
     
-    private func deleteRowContact(at indexPath: IndexPath){
-        self.contacts.remove(at: indexPath.row)
+    private func deleteRowContact(at id: UUID){
+        let index = contacts.firstIndex { $0.contactId == id }
+        guard index != nil else {
+            return
+        }
+        let indexPath = IndexPath(item: index!, section: 0)
+        self.contacts.removeAll { $0.contactId == id }
+        self.tableView.deleteRows(at: [indexPath], with: .left)
+    }
+    
+    private func deleteRowContact(indexPath: IndexPath){
+        contacts.remove(at: indexPath.row)
         self.tableView.deleteRows(at: [indexPath], with: .left)
     }
     
@@ -117,6 +126,7 @@ extension MainTableViewController{
 // MARK: NewContactViewControllerDelegate
 extension MainTableViewController: NewContactViewControllerDelegate{
     func addNewContact(newItem: Contact) {
+        backgroundView.isHidden = true
         let count = contacts.count
         contacts.append(newItem)
         let indexPath = IndexPath(item: count, section: 0)
@@ -127,7 +137,8 @@ extension MainTableViewController: NewContactViewControllerDelegate{
 
 // MARK: ContactInfoViewControllerDelegate
 extension MainTableViewController: ContactInfoViewControllerDelegate{
-    func deleteContact(at indexPath: IndexPath) {
-        deleteRowContact(at: indexPath)
+    func deleteContact(at id: UUID) {
+        deleteRowContact(at: id)
+        checkContacts()
     }
 }

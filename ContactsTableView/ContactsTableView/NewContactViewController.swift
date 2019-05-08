@@ -47,14 +47,6 @@ class NewContactViewController: UIViewController {
         firstNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         phoneTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
     }
-    
-    @objc private func textFieldChanged(){
-        if !firstNameTextField.text!.isEmpty && !phoneTextField.text!.isEmpty{
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }else{
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
-    }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
@@ -120,4 +112,17 @@ extension NewContactViewController: UITextFieldDelegate{
         textField.resignFirstResponder()
         return true
     }
+    
+    @objc private func textFieldChanged(){
+        if !firstNameTextField.text!.isEmpty && !phoneTextField.text!.isEmpty{
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
 }
