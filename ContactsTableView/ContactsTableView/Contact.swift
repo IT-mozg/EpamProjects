@@ -9,7 +9,7 @@ import UIKit
 import Foundation
 
 struct Contact{
-    var contactId: UUID = UUID()
+    var contactId: String
     var firstName: String
     var lastName: String
     var email: String
@@ -17,6 +17,7 @@ struct Contact{
     var imagePhoto: UIImage?
     
     init(firstName: String, lastName: String, email: String, phoneNumber: String, imagePhoto: UIImage?){
+        contactId = UUID().uuidString
         self.firstName = firstName
         self.lastName = lastName
         self.email = email

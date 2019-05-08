@@ -20,7 +20,6 @@ class MainTableViewController: UITableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         checkContacts()
     }
     
@@ -96,7 +95,7 @@ extension MainTableViewController{
         return [delete,edit]
     }
     
-    private func deleteRowContact(at id: UUID){
+    private func deleteRowContact(at id: String){
         let index = contacts.firstIndex { $0.contactId == id }
         guard index != nil else {
             return
