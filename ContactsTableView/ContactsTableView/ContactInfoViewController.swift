@@ -8,9 +8,9 @@
 
 import UIKit
 
-protocol ContactInfoViewControllerDelegate:class{
-    func deleteContact(at id: UUID)
-}
+//protocol ContactInfoViewControllerDelegate:class{
+//    func deleteContact(at id: UUID)
+//}
 
 class ContactInfoViewController: UIViewController {
     @IBOutlet weak var firstNameLabel: UILabel!
@@ -22,9 +22,10 @@ class ContactInfoViewController: UIViewController {
     
     var contact: Contact!
     
-    weak var delegate: ContactInfoViewControllerDelegate?
+   // weak var delegate: ContactInfoViewControllerDelegate?
     
     var update: ((_ contact: Contact)->())?
+    var delete: (()->())?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,8 +59,8 @@ class ContactInfoViewController: UIViewController {
         let alertController = UIAlertController(title: "Delete", message: "Do you realy wanna delete current contact?", preferredStyle: .alert)
         let noAlertAction = UIAlertAction(title: "No", style: .default, handler: nil)
         let yesAlertAction = UIAlertAction(title: "Yes", style: .default) { (action) in
-            if let delegate = self.delegate{
-                delegate.deleteContact(at: self.contact.contactId)
+            if let deleteClosure = self.delete{
+                deleteClosure()
                 self.navigationController?.popViewController(animated: true)
             }
         }

@@ -15,6 +15,7 @@ class MainTableViewController: UITableViewController {
     @IBOutlet weak var backgroundView: UIView!
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         checkContacts()
     }
     override func viewDidLoad() {
@@ -33,16 +34,10 @@ class MainTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return contacts.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: mainCellID, for: indexPath) as! MainContactTableViewCell
         
@@ -75,9 +70,12 @@ extension MainTableViewController{
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let controller = storyboard?.instantiateViewController(withIdentifier: "ContactInfoViewController") as? ContactInfoViewController{
-            controller.delegate = self
+            //controller.delegate = self
             controller.update = { updatedContact in
                 self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
+            }
+            controller.delete = {
+                self.deleteRowContact(indexPath: indexPath)
             }
             controller.contact = contacts[indexPath.row]
             navigationController?.pushViewController(controller, animated: true)
@@ -136,9 +134,9 @@ extension MainTableViewController: NewContactViewControllerDelegate{
 }
 
 // MARK: ContactInfoViewControllerDelegate
-extension MainTableViewController: ContactInfoViewControllerDelegate{
-    func deleteContact(at id: UUID) {
-        deleteRowContact(at: id)
-        checkContacts()
-    }
-}
+//extension MainTableViewController: ContactInfoViewControllerDelegate{
+//    func deleteContact(at id: UUID) {
+//        deleteRowContact(at: id)
+//        checkContacts()
+//    }
+//}

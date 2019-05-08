@@ -14,9 +14,9 @@ struct Contact{
     var lastName: String
     var email: String
     var phoneNumber: String
-    var imagePhoto: UIImage
+    var imagePhoto: UIImage?
     
-    init(firstName: String, lastName: String, email: String, phoneNumber: String, imagePhoto: UIImage){
+    init(firstName: String, lastName: String, email: String, phoneNumber: String, imagePhoto: UIImage?){
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
