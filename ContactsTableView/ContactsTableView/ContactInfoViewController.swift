@@ -45,7 +45,7 @@ class ContactInfoViewController: UIViewController {
     
     @objc private func editButtonPressed(){
         if let controller = storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
-            controller.update = {updatedContact in
+            controller.update = {[unowned self] updatedContact in
                 self.contact = updatedContact
                 self.update?(updatedContact)
                 self.presentContact()

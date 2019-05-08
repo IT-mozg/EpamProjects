@@ -76,11 +76,12 @@ extension MainTableViewController{
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let controller = storyboard?.instantiateViewController(withIdentifier: "ContactInfoViewController") as? ContactInfoViewController{
             //controller.delegate = self
-            controller.update = { updatedContact in
+            controller.update = {[unowned self] updatedContact in
                 self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
             }
-            controller.delete = {
+            controller.delete = {[unowned self] in
                 self.deleteRowContact(indexPath: indexPath)
+                self.checkContacts()
             }
             controller.contact = contacts[indexPath.row]
             navigationController?.pushViewController(controller, animated: true)
@@ -95,7 +96,7 @@ extension MainTableViewController{
         let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
             if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
                 controller.editingContact = self.contacts[indexPath.row]
-                controller.update = { updatedContact in
+                controller.update = {[unowned self] updatedContact in
                     self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
                 }
                 self.navigationController?.pushViewController(controller, animated: true)
