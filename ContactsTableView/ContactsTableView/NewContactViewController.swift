@@ -57,7 +57,11 @@ class NewContactViewController: UIViewController {
     }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        guard editingContact != nil else {
+            dismiss(animated: true, completion: nil)
+            return
+        }
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
@@ -67,7 +71,11 @@ class NewContactViewController: UIViewController {
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
         if contactImage == nil{
-            contactImage = UIImage(named: "avatar")
+            if editingContact != nil{
+                contactImage = editingContact!.imagePhoto
+            }else{
+                contactImage = UIImage(named: "avatar")
+            }
         }
         let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: contactImage)
         if editingContact != nil{
