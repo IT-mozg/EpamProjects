@@ -18,6 +18,7 @@ class NewContactViewController: UIViewController {
     
     var editingContact: Contact?
     var update: UpdateClosure?
+    var delete: (()->())?
     
     var contactImage: UIImage?
     
@@ -26,10 +27,13 @@ class NewContactViewController: UIViewController {
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var phoneTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var deleteButton: UIButton!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        if editingContact == nil{
+            deleteButton.isHidden = true
+        }
     }
     
     override func viewDidLoad() {
@@ -74,6 +78,21 @@ class NewContactViewController: UIViewController {
             dismiss(animated: true, completion: nil)
         }
     }
+    
+    @IBAction func deleteButtonPressed(_ sender: UIButton) {
+        let alertController = UIAlertController(title: "Delete", message: "Do you realy wanna delete current contact?", preferredStyle: .alert)
+        let noAlertAction = UIAlertAction(title: "No", style: .default, handler: nil)
+        let yesAlertAction = UIAlertAction(title: "Yes", style: .default) { (action) in
+            if let deleteClosure = self.delete{
+                deleteClosure()
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+        alertController.addAction(noAlertAction)
+        alertController.addAction(yesAlertAction)
+        present(alertController, animated: true)
+    }
+    
     
     @IBAction func pickImageButtonPressed(_ sender: UIButton) {
         #if targetEnvironment(simulator)

@@ -50,6 +50,10 @@ class ContactInfoViewController: UIViewController {
                 self.update?(updatedContact)
                 self.presentContact()
             }
+            controller.delete = {[unowned self] in
+                self.delete?()
+                self.navigationController?.popToRootViewController(animated: true)
+            }
             controller.editingContact = contact
             navigationController?.pushViewController(controller, animated: true)
         }
@@ -67,5 +71,6 @@ class ContactInfoViewController: UIViewController {
         alertController.addAction(noAlertAction)
         alertController.addAction(yesAlertAction)
         present(alertController, animated: true)
+        
     }
 }

@@ -34,7 +34,7 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your contact list is empty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Us-eU-f1u">
-                                    <rect key="frame" x="111" y="146" width="193" height="21"/>
+                                    <rect key="frame" x="110.66666666666669" y="146" width="193" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -325,9 +325,24 @@
                                     </textField>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nqO-3x-2Oo">
+                                <rect key="frame" x="169" y="803" width="76" height="36"/>
+                                <color key="backgroundColor" red="1" green="0.1979223779" blue="0.076535550810000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="76" id="I3D-jJ-lS3"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteButtonPressed:" destination="xfx-XT-LXI" eventType="touchUpInside" id="zEB-sy-clA"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="jVI-px-8tp" firstAttribute="bottom" secondItem="nqO-3x-2Oo" secondAttribute="bottom" constant="23" id="3yE-7a-Vwv"/>
                             <constraint firstItem="5Kz-JW-P5D" firstAttribute="width" secondItem="KDf-7c-C3l" secondAttribute="width" id="5Gu-3b-Q8L"/>
                             <constraint firstItem="d0w-H4-KiR" firstAttribute="top" secondItem="KDf-7c-C3l" secondAttribute="bottom" constant="19" id="5fF-MU-Xp6"/>
                             <constraint firstItem="BDH-sY-rDi" firstAttribute="leading" secondItem="d0w-H4-KiR" secondAttribute="trailing" constant="19" id="6uk-Q7-qZr"/>
@@ -335,6 +350,7 @@
                             <constraint firstItem="KDf-7c-C3l" firstAttribute="trailing" secondItem="jVI-px-8tp" secondAttribute="trailing" id="Dtz-RP-vTe"/>
                             <constraint firstItem="KDf-7c-C3l" firstAttribute="leading" secondItem="jVI-px-8tp" secondAttribute="leading" id="G2Y-uy-Ae5"/>
                             <constraint firstItem="5Kz-JW-P5D" firstAttribute="bottom" secondItem="KDf-7c-C3l" secondAttribute="bottom" id="Ip1-tD-KG4"/>
+                            <constraint firstItem="nqO-3x-2Oo" firstAttribute="centerX" secondItem="jVI-px-8tp" secondAttribute="centerX" id="Mdh-7A-dTU"/>
                             <constraint firstItem="5Kz-JW-P5D" firstAttribute="trailing" secondItem="KDf-7c-C3l" secondAttribute="trailing" id="She-qq-Wrr"/>
                             <constraint firstItem="d0w-H4-KiR" firstAttribute="leading" secondItem="jVI-px-8tp" secondAttribute="leading" constant="16" id="aAl-K8-Icz"/>
                             <constraint firstItem="5Kz-JW-P5D" firstAttribute="height" secondItem="KDf-7c-C3l" secondAttribute="height" id="csm-0F-OcU"/>
@@ -357,6 +373,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="deleteButton" destination="nqO-3x-2Oo" id="ZYm-x7-OIr"/>
                         <outlet property="emailTextField" destination="Ib4-Kq-xoe" id="kPa-u5-3da"/>
                         <outlet property="firstNameTextField" destination="PP4-Dc-JGl" id="bEc-4q-KKc"/>
                         <outlet property="lastNameTextField" destination="ULm-5k-vax" id="Y7J-5K-HZM"/>
