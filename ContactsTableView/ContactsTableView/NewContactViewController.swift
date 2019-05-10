@@ -45,6 +45,7 @@ class NewContactViewController: UIViewController {
             phoneTextField.text = contact.phoneNumber
             emailTextField.text = contact.email
             photoContactImageView.image = contact.imagePhoto
+            contactImage = contact.imagePhoto
         }else{
             navigationItem.rightBarButtonItem?.title = "Add"
             navigationItem.rightBarButtonItem?.isEnabled = false
@@ -101,8 +102,7 @@ class NewContactViewController: UIViewController {
         present(alertController, animated: true)
     }
     
-    
-    @IBAction func pickImageButtonPressed(_ sender: UIButton) {
+    private func changeImage(){
         #if targetEnvironment(simulator)
             self.chooseImagePickerAction(source: .photoLibrary)
         #else
@@ -120,10 +120,39 @@ class NewContactViewController: UIViewController {
             self.present(alertController, animated: true, completion: nil)
         #endif
     }
+    
+    @IBAction func pickImageButtonPressed(_ sender: UIButton) {
+        if editingContact == nil && contactImage == nil{
+            changeImage()
+        }
+        else{
+            let alertController = UIAlertController(title: "Edit image", message: nil, preferredStyle: .actionSheet)
+            let removeAction = UIAlertAction(title: "Remove", style: .default) { (action) in
+                let image = UIImage(named: "avatar")
+                self.assingImage(image!)
+            }
+            let changeAction = UIAlertAction(title: "Change", style: .default) { (action) in
+                alertController.dismiss(animated: true, completion: nil)
+                self.changeImage()
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(removeAction)
+            alertController.addAction(changeAction)
+            alertController.addAction(cancelAction)
+            present(alertController, animated: true)
+        }
+    }
 
 }
 // MARK: Image picker
 extension NewContactViewController: UIImagePickerControllerDelegate{
+    private func assingImage(_ image: UIImage){
+        contactImage = image
+        photoContactImageView.image = contactImage
+        photoContactImageView.contentMode = .scaleAspectFill
+        photoContactImageView.clipsToBounds = true
+    }
+    
     private func chooseImagePickerAction(source: UIImagePickerController.SourceType){
         guard UIImagePickerController.isSourceTypeAvailable(source) else {
             return
@@ -137,10 +166,7 @@ extension NewContactViewController: UIImagePickerControllerDelegate{
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.editedImage] as? UIImage{
-            contactImage = image
-            photoContactImageView.image = contactImage
-            photoContactImageView.contentMode = .scaleAspectFill
-            photoContactImageView.clipsToBounds = true
+            assingImage(image)
         }
         dismiss(animated: true, completion: nil)
     }
