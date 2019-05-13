@@ -39,7 +39,7 @@ class Contact: NSObject, NSCoding{
         let phoneNumber = aDecoder.decodeObject(forKey: "phoneNumber") as! String
         
         var oldImage: UIImage? = nil
-        let possibleOldImagePath = UserDefaults.standard.object(forKey: "path") as! String?
+        let possibleOldImagePath = UserDefaults.standard.object(forKey: "path-\(id)") as! String?
         if let oldImagePath = possibleOldImagePath {
             let pathes = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
             let path = pathes.first! as String
@@ -60,17 +60,20 @@ class Contact: NSObject, NSCoding{
         aCoder.encode(lastName, forKey: "lastName")
         aCoder.encode(email, forKey: "email")
         aCoder.encode(phoneNumber, forKey: "phoneNumber")
-        encodeImage(imagePhoto!)
+        encodeImage(imagePhoto)
     }
     
-    func encodeImage(_ image: UIImage){
+    func encodeImage(_ image: UIImage?){
+        guard let image = image else{
+            return
+        }
         let imgData = UIImage.jpegData(image)
         let relativePath = "image-\(contactId).jpg"
         let url = documentsPathForFileName(relativePath)
         do{
             try imgData(1.0)?.write(to: url)
         }catch{}
-        UserDefaults.standard.set(relativePath, forKey: "path")
+        UserDefaults.standard.set(relativePath, forKey: "path-\(contactId)")
         UserDefaults.standard.synchronize()
     }
     

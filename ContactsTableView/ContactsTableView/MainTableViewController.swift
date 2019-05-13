@@ -11,6 +11,7 @@ let mainCellID = "MainCell"
 
 class MainTableViewController: UITableViewController {
     var contacts: [Contact] = []
+    var userDefaults: UserDefaults!
 
     @IBOutlet weak var backgroundView: UIView!
     
@@ -21,14 +22,19 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
-        let us = UserDefaults.standard
 //        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
 //        us.set(encodedData, forKey: "contacts")
 //        us.synchronize()
-        let decoded = us.data(forKey: "contacts")
+        userDefaults = UserDefaults.standard
+        let decoded = userDefaults.data(forKey: "contacts")
         let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Contact]
         contacts = decodedContacts
-        contacts.first?.firstName = "123"
+    }
+    
+    private func updateUserDefaults(){
+        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
+        userDefaults.set(encodedData, forKey: "contacts")
+        userDefaults.synchronize()
     }
     
     private func checkContacts(){
@@ -69,6 +75,7 @@ class MainTableViewController: UITableViewController {
         else{
             navigationItem.rightBarButtonItem = nil
         }
+        updateUserDefaults()
         return contacts.count
     }
 
@@ -91,6 +98,7 @@ extension MainTableViewController{
     private func updateContact(updatedContact: Contact, indexPath: IndexPath){
         self.contacts[indexPath.row] = updatedContact
         self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        updateUserDefaults()
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -138,11 +146,13 @@ extension MainTableViewController{
         let indexPath = IndexPath(item: index!, section: 0)
         self.contacts.removeAll { $0.contactId == id }
         self.tableView.deleteRows(at: [indexPath], with: .left)
+        updateUserDefaults()
     }
     
     private func deleteRowContact(indexPath: IndexPath){
         contacts.remove(at: indexPath.row)
         self.tableView.deleteRows(at: [indexPath], with: .left)
+        updateUserDefaults()
     }
 }
 
@@ -154,5 +164,6 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         contacts.append(newItem)
         let indexPath = IndexPath(item: count, section: 0)
         self.tableView.insertRows(at: [indexPath], with: .automatic)
+        updateUserDefaults()
     }
 }
