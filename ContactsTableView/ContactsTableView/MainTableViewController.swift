@@ -22,9 +22,6 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
-//        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
-//        us.set(encodedData, forKey: "contacts")
-//        us.synchronize()
         userDefaults = UserDefaults.standard
         let decoded = userDefaults.data(forKey: "contacts")
         let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Contact]
@@ -81,9 +78,7 @@ class MainTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: mainCellID, for: indexPath) as! MainContactTableViewCell
-        
         cell.updateWith(model: contacts[indexPath.row])
-        
         return cell
     }
     
