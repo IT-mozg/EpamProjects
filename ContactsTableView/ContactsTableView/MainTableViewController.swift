@@ -35,20 +35,9 @@ class MainTableViewController: UITableViewController {
         userDefaults.synchronize()
     }
     
-    private func checkContacts(){
-        tableView.backgroundView = backgroundView
-        backgroundView.isHidden = !contacts.isEmpty
-        if !contacts.isEmpty{
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
-        }
-        else{
-            navigationItem.rightBarButtonItem = nil
-        }
-    }
-    
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
         self.tableView.isEditing = !self.tableView.isEditing
-        sender.title = (self.tableView.isEditing) ? "Done" : "Edit"
+        navigationItem.leftBarButtonItem!.title = (self.tableView.isEditing) ? "Done" : "Edit"
     }
     
     @IBAction func addNewButtonPressed(_ sender: Any) {
@@ -69,9 +58,11 @@ class MainTableViewController: UITableViewController {
         backgroundView.isHidden = !contacts.isEmpty
         if !contacts.isEmpty{
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
         }
         else{
             navigationItem.rightBarButtonItem = nil
+            navigationItem.leftBarButtonItem = nil
         }
         updateUserDefaults()
         return contacts.count

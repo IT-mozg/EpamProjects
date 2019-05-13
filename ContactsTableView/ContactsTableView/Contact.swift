@@ -9,26 +9,65 @@ import UIKit
 import Foundation
 
 class Contact: NSObject, NSCoding{
-
-    var contactId: String
+    private var privateId: String
+    
+    var contactId: String{
+        return privateId
+    }
     var firstName: String
     var lastName: String
     var email: String
     var phoneNumber: String
-    var imagePhoto: UIImage?
+    var imagePhoto: UIImage?{
+        set{
+            guard let image = newValue else{
+                do{
+                    let path = self.documentsPathForFileName(imageName, fileExtension: "jpg")
+                    let fileManager = FileManager.default
+                    try fileManager.removeItem(at: path)
+                }catch let error as NSError{
+                    print(error)
+                }
+                return
+            }
+            let imgData = UIImage.jpegData(image)
+            let relativePath = imageName
+            let url = documentsPathForFileName(relativePath, fileExtension: "jpg")
+            do{
+                try imgData(1.0)!.write(to: url)
+            }catch let error as NSError{
+                print(error)
+            }
+        }
+        get{
+            var image: UIImage? = nil
+            do{
+                let path = self.documentsPathForFileName(imageName, fileExtension: "jpg")
+                let data = try Data(contentsOf: path)
+                image = UIImage(data: data)
+            }catch let error as NSError{
+                print(error)
+            }
+            return image
+        }
+    }
     
-    init(firstName: String, lastName: String, email: String, phoneNumber: String, imagePhoto: UIImage?){
-        contactId = UUID().uuidString
+    private lazy var imageName: String = {
+        return "image-\(contactId)"
+    }()
+    
+    init(firstName: String, lastName: String, email: String, phoneNumber: String){
+        privateId = UUID().uuidString
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
         self.phoneNumber = phoneNumber
-        self.imagePhoto = imagePhoto
+        super.init()
     }
     
-    convenience init(id: String, firstName: String, lastName: String, email: String, phoneNumber: String, imagePhoto: UIImage?){
-        self.init(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, imagePhoto: imagePhoto)
-        contactId = id
+    convenience init(id: String, firstName: String, lastName: String, email: String, phoneNumber: String){
+        self.init(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
+        privateId = id
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -38,20 +77,11 @@ class Contact: NSObject, NSCoding{
         let email = aDecoder.decodeObject(forKey: "email") as! String
         let phoneNumber = aDecoder.decodeObject(forKey: "phoneNumber") as! String
         
-        var oldImage: UIImage? = nil
-        let possibleOldImagePath = UserDefaults.standard.object(forKey: "path-\(id)") as! String?
-        if let oldImagePath = possibleOldImagePath {
-            let pathes = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            let path = pathes.first! as String
-            let oldFullPath = URL(fileURLWithPath: path).appendingPathComponent(oldImagePath)
-            do{
-                let data = try Data(contentsOf: oldFullPath)
-                oldImage = UIImage(data: data)
-            }catch{
-                oldImage = nil
-            }
-        }
-        self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, imagePhoto: oldImage)
+        self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
+    }
+    
+    deinit {
+        imagePhoto = nil
     }
     
     func encode(with aCoder: NSCoder) {
@@ -60,27 +90,20 @@ class Contact: NSObject, NSCoding{
         aCoder.encode(lastName, forKey: "lastName")
         aCoder.encode(email, forKey: "email")
         aCoder.encode(phoneNumber, forKey: "phoneNumber")
-        encodeImage(imagePhoto)
     }
     
-    func encodeImage(_ image: UIImage?){
-        guard let image = image else{
-            return
-        }
-        let imgData = UIImage.jpegData(image)
-        let relativePath = "image-\(contactId).jpg"
-        let url = documentsPathForFileName(relativePath)
-        do{
-            try imgData(1.0)?.write(to: url)
-        }catch{}
-        UserDefaults.standard.set(relativePath, forKey: "path-\(contactId)")
-        UserDefaults.standard.synchronize()
+    func documentsPathForFileName(_ name: String, fileExtension: String) -> URL{
+        let documentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let fileURL = documentDirURL.appendingPathComponent(name).appendingPathExtension(fileExtension)
+        return fileURL
     }
-    
-    func documentsPathForFileName(_ name: String) -> URL{
-        let pathes = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = pathes.first! as String
-        let url = URL(fileURLWithPath: path).appendingPathComponent(name)
-        return url
+
+}
+
+extension Contact : NSCopying{
+    func copy(with zone: NSZone? = nil) -> Any{
+        let copyContact = Contact(id: contactId, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
+        copyContact.imagePhoto = imagePhoto
+        return copyContact
     }
 }

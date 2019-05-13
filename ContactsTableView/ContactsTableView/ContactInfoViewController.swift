@@ -40,7 +40,7 @@ class ContactInfoViewController: UIViewController {
         lastNameLabel.text = contact?.lastName
         phoneLabel.text = contact?.phoneNumber
         emailLabel.text = contact?.email
-        photoImageView.image = contact?.imagePhoto
+        photoImageView.image = contact?.imagePhoto ?? UIImage(named: "avatar")
     }
     
     @objc private func editButtonPressed(){

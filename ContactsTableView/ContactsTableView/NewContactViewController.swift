@@ -43,7 +43,7 @@ class NewContactViewController: UIViewController {
             lastNameTextField.text = contact.lastName
             phoneTextField.text = contact.phoneNumber
             emailTextField.text = contact.email
-            photoContactImageView.image = contact.imagePhoto
+            photoContactImageView.image = contact.imagePhoto ?? UIImage(named: "camera")
             contactImage = contact.imagePhoto
         }else{
             navigationItem.rightBarButtonItem?.title = "Add"
@@ -66,18 +66,21 @@ class NewContactViewController: UIViewController {
         guard let lastName = lastNameTextField.text else { return  }
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
-        if contactImage == nil{
-            if editingContact != nil{
-                contactImage = editingContact!.imagePhoto
-            }else{
-                contactImage = UIImage(named: "avatar")
-            }
-        }
-        let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: contactImage)
       
-        update?(newItem)
-
-        delegate?.addNewContact(newItem: newItem)
+        if let updateClosure = self.update{
+            let updated = editingContact!.copy() as! Contact
+            updated.firstName = firstName
+            updated.lastName = lastName
+            updated.email = email
+            updated.phoneNumber = phone
+            updated.imagePhoto = contactImage
+            updateClosure(updated)
+        }
+        if delegate != nil{
+            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone)
+            newItem.imagePhoto = contactImage
+            delegate!.addNewContact(newItem: newItem)
+        }
         dismiss(animated: true, completion: nil)
     
     }
@@ -112,8 +115,7 @@ class NewContactViewController: UIViewController {
         else{
             let alertController = UIAlertController(title: "Edit image", message: nil, preferredStyle: .actionSheet)
             let removeAction = UIAlertAction(title: "Remove", style: .default) { (action) in
-                let image = UIImage(named: "avatar")
-                self.assingImage(image!)
+                self.contactImage = nil
             }
             let changeAction = UIAlertAction(title: "Change", style: .default) { (action) in
                 alertController.dismiss(animated: true, completion: nil)
