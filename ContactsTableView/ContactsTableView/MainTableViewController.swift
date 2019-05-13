@@ -8,10 +8,7 @@
 
 import UIKit
 let mainCellID = "MainCell"
-struct Lol{
-    var q: String
-    var w: String
-}
+
 class MainTableViewController: UITableViewController {
     var contacts: [Contact] = []
 
@@ -46,6 +43,10 @@ class MainTableViewController: UITableViewController {
         }
     }
     
+    @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
+        self.tableView.isEditing = !self.tableView.isEditing
+        sender.title = (self.tableView.isEditing) ? "Done" : "Edit"
+    }
     
     @IBAction func addNewButtonPressed(_ sender: Any) {
         addButtonItemPressed()

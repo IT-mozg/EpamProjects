@@ -50,7 +50,6 @@ class Contact: NSObject, NSCoding{
             }catch{
                 oldImage = nil
             }
-            // here is your saved image:
         }
         self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, imagePhoto: oldImage)
     }
@@ -62,18 +61,6 @@ class Contact: NSObject, NSCoding{
         aCoder.encode(email, forKey: "email")
         aCoder.encode(phoneNumber, forKey: "phoneNumber")
         encodeImage(imagePhoto!)
-    }
-    
-    func decodeImage() -> UIImage? {
-        let possibleOldImagePath = UserDefaults.standard.object(forKey: "path") as! String?
-        if let oldImagePath = possibleOldImagePath {
-            let oldFullPath = self.documentsPathForFileName(oldImagePath)
-            let oldImageData = NSData(contentsOfFile: oldFullPath.absoluteString)
-            // here is your saved image:
-            let oldImage = UIImage(data: oldImageData! as Data)
-            return oldImage
-        }
-        return nil
     }
     
     func encodeImage(_ image: UIImage){

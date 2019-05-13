@@ -102,6 +102,11 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Contacts" id="duP-BA-7eG">
                         <barButtonItem key="backBarButtonItem" title="Back" id="ktc-mM-W4x"/>
+                        <barButtonItem key="leftBarButtonItem" title="Edit" id="S8g-1o-oYb">
+                            <connections>
+                                <action selector="editButtonPressed:" destination="j0Y-Ac-Rw6" id="joC-lL-mLu"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="8we-Av-UIE">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
