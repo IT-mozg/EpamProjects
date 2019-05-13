@@ -23,9 +23,10 @@ class MainTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
         userDefaults = UserDefaults.standard
-        let decoded = userDefaults.data(forKey: "contacts")
-        let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Contact]
-        contacts = decodedContacts
+        if let decoded = userDefaults.data(forKey: "contacts"){
+            let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [Contact]
+            contacts = decodedContacts
+        }
     }
     
     private func updateUserDefaults(){
