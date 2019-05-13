@@ -20,7 +20,7 @@ class MainTableViewController: UITableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkContacts()
+        tableView.backgroundView = backgroundView
         let us = UserDefaults.standard
 //        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
 //        us.set(encodedData, forKey: "contacts")
@@ -29,7 +29,6 @@ class MainTableViewController: UITableViewController {
         let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Contact]
         contacts = decodedContacts
         contacts.first?.firstName = "123"
-        checkContacts()
     }
     
     private func checkContacts(){
@@ -63,6 +62,13 @@ class MainTableViewController: UITableViewController {
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        backgroundView.isHidden = !contacts.isEmpty
+        if !contacts.isEmpty{
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
+        }
+        else{
+            navigationItem.rightBarButtonItem = nil
+        }
         return contacts.count
     }
 
@@ -89,13 +95,11 @@ extension MainTableViewController{
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let controller = storyboard?.instantiateViewController(withIdentifier: "ContactInfoViewController") as? ContactInfoViewController{
-            //controller.delegate = self
             controller.update = {[unowned self] updatedContact in
                 self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
             }
             controller.delete = {[unowned self] in
                 self.deleteRowContact(indexPath: indexPath)
-                self.checkContacts()
             }
             controller.contact = contacts[indexPath.row]
             navigationController?.pushViewController(controller, animated: true)
@@ -108,12 +112,17 @@ extension MainTableViewController{
             self.deleteRowContact(indexPath: indexPath)
         }
         let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
-            if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
-                controller.editingContact = self.contacts[indexPath.row]
-                controller.update = {[unowned self] updatedContact in
-                    self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
+            if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
+                if let controller = navigationController.viewControllers.first as? NewContactViewController{
+                    controller.editingContact = self.contacts[indexPath.row]
+                    controller.update = {[unowned self] updatedContact in
+                        self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
+                    }
+                    controller.delete = {[unowned self] in
+                        self.deleteRowContact(indexPath: indexPath)
+                    }
+                    self.present(navigationController, animated: true, completion: nil)
                 }
-                self.navigationController?.pushViewController(controller, animated: true)
             }
         }
         delete.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
@@ -135,10 +144,6 @@ extension MainTableViewController{
         contacts.remove(at: indexPath.row)
         self.tableView.deleteRows(at: [indexPath], with: .left)
     }
-    
-    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        checkContacts()
-    }
 }
 
 // MARK: NewContactViewControllerDelegate
@@ -149,6 +154,5 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         contacts.append(newItem)
         let indexPath = IndexPath(item: count, section: 0)
         self.tableView.insertRows(at: [indexPath], with: .automatic)
-        checkContacts()
     }
 }

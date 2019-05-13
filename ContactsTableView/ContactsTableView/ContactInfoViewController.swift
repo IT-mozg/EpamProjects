@@ -44,18 +44,20 @@ class ContactInfoViewController: UIViewController {
     }
     
     @objc private func editButtonPressed(){
-        if let controller = storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
-            controller.update = {[unowned self] updatedContact in
-                self.contact = updatedContact
-                self.update?(updatedContact)
-                self.presentContact()
+        if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
+            if let controller = navigationController.viewControllers.first as? NewContactViewController{
+                controller.update = {[unowned self] updatedContact in
+                    self.contact = updatedContact
+                    self.update?(updatedContact)
+                    self.presentContact()
+                }
+                controller.delete = {[unowned self] in
+                    self.delete?()
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
+                controller.editingContact = contact
+                self.present(navigationController, animated: true, completion: nil)
             }
-            controller.delete = {[unowned self] in
-                self.delete?()
-                self.navigationController?.popToRootViewController(animated: true)
-            }
-            controller.editingContact = contact
-            navigationController?.pushViewController(controller, animated: true)
         }
     }
 

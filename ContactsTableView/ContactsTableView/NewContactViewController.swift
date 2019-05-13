@@ -31,14 +31,13 @@ class NewContactViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if editingContact == nil{
-            deleteButton.isHidden = true
-        }
+        deleteButton.isHidden = editingContact == nil
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if let contact = editingContact{
+            navigationItem.title = "Editing"
             navigationItem.rightBarButtonItem?.title = "Save"
             firstNameTextField.text = contact.firstName
             lastNameTextField.text = contact.lastName
@@ -58,11 +57,7 @@ class NewContactViewController: UIViewController {
     }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        guard editingContact != nil else {
-            dismiss(animated: true, completion: nil)
-            return
-        }
-        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
@@ -79,27 +74,16 @@ class NewContactViewController: UIViewController {
             }
         }
         let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: contactImage)
-        if editingContact != nil{
-            update?(newItem)
-            navigationController?.popViewController(animated: true)
-        }else{
-            delegate?.addNewContact(newItem: newItem)
-            dismiss(animated: true, completion: nil)
-        }
+      
+        update?(newItem)
+
+        delegate?.addNewContact(newItem: newItem)
+        dismiss(animated: true, completion: nil)
+    
     }
     
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
-        let alertController = UIAlertController(title: "Delete", message: "Do you realy wanna delete current contact?", preferredStyle: .alert)
-        let noAlertAction = UIAlertAction(title: "No", style: .default, handler: nil)
-        let yesAlertAction = UIAlertAction(title: "Yes", style: .default) { (action) in
-            if let deleteClosure = self.delete{
-                deleteClosure()
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-        alertController.addAction(noAlertAction)
-        alertController.addAction(yesAlertAction)
-        present(alertController, animated: true)
+         ContactActionHelper.delete(self.delete, viewController: self)
     }
     
     private func changeImage(){
