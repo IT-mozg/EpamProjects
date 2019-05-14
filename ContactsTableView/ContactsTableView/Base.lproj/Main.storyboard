@@ -122,6 +122,34 @@
             </objects>
             <point key="canvasLocation" x="1089.8550724637682" y="147.99107142857142"/>
         </scene>
+        <!--Contacts Search Result Table View Controller-->
+        <scene sceneID="peX-2H-gbr">
+            <objects>
+                <tableViewController storyboardIdentifier="ContactsSearchResultTableViewController" id="OSW-gU-iQ3" customClass="ContactsSearchResultTableViewController" customModule="ContactsTableView" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="UNK-uU-K3D">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="resultCell" id="gKr-1F-kBv">
+                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gKr-1F-kBv" id="eLH-wU-iCs">
+                                    <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="OSW-gU-iQ3" id="jZi-C3-rEW"/>
+                            <outlet property="delegate" destination="OSW-gU-iQ3" id="48h-5n-vPg"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pwl-l3-s1w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1090" y="-579"/>
+        </scene>
         <!--Contact Info View Controller-->
         <scene sceneID="thi-Hc-cFm">
             <objects>
@@ -388,7 +416,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xzj-na-MgZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2985.507246376812" y="147.99107142857142"/>
+            <point key="canvasLocation" x="3067" y="148"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="BQv-f7-PfL">
@@ -411,7 +439,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1IT-iO-ZWq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2075.36231884058" y="147.99107142857142"/>
+            <point key="canvasLocation" x="2157" y="148"/>
         </scene>
     </scenes>
     <resources>

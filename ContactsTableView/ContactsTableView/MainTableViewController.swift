@@ -11,7 +11,12 @@ let mainCellID = "MainCell"
 
 class MainTableViewController: UITableViewController {
     private var contacts: [Contact] = []
-    private var filteredContacts: [Contact] = []
+    private var filteredContacts: [Contact] = []{
+        didSet{
+            searchResultController?.filteredContacts = filteredContacts
+            searchResultController?.searchString = contactSearchController.searchBar.text
+        }
+    }
     private var userDefaults: UserDefaults!
     private var contactSearchController: UISearchController!
     private var searchBarIsEmpty: Bool{
@@ -23,6 +28,7 @@ class MainTableViewController: UITableViewController {
     private var isFiltering: Bool{
         return contactSearchController.isActive && !searchBarIsEmpty
     }
+    private var searchResultController: ContactsSearchResultTableViewController?
     
     @IBOutlet weak var backgroundView: UIView!
     
@@ -32,16 +38,22 @@ class MainTableViewController: UITableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // setup background
         tableView.backgroundView = backgroundView
+        
         // setup searchController
-        contactSearchController = UISearchController(searchResultsController: nil)
+        searchResultController = storyboard?.instantiateViewController(withIdentifier: "ContactsSearchResultTableViewController") as? ContactsSearchResultTableViewController
+        searchResultController!.delegate = self
+        contactSearchController = UISearchController(searchResultsController: searchResultController)
         contactSearchController.searchResultsUpdater = self
         contactSearchController.obscuresBackgroundDuringPresentation = false
         contactSearchController.searchBar.placeholder = "Search contact"
+        contactSearchController.searchBar.delegate = self
         navigationItem.searchController = contactSearchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
+        
         // unarchive contacts
         userDefaults = UserDefaults.standard
         if let decoded = userDefaults.data(forKey: "contacts"){
@@ -86,19 +98,12 @@ class MainTableViewController: UITableViewController {
             navigationItem.leftBarButtonItem = nil
         }
         updateUserDefaults()
-        if isFiltering{
-            return filteredContacts.count
-        }
         return contacts.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: mainCellID, for: indexPath) as! MainContactTableViewCell
-        if isFiltering{
-            cell.updateWith(model: filteredContacts[indexPath.row])
-        }else{
-            cell.updateWith(model: contacts[indexPath.row])
-        }
+        cell.updateWith(model: contacts[indexPath.row])
         return cell
     }
     
@@ -117,6 +122,108 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        didSelectRow(tableView, indexPath)
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        return editActionsForRow(tableView, indexPath)
+    }
+    
+    private func deleteRowContact(_ indexPath: IndexPath){
+        if isFiltering{
+            deleteRowContact(at: filteredContacts[indexPath.row].contactId)
+        }
+        else{
+            deleteRowContact(at: contacts[indexPath.row].contactId)
+        }
+    }
+    
+    private func deleteRowContact(at id: String){
+        var index: Int?
+        if isFiltering{
+            index = filteredContacts.firstIndex { $0.contactId == id }
+            guard index != nil else {
+                return
+            }
+            filteredContacts.removeAll { $0.contactId == id }
+            contacts.removeAll { $0.contactId == id }
+            deleteTableRows(index!)
+        }else{
+            index = contacts.firstIndex { $0.contactId == id }
+            guard index != nil else {
+                return
+            }
+            contacts.removeAll { $0.contactId == id }
+            deleteTableRows(index!)
+        }
+        updateUserDefaults()
+    }
+    
+    private func deleteTableRows(_ id: Int){
+        let indexPath = IndexPath(item: id, section: 0)
+        self.tableView.deleteRows(at: [indexPath], with: .left)
+    }
+}
+
+// MARK: NewContactViewControllerDelegate
+extension MainTableViewController: NewContactViewControllerDelegate{
+    func addNewContact(newItem: Contact) {
+        backgroundView.isHidden = true
+        let count = contacts.count
+        contacts.append(newItem)
+        let indexPath = IndexPath(item: count, section: 0)
+        self.tableView.insertRows(at: [indexPath], with: .automatic)
+        updateUserDefaults()
+    }
+}
+
+// MARK: Search
+extension MainTableViewController: UISearchResultsUpdating{
+    func updateSearchResults(for searchController: UISearchController) {
+        if searchBarIsEmpty{
+            return
+        }
+        let searchResults = contacts
+        let searchItems = splitString(string: searchController.searchBar.text!, by: " ")
+        let filteredResult = searchResults.filter { (contact) -> Bool in
+            return findMatches(searchItems, contact.firstName) || findMatches(searchItems, contact.lastName) ||
+                findMatches(searchItems, contact.phoneNumber) || findMatches(searchItems, contact.email)
+        }
+        
+        self.filteredContacts = filteredResult
+        tableView.reloadData()
+    }
+    
+    private func findMatches(_ searchStringItems: [String], _ currentString: String) -> Bool{
+        for j in searchStringItems{
+            if currentString.lowercased().contains(j){
+                return true
+            }
+        }
+        return false
+    }
+    
+    private func splitString(string: String, by: String) -> [String]{
+        let thisString = string.lowercased()
+        let strippedName = thisString.trimmingCharacters(in: CharacterSet.whitespaces)
+        return strippedName.components(separatedBy: " ")
+    }
+}
+
+extension MainTableViewController: UISearchBarDelegate{
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        contactSearchController.isActive = false
+        tableView.reloadData()
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        contactSearchController.isActive = false
+        tableView.reloadData()
+    }
+}
+
+// MARK: ContactsSearchResultDelegate
+extension MainTableViewController: ContactsSearchResultDelegate{
+    func didSelectRow(_ tableView: UITableView, _ indexPath: IndexPath) {
         if let controller = storyboard?.instantiateViewController(withIdentifier: "ContactInfoViewController") as? ContactInfoViewController{
             controller.update = {[unowned self] updatedContact in
                 self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
@@ -135,7 +242,7 @@ extension MainTableViewController{
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    func editActionsForRow(_ tableView: UITableView, _ indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .default, title: "Delete") { (action, indexPath) in
             self.deleteRowContact(indexPath)
         }
@@ -163,99 +270,5 @@ extension MainTableViewController{
         return [delete,edit]
     }
     
-    private func deleteRowContact(_ indexPath: IndexPath){
-        if isFiltering{
-            deleteRowContact(at: filteredContacts[indexPath.row].contactId)
-        }
-        else{
-            deleteRowContact(at: contacts[indexPath.row].contactId)
-        }
-    }
     
-    private func deleteRowContact(at id: String){
-        var index: Int?
-        if isFiltering{
-            index = filteredContacts.firstIndex { $0.contactId == id }
-            guard index != nil else {
-                return
-            }
-            filteredContacts.removeAll { $0.contactId == id }
-            deleteTableRows(index!)
-        }
-        index = contacts.firstIndex { $0.contactId == id }
-        guard index != nil else {
-            return
-        }
-        self.contacts.removeAll { $0.contactId == id }
-        deleteTableRows(index!)
-        updateUserDefaults()
-    }
-    
-    private func deleteTableRows(_ id: Int){
-        let indexPath = IndexPath(item: id, section: 0)
-        self.tableView.deleteRows(at: [indexPath], with: .left)
-    }
-}
-
-// MARK: NewContactViewControllerDelegate
-extension MainTableViewController: NewContactViewControllerDelegate{
-    func addNewContact(newItem: Contact) {
-        backgroundView.isHidden = true
-        let count = contacts.count
-        contacts.append(newItem)
-        let indexPath = IndexPath(item: count, section: 0)
-        self.tableView.insertRows(at: [indexPath], with: .automatic)
-        updateUserDefaults()
-    }
-}
-
-// MARK: Search
-extension MainTableViewController: UISearchResultsUpdating{
-    func updateSearchResults(for searchController: UISearchController) {
-        let searchResults = contacts
-
-        let searchItems = splitString(string: searchController.searchBar.text!, by: " ")
-        
-        let filteredResult = searchResults.filter { (contact) -> Bool in
-            let firstNameItems = splitString(string: contact.firstName, by: " ")
-            for i in firstNameItems{
-                for j in searchItems{
-                    if i.contains(j.lowercased()){
-                        return true
-                    }
-                }
-            }
-            
-            let lastNameItems = splitString(string: contact.lastName, by: " ")
-            for i in lastNameItems{
-                for j in searchItems{
-                    if i.contains(j.lowercased()){
-                        return true
-                    }
-                }
-            }
-            
-            for j in searchItems{
-                if contact.email.lowercased().contains(j){
-                    return true
-                }
-            }
-            
-            for j in searchItems{
-                if contact.phoneNumber.lowercased().contains(j){
-                    return true
-                }
-            }
-            return false
-        }
-        
-        self.filteredContacts = filteredResult
-        tableView.reloadData()
-    }
-    
-    private func splitString(string: String, by: String) -> [String]{
-        let thisString = string.lowercased()
-        let strippedName = thisString.trimmingCharacters(in: CharacterSet.whitespaces)
-        return strippedName.components(separatedBy: " ")
-    }
 }
