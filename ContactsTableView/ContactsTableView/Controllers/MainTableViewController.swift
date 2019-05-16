@@ -181,10 +181,10 @@ extension MainTableViewController{
         deleteTableRows(index!, section, isLast)
     }
     
-    private func deleteTableRows(_ id: Int,_ section: Int = 0,_ isLast: Bool = false){
+    private func deleteTableRows(_ row: Int,_ section: Int = 0,_ isLast: Bool = false){
         tableView.beginUpdates()
         
-        let indexPath = IndexPath(item: id, section: section)
+        let indexPath = IndexPath(item: row, section: section)
         self.tableView.deleteRows(at: [indexPath], with: .top)
         
         if isLast{
