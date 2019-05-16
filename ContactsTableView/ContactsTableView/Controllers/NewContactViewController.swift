@@ -185,7 +185,7 @@ extension NewContactViewController: UITextFieldDelegate{
         if !emailTextField.text!.isEmpty{
             emailChecker = isValidEmailTextField()
         }
-        if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
+        if (firstNameChecker || lastNameChecker) && (phoneChecker || emailChecker){
             navigationItem.rightBarButtonItem?.isEnabled = true
             return true
         }
