@@ -65,29 +65,14 @@ class MainTableViewController: UITableViewController {
         userDefaults = UserDefaults.standard
         do{
             if let decoded = userDefaults.data(forKey: "contacts"){
-                let decodedContacts = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [Contact]
-                setupSections(contacts: decodedContacts)
+                contactDictionary = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [String: [Contact]]
+                contactSectionTitles = [String](contactDictionary.keys)
+                contactSectionTitles = contactSectionTitles.sorted(by: {$0 < $1})
             }
         }catch {
             print(error)
         }
         checkUpdates()
-    }
-    
-    private func setupSections(contacts: [Contact]){
-        contactDictionary = [String: [Contact]]()
-        for contact in contacts{
-            let contactKey = String(contact.firstName.prefix(1))
-            if var contactDictValues = contactDictionary[contactKey]{
-                contactDictValues.append(contact)
-                contactDictionary[contactKey] = contactDictValues
-            }else{
-                contactDictionary[contactKey] = [contact]
-            }
-        }
-        
-        contactSectionTitles = [String](contactDictionary.keys)
-        contactSectionTitles = contactSectionTitles.sorted(by: {$0 < $1})
     }
     
     private func contactDictionaryToArray() -> [Contact]{
@@ -102,8 +87,7 @@ class MainTableViewController: UITableViewController {
     
     private func updateUserDefaults(){
         do{
-            let contacts = contactDictionaryToArray()
-            let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: contacts, requiringSecureCoding: false)
+            let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: contactDictionary, requiringSecureCoding: false)
             userDefaults.set(encodedData, forKey: "contacts")
             userDefaults.synchronize()
         }catch{
@@ -319,7 +303,7 @@ extension MainTableViewController: UISearchResultsUpdating{
     private func splitString(string: String, by: String) -> [String]{
         let thisString = string.lowercased()
         let strippedName = thisString.trimmingCharacters(in: CharacterSet.whitespaces)
-        return strippedName.components(separatedBy: " ")
+        return strippedName.components(separatedBy: by)
     }
 }
 
