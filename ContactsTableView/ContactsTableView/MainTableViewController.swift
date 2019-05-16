@@ -10,12 +10,7 @@ import UIKit
 let mainCellID = "MainCell"
 
 class MainTableViewController: UITableViewController {
-//    private var contacts = [Contact](){
-//        didSet{
-//            setupSections()
-//            updateUserDefaults()
-//        }
-//    }
+
     private var contactDictionary = [String: [Contact]](){
         didSet{
             updateUserDefaults()
@@ -76,6 +71,7 @@ class MainTableViewController: UITableViewController {
         }catch {
             print(error)
         }
+        checkUpdates()
     }
     
     private func setupSections(contacts: [Contact]){
@@ -138,7 +134,7 @@ class MainTableViewController: UITableViewController {
         return contactSectionTitles.count
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    private func checkUpdates(){
         backgroundView.isHidden = !contactDictionary.isEmpty
         if !contactDictionary.isEmpty{
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
@@ -148,6 +144,10 @@ class MainTableViewController: UITableViewController {
             navigationItem.rightBarButtonItem = nil
             navigationItem.leftBarButtonItem = nil
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        checkUpdates()
         let contactKey = contactSectionTitles[section]
         if let contactValues = contactDictionary[contactKey]{
             return contactValues.count
@@ -180,12 +180,19 @@ class MainTableViewController: UITableViewController {
 extension MainTableViewController{
     
     private func updateContact(updatedContact: Contact, indexPath: IndexPath){
-        let key = String(updatedContact.firstName.prefix(1))
-        if var contactValues = contactDictionary[key]{
-            contactValues[indexPath.row] = updatedContact
-            contactDictionary[key] = contactValues
+        let updatedContactsKey = String(updatedContact.firstName.prefix(1))
+        let oldContactsKey = contactSectionTitles[indexPath.section]
+        if oldContactsKey == updatedContactsKey{
+            if var contactValues = contactDictionary[updatedContactsKey]{
+                contactValues[indexPath.row] = updatedContact
+                contactDictionary[updatedContactsKey] = contactValues
+            }
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
         }
-        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        else{
+            addNewContact(newItem: updatedContact)
+            deleteRowContact(indexPath)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -203,6 +210,7 @@ extension MainTableViewController{
         else{
             deleteIfNotFiltering(indexPath: indexPath)
         }
+        checkUpdates()
     }
     
     private func deleteIfNotFiltering(indexPath: IndexPath){
@@ -247,45 +255,23 @@ extension MainTableViewController{
         return isLast
     }
     
-//    private func deleteRowContact(at id: String){
-//        var index: Int?
-//        if isFiltering{
-//            index = filteredContacts.firstIndex { $0.contactId == id }
-//            guard index != nil else {
-//                return
-//            }
-//            filteredContacts.removeAll { $0.contactId == id }
-//            contacts.removeAll { $0.contactId == id }
-//            deleteTableRows(index!)
-//        }else{
-//            index = contacts.firstIndex { $0.contactId == id }
-//            guard index != nil else {
-//                return
-//            }
-//            contacts.removeAll { $0.contactId == id }
-//            tableView.reloadData()
-//            //deleteTableRows(index!)
-//        }
-//    }
-    
     private func deleteTableRows(_ id: Int,_ section: Int = 0,_ isLast: Bool = false){
-//        tableView.beginUpdates()
-//
-//        let indexPath = IndexPath(item: id, section: section)
-//        self.tableView.deleteRows(at: [indexPath], with: .top)
-//
-//        if isLast{
-//            for i in 0...contactSectionTitles.count{
-//                let indexSet = IndexSet(arrayLiteral: i)
-//                tableView.deleteSections(indexSet, with: .none)
-//            }
-//            for i in 0..<contactSectionTitles.count{
-//                let indexSet = IndexSet(arrayLiteral: i)
-//                tableView.insertSections(indexSet, with: .none)
-//            }
-//        }
-//        tableView.endUpdates()
-        tableView.reloadData()
+        tableView.beginUpdates()
+
+        let indexPath = IndexPath(item: id, section: section)
+        self.tableView.deleteRows(at: [indexPath], with: .top)
+
+        if isLast{
+            for i in 0...contactSectionTitles.count{
+                let indexSet = IndexSet(arrayLiteral: i)
+                tableView.deleteSections(indexSet, with: .none)
+            }
+            for i in 0..<contactSectionTitles.count{
+                let indexSet = IndexSet(arrayLiteral: i)
+                tableView.insertSections(indexSet, with: .none)
+            }
+        }
+        tableView.endUpdates()
     }
 }
 
@@ -322,8 +308,8 @@ extension MainTableViewController: UISearchResultsUpdating{
     }
     
     private func findMatches(_ searchStringItems: [String], _ currentString: String) -> Bool{
-        for j in searchStringItems{
-            if currentString.lowercased().contains(j){
+        for currentSearchStringItem in searchStringItems{
+            if currentString.lowercased().contains(currentSearchStringItem){
                 return true
             }
         }
