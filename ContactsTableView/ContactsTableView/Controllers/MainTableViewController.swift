@@ -88,15 +88,6 @@ class MainTableViewController: UITableViewController {
     }
     
     //MARK: private help methods
-    private func contactDictionaryToArray() -> [Contact]{
-        var result = [Contact]()
-        for contacts in contactDictionary.values{
-            for item in contacts{
-                result.append(item)
-            }
-        }
-        return result
-    }
     
     private func updateUserDefaults(){
         do{
@@ -294,7 +285,7 @@ extension MainTableViewController: UISearchResultsUpdating{
         if searchBarIsEmpty{
             return
         }
-        let searchResults = contactDictionaryToArray()
+        let searchResults = contactDictionary.values.flatMap{$0}
         let searchItems = searchController.searchBar.text!.splitString(separator: " ")
         filteredContacts = searchResults.filter { (contact) -> Bool in
             let findMatches = SearchStringHelper.findMatches
@@ -303,8 +294,6 @@ extension MainTableViewController: UISearchResultsUpdating{
         }
         tableView.reloadData()
     }
-    
-    
 }
 
 extension MainTableViewController: UISearchBarDelegate{
