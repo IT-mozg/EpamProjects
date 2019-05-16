@@ -68,13 +68,12 @@ class MainTableViewController: UITableViewController {
         do{
             if let decoded = userDefaults.data(forKey: "contacts"){
                 contactDictionary = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [String: [Contact]]
-                contactSectionTitles = [String](contactDictionary.keys)
-                contactSectionTitles = contactSectionTitles.sorted(by: <)
+                reloadSectionTitles()
             }
         }catch {
             print(error)
         }
-        checkUpdates()
+        checkNumberOfRows()
     }
     
     // MARK: IBActions
@@ -88,6 +87,11 @@ class MainTableViewController: UITableViewController {
     }
     
     //MARK: private help methods
+    
+    private func reloadSectionTitles(){
+        contactSectionTitles = [String](contactDictionary.keys)
+        contactSectionTitles = contactSectionTitles.sorted(by: <)
+    }
     
     private func updateUserDefaults(){
         do{
@@ -108,7 +112,7 @@ class MainTableViewController: UITableViewController {
         }
     }
     
-    private func checkUpdates(){
+    private func checkNumberOfRows(){
         backgroundView.isHidden = !contactDictionary.isEmpty
         if !contactDictionary.isEmpty{
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
@@ -140,7 +144,7 @@ extension MainTableViewController{
         else{
             deleteIfNotFiltering(indexPath: indexPath)
         }
-        checkUpdates()
+        checkNumberOfRows()
     }
     
     private func deleteIfNotFiltering(indexPath: IndexPath){
@@ -215,7 +219,7 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        checkUpdates()
+        checkNumberOfRows()
         let contactKey = contactSectionTitles[section]
         if let contactValues = contactDictionary[contactKey]{
             return contactValues.count
@@ -267,8 +271,7 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         else{
             contactDictionary[key] = [newItem]
         }
-        contactSectionTitles = [String](contactDictionary.keys)
-        contactSectionTitles = contactSectionTitles.sorted(by: {$0 < $1})
+        reloadSectionTitles()
         tableView.reloadData()
     }
 }
