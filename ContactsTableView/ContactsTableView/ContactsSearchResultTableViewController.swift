@@ -51,7 +51,7 @@ class ContactsSearchResultTableViewController: UITableViewController {
     }
     
     private func findMostSimilarString(contact: Contact) -> NSAttributedString?{
-        let searchItems = splitString(string: searchString, by: " ")
+        let searchItems = searchString.splitString(separator: " ")
         if findMatches(searchItems, contact.phoneNumber){
             return replaceMatches(searchItems, contact.phoneNumber)
         }
@@ -88,11 +88,4 @@ class ContactsSearchResultTableViewController: UITableViewController {
         }
         return attribute
     }
-    
-    private func splitString(string: String, by: String) -> [String]{
-        let thisString = string.lowercased()
-        let strippedName = thisString.trimmingCharacters(in: CharacterSet.whitespaces)
-        return strippedName.components(separatedBy: by)
-    }
-
 }

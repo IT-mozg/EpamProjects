@@ -67,7 +67,7 @@ class MainTableViewController: UITableViewController {
             if let decoded = userDefaults.data(forKey: "contacts"){
                 contactDictionary = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [String: [Contact]]
                 contactSectionTitles = [String](contactDictionary.keys)
-                contactSectionTitles = contactSectionTitles.sorted(by: {$0 < $1})
+                contactSectionTitles = contactSectionTitles.sorted(by: <)
             }
         }catch {
             print(error)
@@ -283,7 +283,7 @@ extension MainTableViewController: UISearchResultsUpdating{
             return
         }
         let searchResults = contactDictionaryToArray()
-        let searchItems = splitString(string: searchController.searchBar.text!, by: " ")
+        let searchItems = searchController.searchBar.text!.splitString(separator: " ")
         filteredContacts = searchResults.filter { (contact) -> Bool in
             return findMatches(searchItems, contact.firstName) || findMatches(searchItems, contact.lastName) ||
                 findMatches(searchItems, contact.phoneNumber) || findMatches(searchItems, contact.email)
@@ -298,12 +298,6 @@ extension MainTableViewController: UISearchResultsUpdating{
             }
         }
         return false
-    }
-    
-    private func splitString(string: String, by: String) -> [String]{
-        let thisString = string.lowercased()
-        let strippedName = thisString.trimmingCharacters(in: CharacterSet.whitespaces)
-        return strippedName.components(separatedBy: by)
     }
 }
 
