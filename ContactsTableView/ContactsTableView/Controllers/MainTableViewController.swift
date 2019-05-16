@@ -11,6 +11,7 @@ let mainCellID = "MainCell"
 
 class MainTableViewController: UITableViewController {
 
+    //MARK: Properties
     private var contactDictionary = [String: [Contact]](){
         didSet{
             updateUserDefaults()
@@ -36,11 +37,12 @@ class MainTableViewController: UITableViewController {
     }
     private var searchResultController: ContactsSearchResultTableViewController?
     
+    //MARK: IBOutlets
     @IBOutlet weak var backgroundView: UIView!
     
+    //MARK: Notify methods
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
     }
     
     override func viewDidLoad() {
@@ -75,6 +77,17 @@ class MainTableViewController: UITableViewController {
         checkUpdates()
     }
     
+    // MARK: IBActions
+    @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
+        self.tableView.isEditing = !self.tableView.isEditing
+        navigationItem.leftBarButtonItem!.title = (self.tableView.isEditing) ? "Done" : "Edit"
+    }
+    
+    @IBAction func addNewButtonPressed(_ sender: Any) {
+        addButtonItemPressed()
+    }
+    
+    //MARK: private help methods
     private func contactDictionaryToArray() -> [Contact]{
         var result = [Contact]()
         for contacts in contactDictionary.values{
@@ -94,28 +107,14 @@ class MainTableViewController: UITableViewController {
             print(error)
         }
     }
-    
-    @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
-        self.tableView.isEditing = !self.tableView.isEditing
-        navigationItem.leftBarButtonItem!.title = (self.tableView.isEditing) ? "Done" : "Edit"
-    }
-    
-    @IBAction func addNewButtonPressed(_ sender: Any) {
-        addButtonItemPressed()
-    }
-    
-    @objc func addButtonItemPressed(){
+
+    @objc private func addButtonItemPressed(){
         if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
             if let viewController = navigationController.viewControllers.first as? NewContactViewController{
                 viewController.delegate = self
                 self.present(navigationController, animated: true, completion: nil)
             }
         }
-    }
-
-    // MARK: - Table view data source
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return contactSectionTitles.count
     }
     
     private func checkUpdates(){
@@ -130,63 +129,19 @@ class MainTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        checkUpdates()
-        let contactKey = contactSectionTitles[section]
-        if let contactValues = contactDictionary[contactKey]{
-            return contactValues.count
+    private func checkIsEmptyArray(contactKey: String, contactValues: [Contact]) -> Bool{
+        let isLast = contactValues.isEmpty
+        contactDictionary[contactKey] = contactValues
+        if isLast{
+            contactDictionary.removeValue(forKey: contactKey)
+            contactSectionTitles.removeAll{$0 == contactKey}
         }
-        return 0
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: mainCellID, for: indexPath) as! MainContactTableViewCell
-        let contactKey = contactSectionTitles[indexPath.section]
-        if let contactValues = contactDictionary[contactKey]{
-            cell.updateWith(model: contactValues[indexPath.row])
-        }
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return contactSectionTitles[section]
-    }
-    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return contactSectionTitles
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
+        return isLast
     }
 }
 
-//MARK: TableViewControllerDelegate
+// MARK: Deleting contacts
 extension MainTableViewController{
-    
-    private func updateContact(updatedContact: Contact, indexPath: IndexPath){
-        let updatedContactsKey = String(updatedContact.firstName.prefix(1))
-        let oldContactsKey = contactSectionTitles[indexPath.section]
-        if oldContactsKey == updatedContactsKey{
-            if var contactValues = contactDictionary[updatedContactsKey]{
-                contactValues[indexPath.row] = updatedContact
-                contactDictionary[updatedContactsKey] = contactValues
-            }
-            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-        }
-        else{
-            addNewContact(newItem: updatedContact)
-            deleteRowContact(indexPath)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        didSelectRow(tableView, indexPath)
-    }
-    
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        return editActionsForRow(tableView, indexPath)
-    }
-    
     private func deleteRowContact(_ indexPath: IndexPath){
         if isFiltering{
             deleteIfFiltering(indexPath: indexPath)
@@ -229,22 +184,12 @@ extension MainTableViewController{
         deleteTableRows(index!, section, isLast)
     }
     
-    private func checkIsEmptyArray(contactKey: String, contactValues: [Contact]) -> Bool{
-        let isLast = contactValues.isEmpty
-        contactDictionary[contactKey] = contactValues
-        if isLast{
-            contactDictionary.removeValue(forKey: contactKey)
-            contactSectionTitles.removeAll{$0 == contactKey}
-        }
-        return isLast
-    }
-    
     private func deleteTableRows(_ id: Int,_ section: Int = 0,_ isLast: Bool = false){
         tableView.beginUpdates()
-
+        
         let indexPath = IndexPath(item: id, section: section)
         self.tableView.deleteRows(at: [indexPath], with: .top)
-
+        
         if isLast{
             for i in 0...contactSectionTitles.count{
                 let indexSet = IndexSet(arrayLiteral: i)
@@ -256,6 +201,73 @@ extension MainTableViewController{
             }
         }
         tableView.endUpdates()
+    }
+}
+
+//MARK: Updating contacts
+extension MainTableViewController{
+    private func updateContact(updatedContact: Contact, indexPath: IndexPath){
+        let updatedContactsKey = String(updatedContact.firstName.prefix(1))
+        let oldContactsKey = contactSectionTitles[indexPath.section]
+        if oldContactsKey == updatedContactsKey{
+            if var contactValues = contactDictionary[updatedContactsKey]{
+                contactValues[indexPath.row] = updatedContact
+                contactDictionary[updatedContactsKey] = contactValues
+            }
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        else{
+            addNewContact(newItem: updatedContact)
+            deleteRowContact(indexPath)
+        }
+    }
+}
+
+// MARK: - Table view data source
+extension MainTableViewController{
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return contactSectionTitles.count
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        checkUpdates()
+        let contactKey = contactSectionTitles[section]
+        if let contactValues = contactDictionary[contactKey]{
+            return contactValues.count
+        }
+        return 0
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: mainCellID, for: indexPath) as! MainContactTableViewCell
+        let contactKey = contactSectionTitles[indexPath.section]
+        if let contactValues = contactDictionary[contactKey]{
+            cell.updateWith(model: contactValues[indexPath.row])
+        }
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return contactSectionTitles[section]
+    }
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return contactSectionTitles
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 85
+    }
+}
+
+//MARK: TableViewControllerDelegate
+extension MainTableViewController{
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        didSelectRow(tableView, indexPath)
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        return editActionsForRow(tableView, indexPath)
     }
 }
 
@@ -285,20 +297,14 @@ extension MainTableViewController: UISearchResultsUpdating{
         let searchResults = contactDictionaryToArray()
         let searchItems = searchController.searchBar.text!.splitString(separator: " ")
         filteredContacts = searchResults.filter { (contact) -> Bool in
+            let findMatches = SearchStringHelper.findMatches
             return findMatches(searchItems, contact.firstName) || findMatches(searchItems, contact.lastName) ||
                 findMatches(searchItems, contact.phoneNumber) || findMatches(searchItems, contact.email)
         }
         tableView.reloadData()
     }
     
-    private func findMatches(_ searchStringItems: [String], _ currentString: String) -> Bool{
-        for currentSearchStringItem in searchStringItems{
-            if currentString.lowercased().contains(currentSearchStringItem){
-                return true
-            }
-        }
-        return false
-    }
+    
 }
 
 extension MainTableViewController: UISearchBarDelegate{

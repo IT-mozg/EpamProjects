@@ -7,10 +7,6 @@
 //
 
 import UIKit
-protocol ContactsSearchResultDelegate: class{
-    func didSelectRow(_ tableView: UITableView, _ indexPath: IndexPath)
-    func editActionsForRow(_ tableView: UITableView, _ indexPath: IndexPath) -> [UITableViewRowAction]?
-}
 
 class ContactsSearchResultTableViewController: UITableViewController {
     weak var delegate: ContactsSearchResultDelegate?
@@ -52,6 +48,7 @@ class ContactsSearchResultTableViewController: UITableViewController {
     
     private func findMostSimilarString(contact: Contact) -> NSAttributedString?{
         let searchItems = searchString.splitString(separator: " ")
+        let findMatches = SearchStringHelper.findMatches
         if findMatches(searchItems, contact.phoneNumber){
             return replaceMatches(searchItems, contact.phoneNumber)
         }
@@ -65,15 +62,6 @@ class ContactsSearchResultTableViewController: UITableViewController {
             return replaceMatches(searchItems, contact.email)
         }
         return nil
-    }
-    
-    private func findMatches(_ searchStringItems: [String], _ currentString: String) -> Bool{
-        for j in searchStringItems{
-            if currentString.lowercased().contains(j){
-                return true
-            }
-        }
-        return false
     }
     
     private func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString?{

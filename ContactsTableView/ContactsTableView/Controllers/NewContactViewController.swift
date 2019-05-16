@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol NewContactViewControllerDelegate: class{
-    func addNewContact(newItem: Contact)
-}
-
 typealias UpdateClosure = (_ contact: Contact) -> ()
 class NewContactViewController: UIViewController {
     weak var delegate: NewContactViewControllerDelegate?
@@ -55,6 +51,8 @@ class NewContactViewController: UIViewController {
         phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
         emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
     }
+    
+    //MARK: IBActions
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -89,25 +87,6 @@ class NewContactViewController: UIViewController {
          ContactActionHelper.delete(self.delete, viewController: self)
     }
     
-    private func changeImage(){
-        #if targetEnvironment(simulator)
-            self.chooseImagePickerAction(source: .photoLibrary)
-        #else
-            let alertController = UIAlertController(title: "Photo source", message: nil, preferredStyle: .actionSheet)
-            let cameraAction = UIAlertAction(title: "Camera", style: .default, handler: { (action) in
-                self.chooseImagePickerAction(source: .camera)
-            })
-            let libraryAction = UIAlertAction(title: "Library", style: .default, handler: { (action) in
-                self.chooseImagePickerAction(source: .photoLibrary)
-            })
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            alertController.addAction(cameraAction)
-            alertController.addAction(libraryAction)
-            alertController.addAction(cancelAction)
-            self.present(alertController, animated: true, completion: nil)
-        #endif
-    }
-    
     @IBAction func pickImageButtonPressed(_ sender: UIButton) {
         if editingContact == nil && contactImage == nil{
             changeImage()
@@ -127,6 +106,25 @@ class NewContactViewController: UIViewController {
             alertController.addAction(cancelAction)
             present(alertController, animated: true)
         }
+    }
+    
+    private func changeImage(){
+        #if targetEnvironment(simulator)
+            self.chooseImagePickerAction(source: .photoLibrary)
+        #else
+            let alertController = UIAlertController(title: "Photo source", message: nil, preferredStyle: .actionSheet)
+            let cameraAction = UIAlertAction(title: "Camera", style: .default, handler: { (action) in
+                self.chooseImagePickerAction(source: .camera)
+            })
+            let libraryAction = UIAlertAction(title: "Library", style: .default, handler: { (action) in
+                self.chooseImagePickerAction(source: .photoLibrary)
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(cameraAction)
+            alertController.addAction(libraryAction)
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
+        #endif
     }
 
 }
@@ -234,5 +232,4 @@ extension NewContactViewController: UITextFieldDelegate{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
 }
