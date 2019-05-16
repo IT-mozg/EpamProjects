@@ -170,9 +170,9 @@ extension NewContactViewController: UITextFieldDelegate{
     // MARK: Validation
     @objc private func validateTextFields() -> Bool{
         var firstNameChecker = false
-        var lastNameChecker = false
+        var lastNameChecker = true
         var phoneChecker = false
-        var emailChecker = false
+        var emailChecker = true
         if !firstNameTextField.text!.isEmpty{
             firstNameChecker = isValidFirstNameTextField()
         }
@@ -185,7 +185,7 @@ extension NewContactViewController: UITextFieldDelegate{
         if !emailTextField.text!.isEmpty{
             emailChecker = isValidEmailTextField()
         }
-        if (firstNameChecker || lastNameChecker) && (phoneChecker || emailChecker){
+        if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
             navigationItem.rightBarButtonItem?.isEnabled = true
             return true
         }

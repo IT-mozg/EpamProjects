@@ -51,18 +51,7 @@ class MainTableViewController: UITableViewController {
         // setup background
         tableView.backgroundView = backgroundView
         
-        // setup searchController
-        searchResultController = storyboard?.instantiateViewController(withIdentifier: "ContactsSearchResultTableViewController") as? ContactsSearchResultTableViewController
-        searchResultController!.delegate = self
-        contactSearchController = UISearchController(searchResultsController: searchResultController)
-        contactSearchController.searchResultsUpdater = self
-        contactSearchController.obscuresBackgroundDuringPresentation = false
-        contactSearchController.searchBar.placeholder = "Search contact"
-        contactSearchController.searchBar.delegate = self
-        navigationItem.searchController = contactSearchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        definesPresentationContext = true
-        
+        setupSearchController()
         // unarchive contacts
         userDefaults = UserDefaults.standard
         do{
@@ -87,6 +76,19 @@ class MainTableViewController: UITableViewController {
     }
     
     //MARK: private help methods
+    
+    private func setupSearchController(){
+        searchResultController = storyboard?.instantiateViewController(withIdentifier: "ContactsSearchResultTableViewController") as? ContactsSearchResultTableViewController
+        searchResultController!.delegate = self
+        contactSearchController = UISearchController(searchResultsController: searchResultController)
+        contactSearchController.searchResultsUpdater = self
+        contactSearchController.obscuresBackgroundDuringPresentation = false
+        contactSearchController.searchBar.placeholder = "Search contact"
+        contactSearchController.searchBar.delegate = self
+        navigationItem.searchController = contactSearchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+    }
     
     private func reloadSectionTitles(){
         contactSectionTitles = [String](contactDictionary.keys)
@@ -212,7 +214,7 @@ extension MainTableViewController{
     }
 }
 
-// MARK: - Table view data source
+// MARK: - Table view DataSource
 extension MainTableViewController{
     override func numberOfSections(in tableView: UITableView) -> Int {
         return contactSectionTitles.count
@@ -220,6 +222,11 @@ extension MainTableViewController{
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         checkNumberOfRows()
+        if contactDictionary.values.flatMap({$0}).count > 9{
+            contactSearchController.searchBar.isHidden = false
+        }else{
+            contactSearchController.searchBar.isHidden = true
+        }
         let contactKey = contactSectionTitles[section]
         if let contactValues = contactDictionary[contactKey]{
             return contactValues.count
@@ -263,16 +270,24 @@ extension MainTableViewController{
 // MARK: NewContactViewControllerDelegate
 extension MainTableViewController: NewContactViewControllerDelegate{
     func addNewContact(newItem: Contact) {
+        tableView.beginUpdates()
         let key = String(newItem.firstName.prefix(1))
+        let row = contactDictionary[key]?.count
+        var section = contactSectionTitles.firstIndex(of: key)
         if var contactValue = contactDictionary[key]{
             contactValue.append(newItem)
             contactDictionary[key] = contactValue
         }
         else{
             contactDictionary[key] = [newItem]
+            reloadSectionTitles()
+            section = contactSectionTitles.firstIndex(of: key)
+            let indexSet = IndexSet(arrayLiteral: section!)
+            tableView.insertSections(indexSet, with: .none)
         }
-        reloadSectionTitles()
-        tableView.reloadData()
+        let indexPath = IndexPath(item: row ?? 0, section: section!)
+        tableView.insertRows(at: [indexPath], with: .none)
+        tableView.endUpdates()
     }
 }
 
