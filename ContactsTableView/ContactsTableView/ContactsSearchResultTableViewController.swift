@@ -21,13 +21,17 @@ class ContactsSearchResultTableViewController: UITableViewController {
             tableView.reloadData()
         }
     }
-
+    
+    @IBOutlet var backgroundView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        backgroundView.isHidden = !filteredContacts.isEmpty
+        tableView.backgroundView = backgroundView
         return filteredContacts.count
     }
     
