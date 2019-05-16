@@ -74,9 +74,9 @@
 		F5236CC32280666700FF98E9 /* ContactsTableView */ = {
 			isa = PBXGroup;
 			children = (
-				F5A8A528228D8B7D00D12B94 /* Protocols */,
 				F5236CC42280666700FF98E9 /* AppDelegate.swift */,
 				F5236CE02282052900FF98E9 /* Validation.swift */,
+				F5A8A528228D8B7D00D12B94 /* Protocols */,
 				F5A8A527228D87A800D12B94 /* Helpers */,
 				F5A8A523228D84F400D12B94 /* Cells */,
 				F5A8A522228D84E600D12B94 /* Models */,

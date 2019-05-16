@@ -182,14 +182,8 @@ extension MainTableViewController{
         self.tableView.deleteRows(at: [indexPath], with: .top)
         
         if isLast{
-            for i in 0...contactSectionTitles.count{
-                let indexSet = IndexSet(arrayLiteral: i)
-                tableView.deleteSections(indexSet, with: .none)
-            }
-            for i in 0..<contactSectionTitles.count{
-                let indexSet = IndexSet(arrayLiteral: i)
-                tableView.insertSections(indexSet, with: .none)
-            }
+            let indexSet = IndexSet(arrayLiteral: section)
+            tableView.deleteSections(indexSet, with: .automatic)
         }
         tableView.endUpdates()
     }
