@@ -33,6 +33,20 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // setup background
+        setupUI()
+        // unarchive contacts
+        unurchiveContacts()
+    }
+    
+    private func unurchiveContacts(){
+        userDefaults = UserDefaults.standard
+        if let decoded = userDefaults.data(forKey: "contacts"){
+            let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [Contact]
+            contacts = decodedContacts
+        }
+    }
+    
+    private func setupUI(){
         tableView.backgroundView = backgroundView
         // setup searchController
         contactSearchController = UISearchController(searchResultsController: nil)
@@ -42,12 +56,6 @@ class MainTableViewController: UITableViewController {
         navigationItem.searchController = contactSearchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-        // unarchive contacts
-        userDefaults = UserDefaults.standard
-        if let decoded = userDefaults.data(forKey: "contacts"){
-            let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [Contact]
-            contacts = decodedContacts
-        }
     }
     
     private func updateUserDefaults(){
@@ -158,8 +166,8 @@ extension MainTableViewController{
                 }
             }
         }
-        delete.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        edit.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        delete.backgroundColor = ContactDefault.deleteColor
+        edit.backgroundColor = ContactDefault.editColor
         return [delete,edit]
     }
     
@@ -214,35 +222,35 @@ extension MainTableViewController: UISearchResultsUpdating{
     func updateSearchResults(for searchController: UISearchController) {
         let searchResults = contacts
 
-        let searchItems = splitString(string: searchController.searchBar.text!, by: " ")
+        let searchItems = splitString(string: searchController.searchBar.text!, separator: " ")
         
         let filteredResult = searchResults.filter { (contact) -> Bool in
-            let firstNameItems = splitString(string: contact.firstName, by: " ")
-            for i in firstNameItems{
-                for j in searchItems{
-                    if i.contains(j.lowercased()){
+            let firstNameItems = splitString(string: contact.firstName, separator: " ")
+            for firstNameItem in firstNameItems{
+                for searchItem in searchItems{
+                    if firstNameItem.contains(searchItem.lowercased()){
                         return true
                     }
                 }
             }
             
-            let lastNameItems = splitString(string: contact.lastName, by: " ")
-            for i in lastNameItems{
-                for j in searchItems{
-                    if i.contains(j.lowercased()){
+            let lastNameItems = splitString(string: contact.lastName, separator: " ")
+            for lastNameItem in lastNameItems{
+                for searchItem in searchItems{
+                    if lastNameItem.contains(searchItem.lowercased()){
                         return true
                     }
                 }
             }
             
-            for j in searchItems{
-                if contact.email.lowercased().contains(j){
+            for earchItem in searchItems{
+                if contact.email.lowercased().contains(earchItem){
                     return true
                 }
             }
             
-            for j in searchItems{
-                if contact.phoneNumber.lowercased().contains(j){
+            for earchItem in searchItems{
+                if contact.phoneNumber.lowercased().contains(earchItem){
                     return true
                 }
             }
@@ -253,9 +261,9 @@ extension MainTableViewController: UISearchResultsUpdating{
         tableView.reloadData()
     }
     
-    private func splitString(string: String, by: String) -> [String]{
+    private func splitString(string: String, separator: String) -> [String]{
         let thisString = string.lowercased()
         let strippedName = thisString.trimmingCharacters(in: CharacterSet.whitespaces)
-        return strippedName.components(separatedBy: " ")
+        return strippedName.components(separatedBy: separator)
     }
 }
