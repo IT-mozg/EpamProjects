@@ -47,14 +47,8 @@ class MainTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // setup background
-        tableView.backgroundView = backgroundView
-        
-        setupSearchController()
-        // unarchive contacts
-        setupUserDefaults()
-        
+        setupUI()
+        unurchiveContacts()
         checkNumberOfRows()
     }
     
@@ -70,7 +64,7 @@ class MainTableViewController: UITableViewController {
     
     //MARK: private help methods
     
-    private func setupUserDefaults(){
+    private func unurchiveContacts(){
         userDefaults = UserDefaults.standard
         do{
             if let decoded = userDefaults.data(forKey: "contacts"){
@@ -82,7 +76,8 @@ class MainTableViewController: UITableViewController {
         }
     }
     
-    private func setupSearchController(){
+    private func setupUI(){
+        tableView.backgroundView = backgroundView
         searchResultController = storyboard?.instantiateViewController(withIdentifier: "ContactsSearchResultTableViewController") as? ContactsSearchResultTableViewController
         searchResultController!.delegate = self
         contactSearchController = UISearchController(searchResultsController: searchResultController)
@@ -353,8 +348,8 @@ extension MainTableViewController: ContactsSearchResultDelegate{
         let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
             self.setupEditContact(indexPath: indexPath)
         }
-        delete.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        edit.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        delete.backgroundColor = ContactDefault.deleteColor
+        edit.backgroundColor = ContactDefault.editColor
         return [delete,edit]
     }
     

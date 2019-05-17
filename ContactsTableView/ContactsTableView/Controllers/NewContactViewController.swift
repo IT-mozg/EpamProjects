@@ -39,7 +39,7 @@ class NewContactViewController: UIViewController {
             lastNameTextField.text = contact.lastName
             phoneTextField.text = contact.phoneNumber
             emailTextField.text = contact.email
-            photoContactImageView.image = contact.imagePhoto ?? UIImage(named: "camera")
+            photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
             contactImage = contact.imagePhoto
         }else{
             navigationItem.rightBarButtonItem?.title = "Add"
@@ -71,12 +71,12 @@ class NewContactViewController: UIViewController {
             updated.lastName = lastName
             updated.email = email
             updated.phoneNumber = phone
-            updated.imagePhoto = contactImage
+            updated.saveImage(image: contactImage)
             updateClosure(updated)
         }
         if delegate != nil{
             let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone)
-            newItem.imagePhoto = contactImage
+            newItem.saveImage(image: contactImage)
             delegate!.addNewContact(newItem: newItem)
         }
         dismiss(animated: true, completion: nil)
