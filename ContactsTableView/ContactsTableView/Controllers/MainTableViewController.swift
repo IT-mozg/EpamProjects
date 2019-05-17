@@ -53,15 +53,8 @@ class MainTableViewController: UITableViewController {
         
         setupSearchController()
         // unarchive contacts
-        userDefaults = UserDefaults.standard
-        do{
-            if let decoded = userDefaults.data(forKey: "contacts"){
-                contactDictionary = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [String: [Contact]]
-                reloadSectionTitles()
-            }
-        }catch {
-            print(error)
-        }
+        setupUserDefaults()
+        
         checkNumberOfRows()
     }
     
@@ -76,6 +69,18 @@ class MainTableViewController: UITableViewController {
     }
     
     //MARK: private help methods
+    
+    private func setupUserDefaults(){
+        userDefaults = UserDefaults.standard
+        do{
+            if let decoded = userDefaults.data(forKey: "contacts"){
+                contactDictionary = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [String: [Contact]]
+                reloadSectionTitles()
+            }
+        }catch {
+            print(error)
+        }
+    }
     
     private func setupSearchController(){
         searchResultController = storyboard?.instantiateViewController(withIdentifier: "ContactsSearchResultTableViewController") as? ContactsSearchResultTableViewController
@@ -153,14 +158,13 @@ extension MainTableViewController{
         let contactKey = contactSectionTitles[indexPath.section]
         if var contactValues = contactDictionary[contactKey]{
             let id = contactValues[indexPath.row].contactId
-            let index = contactValues.firstIndex { $0.contactId == id }
-            guard index != nil else {
+            guard let index = contactValues.firstIndex(where: { (contact) in return contact.contactId == id})else{
                 return
             }
             let section = contactSectionTitles.firstIndex(of: contactKey)!
             contactValues.removeAll{$0.contactId == id}
             let isLast = checkIsEmptyArray(contactKey: contactKey, contactValues: contactValues)
-            deleteTableRows(index!, section, isLast)
+            deleteTableRows(index, section, isLast)
         }
     }
     
@@ -221,7 +225,6 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        checkNumberOfRows()
         if contactDictionary.values.flatMap({$0}).count > 9{
             contactSearchController.searchBar.isHidden = false
         }else{
@@ -348,29 +351,33 @@ extension MainTableViewController: ContactsSearchResultDelegate{
             self.deleteRowContact(indexPath)
         }
         let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
-            if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
-                if let controller = navigationController.viewControllers.first as? NewContactViewController{
-                    if self.isFiltering{
-                        controller.editingContact = self.filteredContacts[indexPath.row]
-                    }
-                    else{
-                        let contactKey = self.contactSectionTitles[indexPath.section]
-                        if let contactValues = self.contactDictionary[contactKey]{
-                            controller.editingContact = contactValues[indexPath.row]
-                        }
-                    }
-                    controller.update = {[unowned self] updatedContact in
-                        self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
-                    }
-                    controller.delete = {[unowned self] in
-                        self.deleteRowContact(indexPath)
-                    }
-                    self.present(navigationController, animated: true, completion: nil)
-                }
-            }
+            self.setupEditContact(indexPath: indexPath)
         }
         delete.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
         edit.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         return [delete,edit]
+    }
+    
+    private func setupEditContact(indexPath: IndexPath){
+        if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
+            if let controller = navigationController.viewControllers.first as? NewContactViewController{
+                if self.isFiltering{
+                    controller.editingContact = self.filteredContacts[indexPath.row]
+                }
+                else{
+                    let contactKey = self.contactSectionTitles[indexPath.section]
+                    if let contactValues = self.contactDictionary[contactKey]{
+                        controller.editingContact = contactValues[indexPath.row]
+                    }
+                }
+                controller.update = {[unowned self] updatedContact in
+                    self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
+                }
+                controller.delete = {[unowned self] in
+                    self.deleteRowContact(indexPath)
+                }
+                self.present(navigationController, animated: true, completion: nil)
+            }
+        }
     }
 }

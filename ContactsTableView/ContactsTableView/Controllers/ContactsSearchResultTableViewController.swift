@@ -22,12 +22,12 @@ class ContactsSearchResultTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.backgroundView = backgroundView
     }
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         backgroundView.isHidden = !filteredContacts.isEmpty
-        tableView.backgroundView = backgroundView
         return filteredContacts.count
     }
     
@@ -67,9 +67,9 @@ class ContactsSearchResultTableViewController: UITableViewController {
     private func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString?{
         var attribute: NSMutableAttributedString?
         attribute = NSMutableAttributedString(string: currentString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        for j in searchStringItems{
-            if currentString.lowercased().contains(j){
-                let rangeString = attribute?.string.lowercased().range(of: j)
+        for currentSearchString in searchStringItems{
+            if currentString.lowercased().contains(currentSearchString){
+                let rangeString = attribute?.string.lowercased().range(of: currentSearchString)
                 let range = NSRange(rangeString!, in: attribute!.string)
                 attribute?.setAttributes([.foregroundColor: UIColor.black], range: range)
             }
