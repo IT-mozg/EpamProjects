@@ -75,7 +75,7 @@ class NewContactViewController: UIViewController {
             updateClosure(updated)
         }
         if delegate != nil{
-            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone)
+            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, birthday: nil, height: nil, notes: nil)
             newItem.saveImage(image: contactImage)
             delegate!.addNewContact(newItem: newItem)
         }

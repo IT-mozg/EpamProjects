@@ -9,9 +9,9 @@
 import Foundation
 
 class SearchStringHelper{
-    static func findMatches(_ searchStringItems: [String], _ currentString: String) -> Bool{
+    static func findMatches(_ searchStringItems: [String], _ currentString: String?) -> Bool{
         for currentSearchStringItem in searchStringItems{
-            if currentString.lowercased().contains(currentSearchStringItem){
+            if currentString?.lowercased().contains(currentSearchStringItem) ?? false{
                 return true
             }
         }

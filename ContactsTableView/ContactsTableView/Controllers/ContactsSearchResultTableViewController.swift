@@ -56,10 +56,10 @@ class ContactsSearchResultTableViewController: UITableViewController {
             return replaceMatches(searchItems, contact.firstName)
         }
         if findMatches(searchItems, contact.lastName){
-            return replaceMatches(searchItems, contact.lastName)
+            return replaceMatches(searchItems, contact.lastName!)
         }
         if findMatches(searchItems, contact.email){
-            return replaceMatches(searchItems, contact.email)
+            return replaceMatches(searchItems, contact.email!)
         }
         return nil
     }
