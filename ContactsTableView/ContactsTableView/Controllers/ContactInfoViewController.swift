@@ -13,6 +13,7 @@ class ContactInfoViewController: UIViewController {
     var contact: Contact!
     var update: ((_ contact: Contact)->())?
     var delete: (()->())?
+    private var noText: String = "No"
     
     //MARK: IBOutlets
     @IBOutlet weak var firstNameLabel: UILabel!
@@ -20,6 +21,10 @@ class ContactInfoViewController: UIViewController {
     @IBOutlet weak var phoneLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var birthdayLabel: UILabel!
+    @IBOutlet weak var heightLabel: UILabel!
+    @IBOutlet weak var driverLicenseLabel: UILabel!
+    @IBOutlet weak var nodesLabel: UILabel!
     
 
     override func viewDidLoad() {
@@ -48,11 +53,15 @@ class ContactInfoViewController: UIViewController {
     
     //MARK: Private help methods
     private func presentContact(){
-        firstNameLabel.text = contact?.firstName
-        lastNameLabel.text = contact?.lastName
-        phoneLabel.text = contact?.phoneNumber
-        emailLabel.text = contact?.email
-        photoImageView.image = contact?.imagePhoto ?? ContactDefault.defaultImage
+        firstNameLabel.text = contact.firstName
+        lastNameLabel.text = contact.lastName ?? noText
+        phoneLabel.text = contact.phoneNumber
+        emailLabel.text = contact.email ?? noText
+        photoImageView.image = contact.imagePhoto ?? ContactDefault.defaultImage
+        birthdayLabel.text = contact.birthday ?? noText
+        heightLabel.text = contact.height ?? noText
+        driverLicenseLabel.text = contact.driverLicense ?? noText
+        nodesLabel.text = contact.notes ?? noText
     }
     
     @objc private func editButtonPressed(){

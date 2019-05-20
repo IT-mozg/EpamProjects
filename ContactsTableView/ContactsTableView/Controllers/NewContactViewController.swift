@@ -68,9 +68,13 @@ class NewContactViewController: UITableViewController {
     
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
         guard let firstName = firstNameTextField.text else { return }
-        guard let lastName = lastNameTextField.text else { return  }
+        let lastName = lastNameTextField.text
         guard let phone = phoneTextField.text else { return  }
-        guard let email = emailTextField.text else { return  }
+        let email = emailTextField.text
+        let birthday = birthdayTextField.text
+        let height = heightTextField.text
+        let notes = notesTextView.text
+        let driverLicense = driverLicenseSwitch.isOn ? driverLicenseTextField.text : nil
         if let updateClosure = self.update{
             let updated = editingContact!.copy() as! Contact
             updated.firstName = firstName
@@ -78,10 +82,14 @@ class NewContactViewController: UITableViewController {
             updated.email = email
             updated.phoneNumber = phone
             updated.saveImage(image: contactImage)
+            updated.birthday = birthday
+            updated.height = height
+            updated.notes = notes
+            updated.driverLicense = driverLicense
             updateClosure(updated)
         }
         if delegate != nil{
-            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, birthday: nil, height: nil, notes: nil, driverLicense: nil)
+            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
             newItem.saveImage(image: contactImage)
             delegate!.addNewContact(newItem: newItem)
         }
@@ -320,9 +328,9 @@ extension NewContactViewController: UIPickerViewDelegate{
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch component {
             case 0:
-                self.meter = row
+                meter = row
             case 1:
-                self.deсimetеr = row
+                deсimetеr = row
             case 2:
                 santimeter = row
             default:
