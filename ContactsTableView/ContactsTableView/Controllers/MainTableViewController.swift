@@ -286,6 +286,7 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         let indexPath = IndexPath(item: row ?? 0, section: section!)
         tableView.insertRows(at: [indexPath], with: .none)
         tableView.endUpdates()
+        checkNumberOfRows()
     }
 }
 
