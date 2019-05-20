@@ -13,10 +13,11 @@ class MainTableViewController: UITableViewController {
     var contacts: [Contact] = []{
         didSet{
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
-            us.set(encodedData, forKey: "contacts")
-            us.synchronize()
+            userDefaults.set(encodedData, forKey: "contacts")
+            userDefaults.synchronize()
         }
     }
+    var userDefaults: UserDefaults!
 
     @IBOutlet weak var backgroundView: UIView!
     
@@ -27,8 +28,8 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
-        let us = UserDefaults.standard
-        let decoded = us.data(forKey: "contacts")
+        userDefaults = UserDefaults.standard
+        let decoded = userDefaults.data(forKey: "contacts")
         let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Contact]
         contacts = decodedContacts
         checkContacts()
