@@ -106,6 +106,11 @@ class NewContactViewController: UITableViewController {
         birthdayTextField.text = dateFormatter.string(from: datePicker.date)
     }
     
+    
+}
+
+//MARK: Private funcs
+private extension NewContactViewController{
     private func setupUI(){
         if let contact = editingContact{
             navigationItem.title = NSLocalizedString("EDITING_NAVIGATION_TITLE", comment: "Editing")
@@ -172,24 +177,25 @@ class NewContactViewController: UITableViewController {
     
     private func changeImage(){
         #if targetEnvironment(simulator)
-            self.chooseImagePickerAction(source: .photoLibrary)
+        self.chooseImagePickerAction(source: .photoLibrary)
         #else
-            let alertController = UIAlertController(title: NSLocalizedString("SOURCE_ACTION_TITLE", comment: "Photo source"), message: nil, preferredStyle: .actionSheet)
-            let cameraAction = UIAlertAction(title: NSLocalizedString("CAMERA_ACTION_BUTTON_TEXT", comment: "Camera"), style: .default, handler: { (action) in
-                self.chooseImagePickerAction(source: .camera)
-            })
-            let libraryAction = UIAlertAction(title: NSLocalizedString("LIBRARY_ACTION_BUTTON_TEXT", comment: "Library"), style: .default, handler: { (action) in
-                self.chooseImagePickerAction(source: .photoLibrary)
-            })
-            let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL_ACTION_BUTTON_TEXT", comment: "Cancel"), style: .cancel, handler: nil)
-            alertController.addAction(cameraAction)
-            alertController.addAction(libraryAction)
-            alertController.addAction(cancelAction)
-            self.present(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(title: NSLocalizedString("SOURCE_ACTION_TITLE", comment: "Photo source"), message: nil, preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: NSLocalizedString("CAMERA_ACTION_BUTTON_TEXT", comment: "Camera"), style: .default, handler: { (action) in
+            self.chooseImagePickerAction(source: .camera)
+        })
+        let libraryAction = UIAlertAction(title: NSLocalizedString("LIBRARY_ACTION_BUTTON_TEXT", comment: "Library"), style: .default, handler: { (action) in
+            self.chooseImagePickerAction(source: .photoLibrary)
+        })
+        let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL_ACTION_BUTTON_TEXT", comment: "Cancel"), style: .cancel, handler: nil)
+        alertController.addAction(cameraAction)
+        alertController.addAction(libraryAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
         #endif
     }
 
 }
+
 // MARK: Image picker
 extension NewContactViewController: UIImagePickerControllerDelegate{
     private func assingImage(_ image: UIImage?, _ mode: UIView.ContentMode){

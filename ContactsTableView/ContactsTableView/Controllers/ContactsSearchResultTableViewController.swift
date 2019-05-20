@@ -24,28 +24,10 @@ class ContactsSearchResultTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
     }
+}
 
-    // MARK: - Table view data source
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        backgroundView.isHidden = !filteredContacts.isEmpty
-        return filteredContacts.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell")!
-        cell.textLabel?.attributedText = findMostSimilarString(contact: filteredContacts[indexPath.row])
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didSelectRow(tableView, indexPath)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        return delegate?.editActionsForRow(tableView, indexPath)
-    }
-    
+//MARK: Private funcs
+private extension ContactsSearchResultTableViewController{
     private func findMostSimilarString(contact: Contact) -> NSAttributedString?{
         let searchItems = searchString.splitString(separator: " ")
         let findMatches = SearchStringHelper.findMatches
@@ -77,3 +59,27 @@ class ContactsSearchResultTableViewController: UITableViewController {
         return attribute
     }
 }
+
+//MARK: TableViewControllerDataSource
+extension ContactsSearchResultTableViewController{
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        backgroundView.isHidden = !filteredContacts.isEmpty
+        return filteredContacts.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell")!
+        cell.textLabel?.attributedText = findMostSimilarString(contact: filteredContacts[indexPath.row])
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.didSelectRow(tableView, indexPath)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        return delegate?.editActionsForRow(tableView, indexPath)
+    }
+}
+

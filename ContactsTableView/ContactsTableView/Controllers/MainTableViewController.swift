@@ -62,6 +62,9 @@ class MainTableViewController: UITableViewController {
         addButtonItemPressed()
     }
     
+}
+
+private extension MainTableViewController{
     //MARK: private help methods
     
     private func unurchiveContacts(){
@@ -104,7 +107,7 @@ class MainTableViewController: UITableViewController {
             print(error)
         }
     }
-
+    
     @objc private func addButtonItemPressed(){
         if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
             if let viewController = navigationController.viewControllers.first as? NewContactViewController{
