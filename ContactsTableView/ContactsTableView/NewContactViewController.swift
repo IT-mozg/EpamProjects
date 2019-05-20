@@ -70,7 +70,6 @@ class NewContactViewController: UIViewController {
         guard let lastName = lastNameTextField.text else { return  }
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
-      
         if let updateClosure = self.update{
             let updated = editingContact!.copy() as! Contact
             updated.firstName = firstName
@@ -84,6 +83,7 @@ class NewContactViewController: UIViewController {
             let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone)
             newItem.saveImage(image: contactImage)
             delegate!.addNewContact(newItem: newItem)
+
         }
         dismiss(animated: true, completion: nil)
     

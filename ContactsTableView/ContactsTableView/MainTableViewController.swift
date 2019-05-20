@@ -10,9 +10,14 @@ import UIKit
 let mainCellID = "MainCell"
 
 class MainTableViewController: UITableViewController {
-    private var contacts: [Contact] = []
+    var contacts: [Contact] = []{
+        didSet{
+            updateUserDefault()
+        }
+    }
+    var userDefaults: UserDefaults!
+
     private var filteredContacts: [Contact] = []
-    private var userDefaults: UserDefaults!
     private var contactSearchController: UISearchController!
     private var searchBarIsEmpty: Bool{
         guard let text = contactSearchController.searchBar.text else {
@@ -26,25 +31,29 @@ class MainTableViewController: UITableViewController {
     
     @IBOutlet weak var backgroundView: UIView!
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        // setup background
         setupUI()
-        // unarchive contacts
         unurchiveContacts()
+    }
+    
+    private func updateUserDefault(){
+        do{
+            let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: contacts, requiringSecureCoding: false)
+            userDefaults.set(encodedData, forKey: "contacts")
+            userDefaults.synchronize()
+        }catch{}
     }
     
     private func unurchiveContacts(){
         userDefaults = UserDefaults.standard
-        if let decoded = userDefaults.data(forKey: "contacts"){
-            do{
-                let decodedContacts = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [Contact]
-                contacts = decodedContacts
-            }catch{}
+
+        do{
+            if let decoded = userDefaults.data(forKey: "contacts"){
+                contacts = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [Contact]
+            }
+        }catch {
+            print(error)
         }
     }
     

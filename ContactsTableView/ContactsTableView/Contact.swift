@@ -75,6 +75,7 @@ class Contact: NSObject, NSCoding{
         return fileURL
     }
     
+
     func saveImage(image: UIImage?){
         guard let image = image else{
             deleteImage()
