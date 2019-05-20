@@ -8,10 +8,6 @@
 
 import UIKit
 
-//protocol ContactInfoViewControllerDelegate:class{
-//    func deleteContact(at id: UUID)
-//}
-
 class ContactInfoViewController: UIViewController {
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var lastNameLabel: UILabel!
@@ -21,8 +17,6 @@ class ContactInfoViewController: UIViewController {
     var editBarButtonItem: UIBarButtonItem!
     
     var contact: Contact!
-    
-   // weak var delegate: ContactInfoViewControllerDelegate?
     
     var update: ((_ contact: Contact)->())?
     var delete: (()->())?
@@ -40,7 +34,7 @@ class ContactInfoViewController: UIViewController {
         lastNameLabel.text = contact?.lastName
         phoneLabel.text = contact?.phoneNumber
         emailLabel.text = contact?.email
-        photoImageView.image = contact?.imagePhoto ?? UIImage(named: "avatar")
+        photoImageView.image = contact?.imagePhoto ?? ContactDefault.defaultImage
     }
     
     @objc private func editButtonPressed(){
