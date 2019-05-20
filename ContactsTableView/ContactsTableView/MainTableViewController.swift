@@ -8,12 +8,15 @@
 
 import UIKit
 let mainCellID = "MainCell"
-struct Lol{
-    var q: String
-    var w: String
-}
+
 class MainTableViewController: UITableViewController {
-    var contacts: [Contact] = []
+    var contacts: [Contact] = []{
+        didSet{
+            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
+            us.set(encodedData, forKey: "contacts")
+            us.synchronize()
+        }
+    }
 
     @IBOutlet weak var backgroundView: UIView!
     
@@ -23,20 +26,15 @@ class MainTableViewController: UITableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkContacts()
+        tableView.backgroundView = backgroundView
         let us = UserDefaults.standard
-//        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
-//        us.set(encodedData, forKey: "contacts")
-//        us.synchronize()
         let decoded = us.data(forKey: "contacts")
         let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Contact]
         contacts = decodedContacts
-        contacts.first?.firstName = "123"
         checkContacts()
     }
     
     private func checkContacts(){
-        tableView.backgroundView = backgroundView
         backgroundView.isHidden = !contacts.isEmpty
         if !contacts.isEmpty{
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))

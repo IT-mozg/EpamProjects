@@ -75,7 +75,7 @@ class NewContactViewController: UIViewController {
             if editingContact != nil{
                 contactImage = editingContact!.imagePhoto
             }else{
-                contactImage = ContactDefault.defaultImage
+                contactImage = nil
             }
         }
         let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: contactImage)
