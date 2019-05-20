@@ -61,7 +61,7 @@ class Contact: NSObject, NSCoding{
         aCoder.encode(lastName, forKey: "lastName")
         aCoder.encode(email, forKey: "email")
         aCoder.encode(phoneNumber, forKey: "phoneNumber")
-        encodeImage(imagePhoto!)
+        encodeImage(imagePhoto)
     }
     
     func decodeImage() -> UIImage? {
@@ -76,7 +76,10 @@ class Contact: NSObject, NSCoding{
         return nil
     }
     
-    func encodeImage(_ image: UIImage){
+    func encodeImage(_ image: UIImage?){
+        guard let image = image else{
+            return
+        }
         let imgData = UIImage.jpegData(image)
         let relativePath = "image-\(contactId).jpg"
         let url = documentsPathForFileName(relativePath)

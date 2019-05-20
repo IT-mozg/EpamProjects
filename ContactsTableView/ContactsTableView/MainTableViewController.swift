@@ -12,9 +12,7 @@ let mainCellID = "MainCell"
 class MainTableViewController: UITableViewController {
     var contacts: [Contact] = []{
         didSet{
-            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
-            userDefaults.set(encodedData, forKey: "contacts")
-            userDefaults.synchronize()
+            updateUserDefault()
         }
     }
     var userDefaults: UserDefaults!
@@ -28,11 +26,27 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
-        userDefaults = UserDefaults.standard
-        let decoded = userDefaults.data(forKey: "contacts")
-        let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [Contact]
-        contacts = decodedContacts
+        unurchiveContacts()
         checkContacts()
+    }
+    
+    private func updateUserDefault(){
+        do{
+            let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: contacts, requiringSecureCoding: false)
+            userDefaults.set(encodedData, forKey: "contacts")
+            userDefaults.synchronize()
+        }catch{}
+    }
+    
+    private func unurchiveContacts(){
+        userDefaults = UserDefaults.standard
+        do{
+            if let decoded = userDefaults.data(forKey: "contacts"){
+                contacts = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [Contact]
+            }
+        }catch {
+            print(error)
+        }
     }
     
     private func checkContacts(){
