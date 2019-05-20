@@ -75,7 +75,7 @@ class NewContactViewController: UIViewController {
             if editingContact != nil{
                 contactImage = editingContact!.imagePhoto
             }else{
-                contactImage = UIImage(named: "avatar")
+                contactImage = ContactDefault.defaultImage
             }
         }
         let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: contactImage)
@@ -213,12 +213,12 @@ extension NewContactViewController: UITextFieldDelegate{
         if let text = textField.text{
             if validate(text){
                 navigationItem.rightBarButtonItem?.isEnabled = true
-                textField.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+                textField.backgroundColor = ContactDefault.validColor
                 return true
             }
         }
         navigationItem.rightBarButtonItem?.isEnabled = false
-        textField.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        textField.backgroundColor = ContactDefault.invalidColor
         return false
     }
     

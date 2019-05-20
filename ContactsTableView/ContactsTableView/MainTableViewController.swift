@@ -115,8 +115,8 @@ extension MainTableViewController{
                 self.navigationController?.pushViewController(controller, animated: true)
             }
         }
-        delete.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        edit.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        delete.backgroundColor = ContactDefault.deleteColor
+        edit.backgroundColor = ContactDefault.editColor
         return [delete,edit]
     }
     

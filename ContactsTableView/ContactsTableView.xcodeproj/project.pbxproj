@@ -17,6 +17,7 @@
 		F5236CDD2280819600FF98E9 /* NewContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CDC2280819600FF98E9 /* NewContactViewController.swift */; };
 		F5236CDF2281780C00FF98E9 /* ContactInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */; };
 		F5236CE12282052900FF98E9 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CE02282052900FF98E9 /* Validation.swift */; };
+		F5BD996422929F9100C1AB4A /* ContactDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD996322929F9100C1AB4A /* ContactDefault.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		F5236CDC2280819600FF98E9 /* NewContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewContactViewController.swift; sourceTree = "<group>"; };
 		F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactInfoViewController.swift; sourceTree = "<group>"; };
 		F5236CE02282052900FF98E9 /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
+		F5BD996322929F9100C1AB4A /* ContactDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDefault.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				F5236CCB2280666800FF98E9 /* Assets.xcassets */,
 				F5236CCD2280666800FF98E9 /* LaunchScreen.storyboard */,
 				F5236CD02280666800FF98E9 /* Info.plist */,
+				F5BD996322929F9100C1AB4A /* ContactDefault.swift */,
 			);
 			path = ContactsTableView;
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5BD996422929F9100C1AB4A /* ContactDefault.swift in Sources */,
 				F5236CDB22806B7D00FF98E9 /* Contact.swift in Sources */,
 				F5236CDD2280819600FF98E9 /* NewContactViewController.swift in Sources */,
 				F5236CD72280671600FF98E9 /* MainTableViewController.swift in Sources */,
