@@ -41,8 +41,10 @@ class MainTableViewController: UITableViewController {
     private func unurchiveContacts(){
         userDefaults = UserDefaults.standard
         if let decoded = userDefaults.data(forKey: "contacts"){
-            let decodedContacts = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [Contact]
-            contacts = decodedContacts
+            do{
+                let decodedContacts = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [Contact]
+                contacts = decodedContacts
+            }catch{}
         }
     }
     
@@ -59,9 +61,11 @@ class MainTableViewController: UITableViewController {
     }
     
     private func updateUserDefaults(){
-        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: contacts)
-        userDefaults.set(encodedData, forKey: "contacts")
-        userDefaults.synchronize()
+        do{
+            let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject:contacts, requiringSecureCoding: false)
+            userDefaults.set(encodedData, forKey: "contacts")
+            userDefaults.synchronize()
+        }catch{}
     }
     
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
