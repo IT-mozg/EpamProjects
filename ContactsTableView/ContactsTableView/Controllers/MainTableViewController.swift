@@ -55,7 +55,7 @@ class MainTableViewController: UITableViewController {
     // MARK: IBActions
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
         self.tableView.isEditing = !self.tableView.isEditing
-        navigationItem.leftBarButtonItem!.title = (self.tableView.isEditing) ? "Done" : "Edit"
+        navigationItem.leftBarButtonItem!.title = (self.tableView.isEditing) ? NSLocalizedString("DONE_BUTTON_TEXT", comment: "Done") : NSLocalizedString("EDIT_BUTTON_TEXT", comment: "Edit")
     }
     
     @IBAction func addNewButtonPressed(_ sender: Any) {
@@ -83,7 +83,7 @@ class MainTableViewController: UITableViewController {
         contactSearchController = UISearchController(searchResultsController: searchResultController)
         contactSearchController.searchResultsUpdater = self
         contactSearchController.obscuresBackgroundDuringPresentation = false
-        contactSearchController.searchBar.placeholder = "Search contact"
+        contactSearchController.searchBar.placeholder = NSLocalizedString("SEARCH_PLACEHOLDER_TEXT", comment: "Search contact")
         contactSearchController.searchBar.delegate = self
         navigationItem.searchController = contactSearchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -118,7 +118,7 @@ class MainTableViewController: UITableViewController {
         backgroundView.isHidden = !contactDictionary.isEmpty
         if !contactDictionary.isEmpty{
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("EDIT_BUTTON_TEXT", comment: "Edit"), style: .plain, target: self, action: #selector(editButtonPressed))
         }
         else{
             navigationItem.rightBarButtonItem = nil
@@ -343,10 +343,10 @@ extension MainTableViewController: ContactsSearchResultDelegate{
     }
     
     func editActionsForRow(_ tableView: UITableView, _ indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .default, title: "Delete") { (action, indexPath) in
+        let delete = UITableViewRowAction(style: .default, title: NSLocalizedString("DELETE_BUTTON_TEXT", comment: "Delete")) { (action, indexPath) in
             self.deleteRowContact(indexPath)
         }
-        let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
+        let edit = UITableViewRowAction(style: .default, title: NSLocalizedString("EDIT_BUTTON_TEXT", comment: "Edit")) { (action, indexPath) in
             self.setupEditContact(indexPath: indexPath)
         }
         delete.backgroundColor = ContactDefault.deleteColor

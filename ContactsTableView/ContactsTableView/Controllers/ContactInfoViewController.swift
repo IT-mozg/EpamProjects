@@ -13,7 +13,7 @@ class ContactInfoViewController: UIViewController {
     var contact: Contact!
     var update: ((_ contact: Contact)->())?
     var delete: (()->())?
-    private var noText: String = "No"
+    private var noText: String = NSLocalizedString("NO_LABLE_TEXT", comment: "No")
     
     //MARK: IBOutlets
     @IBOutlet weak var firstNameLabel: UILabel!
@@ -30,25 +30,14 @@ class ContactInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presentContact()
-        editBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
+        editBarButtonItem = UIBarButtonItem(title: NSLocalizedString("EDIT_BUTTON_TEXT", comment: "Edit"), style: .plain, target: self, action: #selector(editButtonPressed))
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = editBarButtonItem
     }
     
     //MARK: IBActions
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
-        let alertController = UIAlertController(title: "Delete", message: "Do you realy wanna delete current contact?", preferredStyle: .alert)
-        let noAlertAction = UIAlertAction(title: "No", style: .default, handler: nil)
-        let yesAlertAction = UIAlertAction(title: "Yes", style: .default) { (action) in
-            if let deleteClosure = self.delete{
-                deleteClosure()
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-        alertController.addAction(noAlertAction)
-        alertController.addAction(yesAlertAction)
-        present(alertController, animated: true)
-        
+        ContactActionHelper.delete(delete, viewController: self)
     }
     
     //MARK: Private help methods

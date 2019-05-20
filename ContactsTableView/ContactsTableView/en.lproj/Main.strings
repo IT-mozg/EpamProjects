@@ -1,0 +1,108 @@
+
+/* Class = "UILabel"; text = "Email:"; ObjectID = "0Bj-ye-dSj"; */
+"0Bj-ye-dSj.text" = "Email:";
+
+/* Class = "UIBarButtonItem"; title = "Add"; ObjectID = "1kI-Tf-Iik"; */
+"1kI-Tf-Iik.title" = "Add";
+
+/* Class = "UIButton"; normalTitle = "Delete"; ObjectID = "2Wb-QW-NtC"; */
+"2Wb-QW-NtC.normalTitle" = "Delete";
+
+/* Class = "UILabel"; text = "Your contact list is empty"; ObjectID = "3Us-eU-f1u"; */
+"3Us-eU-f1u.text" = "Your contact list is empty";
+
+/* Class = "UITextField"; placeholder = "Birthday"; ObjectID = "4d7-Bh-XOO"; */
+"4d7-Bh-XOO.placeholder" = "Birthday";
+
+/* Class = "UILabel"; text = "Birthday"; ObjectID = "5Gx-7e-FBX"; */
+"5Gx-7e-FBX.text" = "Birthday";
+
+/* Class = "UILabel"; text = "LastName"; ObjectID = "6ZU-Oi-mr0"; */
+"6ZU-Oi-mr0.text" = "LastName";
+
+/* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "7Km-XS-Ykz"; */
+"7Km-XS-Ykz.title" = "Cancel";
+
+/* Class = "UITextField"; placeholder = "Last name"; ObjectID = "8mE-yF-ppF"; */
+"8mE-yF-ppF.placeholder" = "Last name";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "9aj-oq-tXf"; */
+"9aj-oq-tXf.placeholder" = "Email";
+
+/* Class = "UILabel"; text = "FirstName"; ObjectID = "DFM-Ic-qgp"; */
+"DFM-Ic-qgp.text" = "FirstName";
+
+/* Class = "UITextField"; placeholder = "Driver license"; ObjectID = "EeN-Km-HIE"; */
+"EeN-Km-HIE.placeholder" = "Driver license";
+
+/* Class = "UILabel"; text = "Email"; ObjectID = "F4t-cI-51l"; */
+"F4t-cI-51l.text" = "Email";
+
+/* Class = "UILabel"; text = "Sorry nothing found"; ObjectID = "FbR-yA-bu8"; */
+"FbR-yA-bu8.text" = "Sorry nothing found";
+
+/* Class = "UIBarButtonItem"; title = "Delete"; ObjectID = "GAf-Mm-Fsi"; */
+"GAf-Mm-Fsi.title" = "Delete";
+
+/* Class = "UILabel"; text = "Driver License:"; ObjectID = "JWD-9k-HRk"; */
+"JWD-9k-HRk.text" = "Driver License:";
+
+/* Class = "UILabel"; text = "DriverLicense"; ObjectID = "NPC-06-JeU"; */
+"NPC-06-JeU.text" = "DriverLicense";
+
+/* Class = "UILabel"; text = "Birthday:"; ObjectID = "NVu-zp-aym"; */
+"NVu-zp-aym.text" = "Birthday:";
+
+/* Class = "UITextField"; placeholder = "First name"; ObjectID = "PhI-L7-53F"; */
+"PhI-L7-53F.placeholder" = "First name";
+
+/* Class = "UIBarButtonItem"; title = "Edit"; ObjectID = "S8g-1o-oYb"; */
+"S8g-1o-oYb.title" = "Edit";
+
+/* Class = "UINavigationItem"; title = "Add new"; ObjectID = "TQJ-d6-7xd"; */
+"TQJ-d6-7xd.title" = "Add new";
+
+/* Class = "UILabel"; text = "Last name"; ObjectID = "VQP-wl-p89"; */
+"VQP-wl-p89.text" = "Last name";
+
+/* Class = "UILabel"; text = "First name: *"; ObjectID = "XHn-Yp-lLd"; */
+"XHn-Yp-lLd.text" = "First name: *";
+
+/* Class = "UILabel"; text = "Phone: *"; ObjectID = "aV8-TT-68W"; */
+"aV8-TT-68W.text" = "Phone: *";
+
+/* Class = "UILabel"; text = "Notes"; ObjectID = "aih-Yj-YCQ"; */
+"aih-Yj-YCQ.text" = "Notes";
+
+/* Class = "UIButton"; normalTitle = "Create new"; ObjectID = "cDf-e2-hTY"; */
+"cDf-e2-hTY.normalTitle" = "Create new";
+
+/* Class = "UINavigationItem"; title = "Contacts"; ObjectID = "duP-BA-7eG"; */
+"duP-BA-7eG.title" = "Contacts";
+
+/* Class = "UILabel"; text = "First name"; ObjectID = "f5r-H3-ZSw"; */
+"f5r-H3-ZSw.text" = "First name";
+
+/* Class = "UIBarButtonItem"; title = "Back"; ObjectID = "ktc-mM-W4x"; */
+"ktc-mM-W4x.title" = "Back";
+
+/* Class = "UILabel"; text = "Height"; ObjectID = "mav-0z-D7L"; */
+"mav-0z-D7L.text" = "Height";
+
+/* Class = "UILabel"; text = "Phone"; ObjectID = "nKO-BT-grO"; */
+"nKO-BT-grO.text" = "Phone";
+
+/* Class = "UILabel"; text = "Notes"; ObjectID = "pLN-2j-cK2"; */
+"pLN-2j-cK2.text" = "Notes";
+
+/* Class = "UITextField"; placeholder = "Height"; ObjectID = "rxn-G9-5az"; */
+"rxn-G9-5az.placeholder" = "Height";
+
+/* Class = "UILabel"; text = "Last name:"; ObjectID = "umS-mc-tOT"; */
+"umS-mc-tOT.text" = "Last name:";
+
+/* Class = "UITextField"; placeholder = "+380XXXXXXXXX"; ObjectID = "z3z-x3-Qye"; */
+"z3z-x3-Qye.placeholder" = "+380XXXXXXXXX";
+
+/* Class = "UILabel"; text = "Height"; ObjectID = "zP7-Ce-v4m"; */
+"zP7-Ce-v4m.text" = "Height";

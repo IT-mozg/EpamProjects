@@ -108,8 +108,8 @@ class NewContactViewController: UITableViewController {
     
     private func setupUI(){
         if let contact = editingContact{
-            navigationItem.title = "Editing"
-            navigationItem.rightBarButtonItem?.title = "Save"
+            navigationItem.title = NSLocalizedString("EDITING_NAVIGATION_TITLE", comment: "Editing")
+            navigationItem.rightBarButtonItem?.title = NSLocalizedString("SAVE_BUTTON_TEXT", comment: "Save")
             firstNameTextField.text = contact.firstName
             lastNameTextField.text = contact.lastName
             phoneTextField.text = contact.phoneNumber
@@ -121,7 +121,7 @@ class NewContactViewController: UITableViewController {
             photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
             contactImage = contact.imagePhoto
         }else{
-            navigationItem.rightBarButtonItem?.title = "Add"
+            navigationItem.rightBarButtonItem?.title = NSLocalizedString("ADD_BUTTON_TEXT", comment: "Add")
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
         setupBirthdayCell()
@@ -154,15 +154,15 @@ class NewContactViewController: UITableViewController {
             changeImage()
         }
         else{
-            let alertController = UIAlertController(title: "Edit image", message: nil, preferredStyle: .actionSheet)
-            let removeAction = UIAlertAction(title: "Remove", style: .default) { (action) in
+            let alertController = UIAlertController(title: NSLocalizedString("EDIT_ACTION_TITLE", comment: "Edit image"), message: nil, preferredStyle: .actionSheet)
+            let removeAction = UIAlertAction(title: NSLocalizedString("REMOVE_ACTION_BUTTON_TEXT", comment: "Remove"), style: .default) { (action) in
                 self.assingImage(nil, .scaleAspectFit)
             }
-            let changeAction = UIAlertAction(title: "Change", style: .default) { (action) in
+            let changeAction = UIAlertAction(title: NSLocalizedString("CHANGE_ACTION_BUTTON_TEXT", comment: "Change"), style: .default) { (action) in
                 alertController.dismiss(animated: true, completion: nil)
                 self.changeImage()
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL_ACTION_BUTTON_TEXT", comment: "Cancel"), style: .cancel, handler: nil)
             alertController.addAction(removeAction)
             alertController.addAction(changeAction)
             alertController.addAction(cancelAction)
@@ -174,14 +174,14 @@ class NewContactViewController: UITableViewController {
         #if targetEnvironment(simulator)
             self.chooseImagePickerAction(source: .photoLibrary)
         #else
-            let alertController = UIAlertController(title: "Photo source", message: nil, preferredStyle: .actionSheet)
-            let cameraAction = UIAlertAction(title: "Camera", style: .default, handler: { (action) in
+            let alertController = UIAlertController(title: NSLocalizedString("SOURCE_ACTION_TITLE", comment: "Photo source"), message: nil, preferredStyle: .actionSheet)
+            let cameraAction = UIAlertAction(title: NSLocalizedString("CAMERA_ACTION_BUTTON_TEXT", comment: "Camera"), style: .default, handler: { (action) in
                 self.chooseImagePickerAction(source: .camera)
             })
-            let libraryAction = UIAlertAction(title: "Library", style: .default, handler: { (action) in
+            let libraryAction = UIAlertAction(title: NSLocalizedString("LIBRARY_ACTION_BUTTON_TEXT", comment: "Library"), style: .default, handler: { (action) in
                 self.chooseImagePickerAction(source: .photoLibrary)
             })
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL_ACTION_BUTTON_TEXT", comment: "Cancel"), style: .cancel, handler: nil)
             alertController.addAction(cameraAction)
             alertController.addAction(libraryAction)
             alertController.addAction(cancelAction)

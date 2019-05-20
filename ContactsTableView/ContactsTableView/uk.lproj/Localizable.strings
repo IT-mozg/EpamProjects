@@ -1,0 +1,32 @@
+/* 
+  Localizable.strings
+  ContactsTableView
+
+  Created by Vlad on 5/20/19.
+  Copyright © 2019 Vlad Tkachuk. All rights reserved.
+*/
+
+"EDIT_BUTTON_TEXT" = "Редагувати";
+"DONE_BUTTON_TEXT" = "Зроблено";
+"DELETE_BUTTON_TEXT" = "Видалити";
+"SAVE_BUTTON_TEXT" = "Зберегти";
+"ADD_BUTTON_TEXT" = "Додати";
+
+"CANCEL_ACTION_BUTTON_TEXT" = "Відміна";
+"REMOVE_ACTION_BUTTON_TEXT" = "Видалити";
+"CHANGE_ACTION_BUTTON_TEXT" = "Змінити";
+"CAMERA_ACTION_BUTTON_TEXT" = "Камера";
+"LIBRARY_ACTION_BUTTON_TEXT" = "Бібліотека";
+"YES_ACTION_BUTTON_TEXT" = "Так";
+"NO_ACTION_BUTTON_TEXT" = "Ні";
+"DELETE_ACTION_MESSAGE" = "Ви справді хочете видалити цей контакт?";
+
+"NO_LABLE_TEXT" = "Нема";
+
+"EDIT_ACTION_TITLE" = "Редагувати зобрження";
+"SOURCE_ACTION_TITLE" = "Джерело зображення";
+
+"EDITING_NAVIGATION_TITLE" = "Редагування";
+"DELETE_ACTION_TITLE" = "Видалити";
+"SEARCH_PLACEHOLDER_TEXT" = "Пошук контакту";
+

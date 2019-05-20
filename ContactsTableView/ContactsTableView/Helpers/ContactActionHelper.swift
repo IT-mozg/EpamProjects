@@ -10,9 +10,9 @@ import UIKit
 
 class ContactActionHelper{
     static func delete(_ delete: (()->())?, viewController: UIViewController){
-        let alertController = UIAlertController(title: "Delete", message: "Do you realy wanna delete current contact?", preferredStyle: .alert)
-        let noAlertAction = UIAlertAction(title: "No", style: .default, handler: nil)
-        let yesAlertAction = UIAlertAction(title: "Yes", style: .default) { (action) in
+        let alertController = UIAlertController(title: NSLocalizedString("DELETE_ACTION_TITLE", comment: "Delete"), message: NSLocalizedString("DELETE_ACTION_MESSAGE", comment: "Delete"), preferredStyle: .alert)
+        let noAlertAction = UIAlertAction(title: NSLocalizedString("NO_ACTION_BUTTON_TEXT", comment: "No"), style: .default, handler: nil)
+        let yesAlertAction = UIAlertAction(title: NSLocalizedString("YES_ACTION_BUTTON_TEXT", comment: "Yes"), style: .default) { (action) in
             if let deleteClosure = delete{
                 deleteClosure()
                 viewController.dismiss(animated: true)
