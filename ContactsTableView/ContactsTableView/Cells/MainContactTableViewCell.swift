@@ -17,7 +17,7 @@ class MainContactTableViewCell: UITableViewCell {
     func updateWith(model: Contact){
         firstNameLabel.text = model.firstName
         lastNameLabel.text = model.lastName
-        contactImage?.image = ContactDefault.defaultImage
+        contactImage?.image = model.imagePhoto ?? ContactDefault.defaultImage
     }
 
 }

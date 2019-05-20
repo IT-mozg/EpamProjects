@@ -18,7 +18,7 @@ class Contact: NSObject, NSCoding{
     var birthday: String?
     var height: String?
     var notes: String?
-    var isHaveDriverLicense: Bool
+    var driverLicense: String?
     var imagePhoto: UIImage?{
         get{
             var image: UIImage? = nil
@@ -37,7 +37,7 @@ class Contact: NSObject, NSCoding{
         return "image-\(contactId)"
     }()
     
-    init(firstName: String, lastName: String?, email: String?, phoneNumber: String, birthday: String?, height: String?, notes: String?, driverLicense: Bool = false){
+    init(firstName: String, lastName: String?, email: String?, phoneNumber: String, birthday: String?, height: String?, notes: String?, driverLicense: String?){
         contactId = UUID().uuidString
         self.firstName = firstName
         self.lastName = lastName
@@ -46,11 +46,11 @@ class Contact: NSObject, NSCoding{
         self.birthday = birthday
         self.height = height
         self.notes = notes
-        self.isHaveDriverLicense = driverLicense
+        self.driverLicense = driverLicense
         super.init()
     }
     
-    convenience init(id: String, firstName: String, lastName: String?, email: String?, phoneNumber: String, birthday: String?, height: String?, notes: String?,driverLicense: Bool){
+    convenience init(id: String, firstName: String, lastName: String?, email: String?, phoneNumber: String, birthday: String?, height: String?, notes: String?, driverLicense: String?){
         self.init(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
         contactId = id
     }
@@ -64,9 +64,9 @@ class Contact: NSObject, NSCoding{
         let birthday = aDecoder.decodeObject(forKey: "birthday") as? String
         let height = aDecoder.decodeObject(forKey: "height") as? String
         let notes = aDecoder.decodeObject(forKey: "notes") as? String
-        let isHaveDriverLicense = aDecoder.decodeObject(forKey: "isHaveDriverLicense") as? Bool ?? false
+        let driverLicense = aDecoder.decodeObject(forKey: "driverLicense") as? String
         
-        self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: isHaveDriverLicense)
+        self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
     }
     
     deinit {
@@ -78,10 +78,11 @@ class Contact: NSObject, NSCoding{
         aCoder.encode(firstName, forKey: "firstName")
         aCoder.encode(lastName, forKey: "lastName")
         aCoder.encode(email, forKey: "email")
+        aCoder.encode(phoneNumber, forKey: "phoneNumber")
         aCoder.encode(birthday, forKey: "birthday")
         aCoder.encode(height, forKey: "height")
         aCoder.encode(notes, forKey: "notes")
-        aCoder.encode(isHaveDriverLicense, forKey: "isHaveDriverLicense")
+        aCoder.encode(driverLicense, forKey: "driverLicense")
     }
     
     func documentsPathForFileName(_ name: String, fileExtension: String) -> URL{
@@ -118,7 +119,7 @@ class Contact: NSObject, NSCoding{
 
 extension Contact : NSCopying{
     func copy(with zone: NSZone? = nil) -> Any{
-        let copyContact = Contact(id: contactId, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: isHaveDriverLicense)
+        let copyContact = Contact(id: contactId, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
         return copyContact
     }
 }

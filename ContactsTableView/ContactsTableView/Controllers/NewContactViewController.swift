@@ -9,62 +9,68 @@
 import UIKit
 
 typealias UpdateClosure = (_ contact: Contact) -> ()
-class NewContactViewController: UIViewController {
+class NewContactViewController: UITableViewController {
     weak var delegate: NewContactViewControllerDelegate?
     
     var editingContact: Contact?
     var update: UpdateClosure?
     var delete: (()->())?
     
-    var contactImage: UIImage?
+    private var meter: Int = 0
+    private var deсimetеr: Int = 0
+    private var santimeter: Int = 0
+    
+    private var contactImage: UIImage?
+    private var datePicker: UIDatePicker?
+    private var heightPickerView: UIPickerView?
     
     @IBOutlet weak var photoContactImageView: UIImageView!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var phoneTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var deleteButton: UIBarButtonItem!
+    @IBOutlet weak var driverLicenseTextField: UITextField!
+    @IBOutlet weak var notesTextView: UITextView!
+    @IBOutlet weak var driverLicenseSwitch: UISwitch!
+    @IBOutlet weak var birthdayTextField: UITextField!
+    @IBOutlet weak var heightTextField: UITextField!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        deleteButton.isHidden = editingContact == nil
+        deleteButton.isEnabled = !(editingContact == nil)
+       
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let contact = editingContact{
-            navigationItem.title = "Editing"
-            navigationItem.rightBarButtonItem?.title = "Save"
-            firstNameTextField.text = contact.firstName
-            lastNameTextField.text = contact.lastName
-            phoneTextField.text = contact.phoneNumber
-            emailTextField.text = contact.email
-            photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
-            contactImage = contact.imagePhoto
-        }else{
-            navigationItem.rightBarButtonItem?.title = "Add"
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
-        
+        setupUI()
+        datePicker?.addTarget(self, action: #selector(dateChanged(datePicker:)), for: .valueChanged)
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped(gestureRecognizer:)))
+//        view.addGestureRecognizer(tapGesture)
         firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
         lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
         phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
         emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
     }
     
+//    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
+//        view.endEditing(true)
+//    }
+    
     //MARK: IBActions
-
+    @IBAction func driverLicenseSwitchValueChanged(_ sender: UISwitch) {
+        driverLicenseTextField.isHidden = !driverLicenseSwitch.isOn
+    }
     @IBAction func cancelButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
-        
         guard let firstName = firstNameTextField.text else { return }
         guard let lastName = lastNameTextField.text else { return  }
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
-      
         if let updateClosure = self.update{
             let updated = editingContact!.copy() as! Contact
             updated.firstName = firstName
@@ -75,26 +81,74 @@ class NewContactViewController: UIViewController {
             updateClosure(updated)
         }
         if delegate != nil{
-            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, birthday: nil, height: nil, notes: nil)
+            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, birthday: nil, height: nil, notes: nil, driverLicense: nil)
             newItem.saveImage(image: contactImage)
             delegate!.addNewContact(newItem: newItem)
         }
         dismiss(animated: true, completion: nil)
-    
     }
     
-    @IBAction func deleteButtonPressed(_ sender: UIButton) {
+    @IBAction func deleteButtonPressed(_ sender: Any) {
          ContactActionHelper.delete(self.delete, viewController: self)
     }
     
-    @IBAction func pickImageButtonPressed(_ sender: UIButton) {
-        if editingContact == nil && contactImage == nil{
+    @objc func dateChanged(datePicker: UIDatePicker){
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        birthdayTextField.text = dateFormatter.string(from: datePicker.date)
+    }
+    
+    private func setupUI(){
+        if let contact = editingContact{
+            navigationItem.title = "Editing"
+            navigationItem.rightBarButtonItem?.title = "Save"
+            firstNameTextField.text = contact.firstName
+            lastNameTextField.text = contact.lastName
+            phoneTextField.text = contact.phoneNumber
+            emailTextField.text = contact.email
+            birthdayTextField.text = contact.birthday
+            heightTextField.text = contact.height
+            driverLicenseTextField.text = contact.driverLicense
+            notesTextView.text = contact.notes
+            photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
+            contactImage = contact.imagePhoto
+        }else{
+            navigationItem.rightBarButtonItem?.title = "Add"
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+        setupBirthdayCell()
+        setupHeightPickeView()
+        setupDriverLicenseCell()
+    }
+    
+    private func setupHeightPickeView(){
+        heightPickerView = UIPickerView()
+        heightPickerView?.delegate = self
+        heightPickerView?.dataSource = self
+        heightTextField.inputView = heightPickerView
+    }
+    
+    private func setupBirthdayCell(){
+        datePicker = UIDatePicker()
+        datePicker?.datePickerMode = .date
+        birthdayTextField.inputView = datePicker
+    }
+    
+    private func setupDriverLicenseCell(){
+        if let text = driverLicenseTextField.text{
+            driverLicenseSwitch.isOn = !(text.isEmpty)
+            driverLicenseTextField.isHidden = !driverLicenseSwitch.isOn
+        }
+    }
+    
+    private func pickImageButtonPressed() {
+        if editingContact?.imagePhoto == nil && contactImage == nil{
             changeImage()
         }
         else{
             let alertController = UIAlertController(title: "Edit image", message: nil, preferredStyle: .actionSheet)
             let removeAction = UIAlertAction(title: "Remove", style: .default) { (action) in
-                self.contactImage = nil
+                self.assingImage(nil, .scaleAspectFit)
             }
             let changeAction = UIAlertAction(title: "Change", style: .default) { (action) in
                 alertController.dismiss(animated: true, completion: nil)
@@ -130,10 +184,10 @@ class NewContactViewController: UIViewController {
 }
 // MARK: Image picker
 extension NewContactViewController: UIImagePickerControllerDelegate{
-    private func assingImage(_ image: UIImage){
+    private func assingImage(_ image: UIImage?, _ mode: UIView.ContentMode){
         contactImage = image
-        photoContactImageView.image = contactImage
-        photoContactImageView.contentMode = .scaleAspectFill
+        photoContactImageView.image = contactImage ?? ContactDefault.defaultCameraImage
+        photoContactImageView.contentMode = mode
         photoContactImageView.clipsToBounds = true
     }
     
@@ -150,7 +204,7 @@ extension NewContactViewController: UIImagePickerControllerDelegate{
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.editedImage] as? UIImage{
-            assingImage(image)
+            assingImage(image, .scaleAspectFill)
         }
         dismiss(animated: true, completion: nil)
     }
@@ -217,6 +271,7 @@ extension NewContactViewController: UITextFieldDelegate{
             return Validation.isValidName(text)
         }
     }
+    
     @objc private func isValidEmailTextField() -> Bool{
         return isValidTextField(textField: emailTextField){ (text) -> (Bool) in
             return Validation.isValidEmail(text)
@@ -231,5 +286,48 @@ extension NewContactViewController: UITextFieldDelegate{
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+}
+
+//MARK: TableViewControllerDelegate
+extension NewContactViewController{
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0{
+            pickImageButtonPressed()
+        }
+        view.endEditing(true)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+//MARK: UIPickerViewDataSource
+extension NewContactViewController: UIPickerViewDataSource{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 3
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 10
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(row)
+    }
+}
+
+//MARK: UIPickerViewDelegate
+extension NewContactViewController: UIPickerViewDelegate{
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        switch component {
+            case 0:
+                self.meter = row
+            case 1:
+                self.deсimetеr = row
+            case 2:
+                santimeter = row
+            default:
+                break
+        }
+        heightTextField.text = "\(meter)/\(deсimetеr)/\(santimeter)"
     }
 }

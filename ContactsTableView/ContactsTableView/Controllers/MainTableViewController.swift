@@ -220,6 +220,7 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        checkNumberOfRows()
         if contactDictionary.values.flatMap({$0}).count > 9{
             contactSearchController.searchBar.isHidden = false
         }else{
