@@ -44,7 +44,7 @@ class NewContactViewController: UIViewController {
             lastNameTextField.text = contact.lastName
             phoneTextField.text = contact.phoneNumber
             emailTextField.text = contact.email
-            photoContactImageView.image = contact.imagePhoto
+            photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
             contactImage = contact.imagePhoto
         }else{
             navigationItem.rightBarButtonItem?.title = "Add"
@@ -71,13 +71,7 @@ class NewContactViewController: UIViewController {
         guard let lastName = lastNameTextField.text else { return  }
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
-        if contactImage == nil{
-            if editingContact != nil{
-                contactImage = editingContact!.imagePhoto
-            }else{
-                contactImage = nil
-            }
-        }
+        
         let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: contactImage)
         if editingContact != nil{
             update?(newItem)

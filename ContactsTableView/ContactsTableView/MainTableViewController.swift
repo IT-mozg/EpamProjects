@@ -19,10 +19,6 @@ class MainTableViewController: UITableViewController {
 
     @IBOutlet weak var backgroundView: UIView!
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
