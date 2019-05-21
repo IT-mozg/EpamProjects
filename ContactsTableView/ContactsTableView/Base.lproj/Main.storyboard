@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <view key="tableFooterView" hidden="YES" contentMode="scaleToFill" misplaced="YES" id="8qT-IS-pZV">
-                            <rect key="frame" x="0.0" y="549" width="414" height="416"/>
+                            <rect key="frame" x="0.0" y="113" width="414" height="416"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDf-e2-hTY">
@@ -384,6 +384,10 @@
                         <outlet property="lastNameTextField" destination="ULm-5k-vax" id="Y7J-5K-HZM"/>
                         <outlet property="phoneTextField" destination="Om6-mm-MeE" id="AHc-8O-T9w"/>
                         <outlet property="photoContactImageView" destination="KDf-7c-C3l" id="CSq-gk-3q5"/>
+                        <outletCollection property="contactTextFields" destination="PP4-Dc-JGl" collectionClass="NSMutableArray" id="i7e-ax-M8h"/>
+                        <outletCollection property="contactTextFields" destination="ULm-5k-vax" collectionClass="NSMutableArray" id="1gY-Hu-19j"/>
+                        <outletCollection property="contactTextFields" destination="Om6-mm-MeE" collectionClass="NSMutableArray" id="KLE-ql-Oar"/>
+                        <outletCollection property="contactTextFields" destination="Ib4-Kq-xoe" collectionClass="NSMutableArray" id="H41-2x-bMO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xzj-na-MgZ" userLabel="First Responder" sceneMemberID="firstResponder"/>

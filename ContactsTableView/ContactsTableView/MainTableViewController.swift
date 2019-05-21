@@ -12,6 +12,7 @@ let mainCellID = "MainCell"
 class MainTableViewController: UITableViewController {
     var contacts: [Contact] = []{
         didSet{
+            checkContactsIsEmpty()
             updateUserDefault()
         }
     }
@@ -33,8 +34,21 @@ class MainTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkContactsIsEmpty()
         setupUI()
-        unurchiveContacts()
+        unarchiveContacts()
+    }
+    
+    private func checkContactsIsEmpty(){
+        backgroundView.isHidden = !contacts.isEmpty
+        if !contacts.isEmpty{
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
+        }
+        else{
+            navigationItem.rightBarButtonItem = nil
+            navigationItem.leftBarButtonItem = nil
+        }
     }
     
     private func updateUserDefault(){
@@ -45,7 +59,7 @@ class MainTableViewController: UITableViewController {
         }catch{}
     }
     
-    private func unurchiveContacts(){
+    private func unarchiveContacts(){
         userDefaults = UserDefaults.standard
 
         do{
@@ -97,16 +111,6 @@ class MainTableViewController: UITableViewController {
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        backgroundView.isHidden = !contacts.isEmpty
-        if !contacts.isEmpty{
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
-        }
-        else{
-            navigationItem.rightBarButtonItem = nil
-            navigationItem.leftBarButtonItem = nil
-        }
-        updateUserDefaults()
         if isFiltering{
             return filteredContacts.count
         }
@@ -143,7 +147,7 @@ extension MainTableViewController{
                 self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
             }
             controller.delete = {[unowned self] in
-                self.deleteRowContact(indexPath)
+                self.deleteContact(at: indexPath)
             }
             if isFiltering{
                 controller.contact = filteredContacts[indexPath.row]
@@ -158,7 +162,7 @@ extension MainTableViewController{
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .default, title: "Delete") { (action, indexPath) in
-            self.deleteRowContact(indexPath)
+            self.deleteContact(at: indexPath)
         }
         let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
             if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
@@ -173,7 +177,7 @@ extension MainTableViewController{
                         self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
                     }
                     controller.delete = {[unowned self] in
-                        self.deleteRowContact(indexPath)
+                        self.deleteContact(at: indexPath)
                     }
                     self.present(navigationController, animated: true, completion: nil)
                 }
@@ -184,17 +188,18 @@ extension MainTableViewController{
         return [delete,edit]
     }
     
-    private func deleteRowContact(_ indexPath: IndexPath){
+    private func deleteContact(at indexPath: IndexPath){
         if isFiltering{
-            deleteRowContact(at: filteredContacts[indexPath.row].contactId)
+            deleteContact(with: filteredContacts[indexPath.row].contactId)
         }
         else{
-            deleteRowContact(at: contacts[indexPath.row].contactId)
+            deleteContact(with: contacts[indexPath.row].contactId)
         }
     }
     
-    private func deleteRowContact(at id: String){
+    private func deleteContact(with id: String){
         var index: Int?
+        let deletingContat = filteredContacts.first{ $0.contactId == id}
         if isFiltering{
             index = filteredContacts.firstIndex { $0.contactId == id }
             guard index != nil else {
@@ -208,8 +213,10 @@ extension MainTableViewController{
             return
         }
         self.contacts.removeAll { $0.contactId == id }
-        deleteTableRows(index!)
-        updateUserDefaults()
+        if !isFiltering{
+            deleteTableRows(index!)
+        }
+        deletingContat?.deleteImage()
     }
     
     private func deleteTableRows(_ id: Int){
@@ -256,14 +263,14 @@ extension MainTableViewController: UISearchResultsUpdating{
                 }
             }
             
-            for earchItem in searchItems{
-                if contact.email.lowercased().contains(earchItem){
+            for searchItem in searchItems{
+                if contact.email.lowercased().contains(searchItem){
                     return true
                 }
             }
             
-            for earchItem in searchItems{
-                if contact.phoneNumber.lowercased().contains(earchItem){
+            for searchItem in searchItems{
+                if contact.phoneNumber.lowercased().contains(searchItem){
                     return true
                 }
             }

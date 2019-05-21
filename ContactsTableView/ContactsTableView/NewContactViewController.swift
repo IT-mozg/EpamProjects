@@ -28,6 +28,7 @@ class NewContactViewController: UIViewController {
     @IBOutlet weak var phoneTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet var contactTextFields: [UITextField]!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -38,10 +39,9 @@ class NewContactViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         
-        firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+        for contactTextField in contactTextFields{
+            contactTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+        }
     }
     
     private func setupUI(){

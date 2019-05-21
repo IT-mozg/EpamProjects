@@ -39,7 +39,6 @@ class Contact: NSObject, NSCoding{
         self.lastName = lastName
         self.email = email
         self.phoneNumber = phoneNumber
-        super.init()
     }
     
     convenience init(id: String, firstName: String, lastName: String, email: String, phoneNumber: String){
@@ -55,10 +54,6 @@ class Contact: NSObject, NSCoding{
         let phoneNumber = aDecoder.decodeObject(forKey: "phoneNumber") as! String
         
         self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
-    }
-    
-    deinit {
-        deleteImage()
     }
     
     func encode(with aCoder: NSCoder) {
