@@ -150,7 +150,7 @@ class MainTableViewController: UITableViewController {
 
 // MARK: Deleting contacts
 extension MainTableViewController{
-    private func deleteRowContact(_ indexPath: IndexPath){
+    private func deleteContact(at indexPath: IndexPath){
         if isFiltering{
             deleteIfFiltering(indexPath: indexPath)
         }
@@ -218,7 +218,7 @@ extension MainTableViewController{
         }
         else{
             addNewContact(newItem: updatedContact)
-            deleteRowContact(indexPath)
+            deleteContact(at: indexPath)
         }
     }
 }
@@ -330,7 +330,7 @@ extension MainTableViewController: ContactsSearchResultDelegate{
                 self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
             }
             controller.delete = {[unowned self] in
-                self.deleteRowContact(indexPath)
+                self.deleteContact(at: indexPath)
             }
             if isFiltering{
                 controller.contact = filteredContacts[indexPath.row]
@@ -348,7 +348,7 @@ extension MainTableViewController: ContactsSearchResultDelegate{
     
     func editActionsForRow(_ tableView: UITableView, _ indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .default, title: "Delete") { (action, indexPath) in
-            self.deleteRowContact(indexPath)
+            self.deleteContact(at: indexPath)
         }
         let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
             self.setupEditContact(indexPath: indexPath)
@@ -374,7 +374,7 @@ extension MainTableViewController: ContactsSearchResultDelegate{
                     self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
                 }
                 controller.delete = {[unowned self] in
-                    self.deleteRowContact(indexPath)
+                    self.deleteContact(at: indexPath)
                 }
                 self.present(navigationController, animated: true, completion: nil)
             }
