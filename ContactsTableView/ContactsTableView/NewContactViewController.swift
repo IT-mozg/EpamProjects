@@ -28,7 +28,6 @@ class NewContactViewController: UIViewController {
     @IBOutlet weak var phoneTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet var contactTextFields: [UITextField]!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -39,9 +38,10 @@ class NewContactViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         
-        for contactTextField in contactTextFields{
-            contactTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        }
+//        firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
     }
     
     private func setupUI(){
@@ -172,9 +172,9 @@ extension NewContactViewController: UITextFieldDelegate{
         textField.resignFirstResponder()
         return true
     }
-    
+
     // MARK: Validation
-    @objc private func validateTextFields() -> Bool{
+    @IBAction func validateTextFields(){
         var firstNameChecker = false
         var lastNameChecker = false
         var phoneChecker = false
@@ -193,10 +193,9 @@ extension NewContactViewController: UITextFieldDelegate{
         }
         if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
             navigationItem.rightBarButtonItem?.isEnabled = true
-            return true
+        }else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
         }
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        return false
     }
     
     private func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{

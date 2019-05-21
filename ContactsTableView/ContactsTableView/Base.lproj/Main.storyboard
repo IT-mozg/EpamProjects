@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <view key="tableFooterView" hidden="YES" contentMode="scaleToFill" misplaced="YES" id="8qT-IS-pZV">
+                        <view key="tableFooterView" hidden="YES" contentMode="scaleToFill" id="8qT-IS-pZV">
                             <rect key="frame" x="0.0" y="113" width="414" height="416"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -298,6 +298,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                         <connections>
+                                            <action selector="validateTextFields" destination="xfx-XT-LXI" eventType="editingChanged" id="gvG-ZA-nWR"/>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="Hwt-zY-DXb"/>
                                         </connections>
                                     </textField>
@@ -307,6 +308,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                         <connections>
+                                            <action selector="validateTextFields" destination="xfx-XT-LXI" eventType="editingChanged" id="8sy-0W-xTw"/>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="k5u-Ln-GjI"/>
                                         </connections>
                                     </textField>
@@ -325,6 +327,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                                         <connections>
+                                            <action selector="validateTextFields" destination="xfx-XT-LXI" eventType="editingChanged" id="aNT-ho-F9Q"/>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="lvI-zc-x7G"/>
                                         </connections>
                                     </textField>
@@ -384,10 +387,6 @@
                         <outlet property="lastNameTextField" destination="ULm-5k-vax" id="Y7J-5K-HZM"/>
                         <outlet property="phoneTextField" destination="Om6-mm-MeE" id="AHc-8O-T9w"/>
                         <outlet property="photoContactImageView" destination="KDf-7c-C3l" id="CSq-gk-3q5"/>
-                        <outletCollection property="contactTextFields" destination="PP4-Dc-JGl" collectionClass="NSMutableArray" id="i7e-ax-M8h"/>
-                        <outletCollection property="contactTextFields" destination="ULm-5k-vax" collectionClass="NSMutableArray" id="1gY-Hu-19j"/>
-                        <outletCollection property="contactTextFields" destination="Om6-mm-MeE" collectionClass="NSMutableArray" id="KLE-ql-Oar"/>
-                        <outletCollection property="contactTextFields" destination="Ib4-Kq-xoe" collectionClass="NSMutableArray" id="H41-2x-bMO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xzj-na-MgZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
