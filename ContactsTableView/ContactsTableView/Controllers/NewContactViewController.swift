@@ -105,8 +105,6 @@ class NewContactViewController: UITableViewController {
         dateFormatter.dateFormat = "MM/dd/yyyy"
         birthdayTextField.text = dateFormatter.string(from: datePicker.date)
     }
-    
-    
 }
 
 //MARK: Private funcs
@@ -342,6 +340,6 @@ extension NewContactViewController: UIPickerViewDelegate{
             default:
                 break
         }
-        heightTextField.text = "\(meter)/\(deсimetеr)/\(santimeter)"
+        heightTextField.text = "\(meter)-\(deсimetеr)-\(santimeter)"
     }
 }
