@@ -9,25 +9,40 @@ import UIKit
 import Foundation
 
 class Contact: NSObject, NSCoding{
-
-    var contactId: String
+    
+    private(set) var contactId: String
     var firstName: String
     var lastName: String
     var email: String
     var phoneNumber: String
-    var imagePhoto: UIImage?
+    var imagePhoto: UIImage?{
+        get{
+            var image: UIImage? = nil
+            do{
+                let path = self.documentsPathForFileName(imageName, fileExtension: "jpg")
+                let data = try Data(contentsOf: path)
+                image = UIImage(data: data)
+            }catch let error as NSError{
+                print(error)
+            }
+            return image
+        }
+    }
     
-    init(firstName: String, lastName: String, email: String, phoneNumber: String, imagePhoto: UIImage?){
+    private lazy var imageName: String = {
+        return "image-\(contactId)"
+    }()
+    
+    init(firstName: String, lastName: String, email: String, phoneNumber: String){
         contactId = UUID().uuidString
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
         self.phoneNumber = phoneNumber
-        self.imagePhoto = imagePhoto
     }
     
-    convenience init(id: String, firstName: String, lastName: String, email: String, phoneNumber: String, imagePhoto: UIImage?){
-        self.init(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, imagePhoto: imagePhoto)
+    convenience init(id: String, firstName: String, lastName: String, email: String, phoneNumber: String){
+        self.init(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
         contactId = id
     }
     
@@ -38,21 +53,7 @@ class Contact: NSObject, NSCoding{
         let email = aDecoder.decodeObject(forKey: "email") as! String
         let phoneNumber = aDecoder.decodeObject(forKey: "phoneNumber") as! String
         
-        var oldImage: UIImage? = nil
-        let possibleOldImagePath = UserDefaults.standard.object(forKey: "path") as! String?
-        if let oldImagePath = possibleOldImagePath {
-            let pathes = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            let path = pathes.first! as String
-            let oldFullPath = URL(fileURLWithPath: path).appendingPathComponent(oldImagePath)
-            do{
-                let data = try Data(contentsOf: oldFullPath)
-                oldImage = UIImage(data: data)
-            }catch{
-                oldImage = nil
-            }
-            // here is your saved image:
-        }
-        self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, imagePhoto: oldImage)
+        self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -61,39 +62,44 @@ class Contact: NSObject, NSCoding{
         aCoder.encode(lastName, forKey: "lastName")
         aCoder.encode(email, forKey: "email")
         aCoder.encode(phoneNumber, forKey: "phoneNumber")
-        encodeImage(imagePhoto)
     }
     
-    func decodeImage() -> UIImage? {
-        let possibleOldImagePath = UserDefaults.standard.object(forKey: "path") as! String?
-        if let oldImagePath = possibleOldImagePath {
-            let oldFullPath = self.documentsPathForFileName(oldImagePath)
-            let oldImageData = NSData(contentsOfFile: oldFullPath.absoluteString)
-            // here is your saved image:
-            let oldImage = UIImage(data: oldImageData! as Data)
-            return oldImage
-        }
-        return nil
+    func documentsPathForFileName(_ name: String, fileExtension: String) -> URL{
+        let documentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let fileURL = documentDirURL.appendingPathComponent(name).appendingPathExtension(fileExtension)
+        return fileURL
     }
     
-    func encodeImage(_ image: UIImage?){
+
+    func saveImage(image: UIImage?){
         guard let image = image else{
+            deleteImage()
             return
         }
         let imgData = UIImage.jpegData(image)
-        let relativePath = "image-\(contactId).jpg"
-        let url = documentsPathForFileName(relativePath)
+        let relativePath = imageName
+        let url = documentsPathForFileName(relativePath, fileExtension: "jpg")
         do{
-            try imgData(1.0)?.write(to: url)
-        }catch{}
-        UserDefaults.standard.set(relativePath, forKey: "path")
-        UserDefaults.standard.synchronize()
+            try imgData(1.0)!.write(to: url)
+        }catch let error as NSError{
+            print(error)
+        }
     }
     
-    func documentsPathForFileName(_ name: String) -> URL{
-        let pathes = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = pathes.first! as String
-        let url = URL(fileURLWithPath: path).appendingPathComponent(name)
-        return url
+    func deleteImage(){
+        do{
+            let path = self.documentsPathForFileName(imageName, fileExtension: "jpg")
+            let fileManager = FileManager.default
+            try fileManager.removeItem(at: path)
+        }catch let error as NSError{
+            print(error)
+        }
+    }
+}
+
+extension Contact : NSCopying{
+    func copy(with zone: NSZone? = nil) -> Any{
+        let copyContact = Contact(id: contactId, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
+        return copyContact
     }
 }

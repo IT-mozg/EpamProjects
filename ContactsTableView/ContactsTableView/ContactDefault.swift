@@ -1,12 +1,4 @@
-//
-//  ContactDefault.swift
-//  ContactsTableView
-//
-//  Created by Vlad on 5/20/19.
-//  Copyright © 2019 Vlad Tkachuk. All rights reserved.
-//
 
-import Foundation
 import UIKit
 
 struct ContactDefault{

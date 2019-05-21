@@ -31,14 +31,22 @@ class NewContactViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if editingContact == nil{
-            deleteButton.isHidden = true
-        }
+        deleteButton.isHidden = editingContact == nil
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        
+//        firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+    }
+    
+    private func setupUI(){
         if let contact = editingContact{
+            navigationItem.title = "Editing"
             navigationItem.rightBarButtonItem?.title = "Save"
             firstNameTextField.text = contact.firstName
             lastNameTextField.text = contact.lastName
@@ -50,19 +58,10 @@ class NewContactViewController: UIViewController {
             navigationItem.rightBarButtonItem?.title = "Add"
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
-        
-        firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
     }
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        guard editingContact != nil else {
-            dismiss(animated: true, completion: nil)
-            return
-        }
-        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
@@ -71,29 +70,27 @@ class NewContactViewController: UIViewController {
         guard let lastName = lastNameTextField.text else { return  }
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
-        
-        let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, imagePhoto: contactImage)
-        if editingContact != nil{
-            update?(newItem)
-            navigationController?.popViewController(animated: true)
-        }else{
-            delegate?.addNewContact(newItem: newItem)
-            dismiss(animated: true, completion: nil)
+        if let updateClosure = self.update{
+            let updated = editingContact!.copy() as! Contact
+            updated.firstName = firstName
+            updated.lastName = lastName
+            updated.email = email
+            updated.phoneNumber = phone
+            updated.saveImage(image: contactImage)
+            updateClosure(updated)
         }
+        if delegate != nil{
+            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone)
+            newItem.saveImage(image: contactImage)
+            delegate!.addNewContact(newItem: newItem)
+
+        }
+        dismiss(animated: true, completion: nil)
+    
     }
     
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
-        let alertController = UIAlertController(title: "Delete", message: "Do you realy wanna delete current contact?", preferredStyle: .alert)
-        let noAlertAction = UIAlertAction(title: "No", style: .default, handler: nil)
-        let yesAlertAction = UIAlertAction(title: "Yes", style: .default) { (action) in
-            if let deleteClosure = self.delete{
-                deleteClosure()
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-        alertController.addAction(noAlertAction)
-        alertController.addAction(yesAlertAction)
-        present(alertController, animated: true)
+         ContactActionHelper.delete(self.delete, viewController: self)
     }
     
     private func changeImage(){
@@ -122,8 +119,7 @@ class NewContactViewController: UIViewController {
         else{
             let alertController = UIAlertController(title: "Edit image", message: nil, preferredStyle: .actionSheet)
             let removeAction = UIAlertAction(title: "Remove", style: .default) { (action) in
-                let image = UIImage(named: "avatar")
-                self.assingImage(image!)
+                self.contactImage = nil
             }
             let changeAction = UIAlertAction(title: "Change", style: .default) { (action) in
                 alertController.dismiss(animated: true, completion: nil)
@@ -176,9 +172,9 @@ extension NewContactViewController: UITextFieldDelegate{
         textField.resignFirstResponder()
         return true
     }
-    
+
     // MARK: Validation
-    @objc private func validateTextFields() -> Bool{
+    @IBAction func validateTextFields(){
         var firstNameChecker = false
         var lastNameChecker = false
         var phoneChecker = false
@@ -197,10 +193,9 @@ extension NewContactViewController: UITextFieldDelegate{
         }
         if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
             navigationItem.rightBarButtonItem?.isEnabled = true
-            return true
+        }else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
         }
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        return false
     }
     
     private func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{

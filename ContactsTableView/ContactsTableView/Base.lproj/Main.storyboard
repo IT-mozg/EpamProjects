@@ -102,6 +102,11 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Contacts" id="duP-BA-7eG">
                         <barButtonItem key="backBarButtonItem" title="Back" id="ktc-mM-W4x"/>
+                        <barButtonItem key="leftBarButtonItem" title="Edit" id="S8g-1o-oYb">
+                            <connections>
+                                <action selector="editButtonPressed:" destination="j0Y-Ac-Rw6" id="joC-lL-mLu"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="8we-Av-UIE">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
@@ -293,6 +298,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                         <connections>
+                                            <action selector="validateTextFields" destination="xfx-XT-LXI" eventType="editingChanged" id="gvG-ZA-nWR"/>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="Hwt-zY-DXb"/>
                                         </connections>
                                     </textField>
@@ -302,6 +308,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                         <connections>
+                                            <action selector="validateTextFields" destination="xfx-XT-LXI" eventType="editingChanged" id="8sy-0W-xTw"/>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="k5u-Ln-GjI"/>
                                         </connections>
                                     </textField>
@@ -311,6 +318,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                         <connections>
+                                            <action selector="validateTextFields" destination="xfx-XT-LXI" eventType="editingChanged" id="yYZ-t7-C11"/>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="Vqq-vo-lWX"/>
                                         </connections>
                                     </textField>
@@ -320,6 +328,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                                         <connections>
+                                            <action selector="validateTextFields" destination="xfx-XT-LXI" eventType="editingChanged" id="aNT-ho-F9Q"/>
                                             <outlet property="delegate" destination="xfx-XT-LXI" id="lvI-zc-x7G"/>
                                         </connections>
                                     </textField>
