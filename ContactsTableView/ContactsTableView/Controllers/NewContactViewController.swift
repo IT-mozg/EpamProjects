@@ -32,6 +32,15 @@ class NewContactViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        
+//        firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+//        emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
+    }
+    
+    private func setupUI(){
         if let contact = editingContact{
             navigationItem.title = "Editing"
             navigationItem.rightBarButtonItem?.title = "Save"
@@ -45,11 +54,6 @@ class NewContactViewController: UIViewController {
             navigationItem.rightBarButtonItem?.title = "Add"
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
-        
-        firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-        emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
     }
     
     //MARK: IBActions
@@ -64,7 +68,6 @@ class NewContactViewController: UIViewController {
         guard let lastName = lastNameTextField.text else { return  }
         guard let phone = phoneTextField.text else { return  }
         guard let email = emailTextField.text else { return  }
-      
         if let updateClosure = self.update{
             let updated = editingContact!.copy() as! Contact
             updated.firstName = firstName
@@ -75,9 +78,10 @@ class NewContactViewController: UIViewController {
             updateClosure(updated)
         }
         if delegate != nil{
-            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone, birthday: nil, height: nil, notes: nil)
+            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone)
             newItem.saveImage(image: contactImage)
             delegate!.addNewContact(newItem: newItem)
+
         }
         dismiss(animated: true, completion: nil)
     
@@ -166,9 +170,9 @@ extension NewContactViewController: UITextFieldDelegate{
         textField.resignFirstResponder()
         return true
     }
-    
+
     // MARK: Validation
-    @objc private func validateTextFields() -> Bool{
+    @IBAction func validateTextFields(){
         var firstNameChecker = false
         var lastNameChecker = true
         var phoneChecker = false
@@ -187,22 +191,21 @@ extension NewContactViewController: UITextFieldDelegate{
         }
         if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
             navigationItem.rightBarButtonItem?.isEnabled = true
-            return true
+        }else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
         }
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        return false
     }
     
     private func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{
         if let text = textField.text{
             if validate(text){
                 navigationItem.rightBarButtonItem?.isEnabled = true
-                textField.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+                textField.backgroundColor = ContactDefault.validColor
                 return true
             }
         }
         navigationItem.rightBarButtonItem?.isEnabled = false
-        textField.backgroundColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+        textField.backgroundColor = ContactDefault.invalidColor
         return false
     }
     

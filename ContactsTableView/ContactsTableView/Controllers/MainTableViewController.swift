@@ -15,6 +15,8 @@ class MainTableViewController: UITableViewController {
     private var contactDictionary = [String: [Contact]](){
         didSet{
             updateUserDefaults()
+            checkNumberOfRows()
+            checkNumberOfContacts()
         }
     }
     private var contactSectionTitles = [String]()
@@ -50,6 +52,7 @@ class MainTableViewController: UITableViewController {
         setupUI()
         unurchiveContacts()
         checkNumberOfRows()
+        checkNumberOfContacts()
     }
     
     // MARK: IBActions
@@ -63,6 +66,14 @@ class MainTableViewController: UITableViewController {
     }
     
     //MARK: private help methods
+    
+    private func checkNumberOfContacts(){
+        if contactDictionary.values.flatMap({$0}).count > 9{
+            contactSearchController.searchBar.isHidden = false
+        }else{
+            contactSearchController.searchBar.isHidden = true
+        }
+    }
     
     private func unurchiveContacts(){
         userDefaults = UserDefaults.standard
@@ -146,7 +157,6 @@ extension MainTableViewController{
         else{
             deleteIfNotFiltering(indexPath: indexPath)
         }
-        checkNumberOfRows()
     }
     
     private func deleteIfNotFiltering(indexPath: IndexPath){
@@ -220,11 +230,6 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if contactDictionary.values.flatMap({$0}).count > 9{
-            contactSearchController.searchBar.isHidden = false
-        }else{
-            contactSearchController.searchBar.isHidden = true
-        }
         let contactKey = contactSectionTitles[section]
         if let contactValues = contactDictionary[contactKey]{
             return contactValues.count
@@ -286,7 +291,6 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         let indexPath = IndexPath(item: row ?? 0, section: section!)
         tableView.insertRows(at: [indexPath], with: .none)
         tableView.endUpdates()
-        checkNumberOfRows()
     }
 }
 
