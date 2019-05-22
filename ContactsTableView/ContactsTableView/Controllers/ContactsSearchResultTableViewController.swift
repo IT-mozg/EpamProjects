@@ -14,6 +14,7 @@ class ContactsSearchResultTableViewController: UITableViewController {
     
     var filteredContacts = [Contact](){
         didSet{
+            backgroundView.isHidden = !filteredContacts.isEmpty
             tableView.reloadData()
         }
     }
@@ -23,11 +24,11 @@ class ContactsSearchResultTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
+        backgroundView.isHidden = !filteredContacts.isEmpty
     }
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        backgroundView.isHidden = !filteredContacts.isEmpty
         return filteredContacts.count
     }
     
