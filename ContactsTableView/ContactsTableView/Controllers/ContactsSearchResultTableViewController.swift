@@ -23,6 +23,7 @@ class ContactsSearchResultTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
+        tableView.tableFooterView = UIView(frame: .zero)
     }
 }
 
@@ -68,7 +69,7 @@ extension ContactsSearchResultTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.resultCellId)!
         cell.textLabel?.attributedText = findMostSimilarString(contact: filteredContacts[indexPath.row])
         return cell
     }

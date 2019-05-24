@@ -47,8 +47,6 @@ class ContactInfoViewController: UIViewController {
         phoneLabel.text = contact.phoneNumber
         emailLabel.text = contact.email ?? noText
         photoImageView.image = contact.imagePhoto ?? ContactDefault.defaultImage
-        birthdayLabel.text = contact.birthday ?? noText
-        heightLabel.text = contact.height ?? noText
         driverLicenseLabel.text = contact.driverLicense ?? noText
         nodesLabel.text = contact.notes ?? noText
     }
@@ -65,7 +63,7 @@ class ContactInfoViewController: UIViewController {
                     self.delete?()
                     self.navigationController?.popToRootViewController(animated: true)
                 }
-                controller.editingContact = contact
+                controller.contactBeforeUpdate = contact
                 self.present(navigationController, animated: true, completion: nil)
             }
         }

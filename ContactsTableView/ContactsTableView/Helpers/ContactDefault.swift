@@ -15,4 +15,5 @@ struct ContactDefault{
     static let editColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
     static let validColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     static let invalidColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
+    static let dateFormat = "MM/dd/yyyy"
 }

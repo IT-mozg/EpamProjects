@@ -6,7 +6,7 @@
 //  Copyright © 2019 Vlad Tkachuk. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class Validation{
     static func isValidEmail(_ email: String) -> Bool {
@@ -28,5 +28,16 @@ class Validation{
         let regex = "^\\+?3?8?(0[0-9][0-9]\\d{7})$"
         let phonePredicate = NSPredicate(format:"SELF MATCHES[c] %@", regex)
         return phonePredicate.evaluate(with: number)
+    }
+    
+    static func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{
+        if let text = textField.text{
+            if validate(text){
+                textField.backgroundColor = ContactDefault.validColor
+                return true
+            }
+        }
+        textField.backgroundColor = ContactDefault.invalidColor
+        return false
     }
 }

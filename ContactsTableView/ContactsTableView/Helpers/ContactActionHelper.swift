@@ -26,8 +26,8 @@ class ContactActionHelper{
 
 extension String{
     func splitString(separator: String) -> [String]{
-    let thisString = self.lowercased()
-    let strippedName = thisString.trimmingCharacters(in: CharacterSet.whitespaces)
-    return strippedName.components(separatedBy: separator)
+        let thisString = self.lowercased()
+        let strippedName = thisString.trimmingCharacters(in: CharacterSet.whitespaces)
+        return strippedName.components(separatedBy: separator)
     }
 }
