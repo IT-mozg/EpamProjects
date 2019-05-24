@@ -16,4 +16,13 @@ struct ContactDefault{
     static let validColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     static let invalidColor = #colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)
     static let dateFormat = "MM/dd/yyyy"
+    static let maxBirthDate = Date()
+    static var minBirthDate: Date{
+        get{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = dateFormat
+            return dateFormatter.date(from: "01/01/1900")!
+        }
+    }
+    static let contactSearchBarShowAt = 9
 }

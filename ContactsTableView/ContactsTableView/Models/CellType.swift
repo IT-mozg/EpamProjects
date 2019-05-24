@@ -17,5 +17,6 @@ enum CellType{
     case birthday(Presentation)
     case height(Presentation)
     case driverLicenseSwitch(Presentation)
+    case driverLicenseText(Presentation)
     case note(Presentation)
 }

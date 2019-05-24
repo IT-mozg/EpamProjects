@@ -83,6 +83,15 @@ class Contact: NSObject, NSCoding{
 //    static func == (lhs: Contact, rhs: Contact) -> Bool {
 //        return lhs.firstName == rhs.firstName && lhs.lastName == rhs.lastName && lhs.phoneNumber == rhs.phoneNumber && lhs.email == rhs.email && lhs.birthday == rhs.birthday && lhs.height == rhs.height && lhs.notes == rhs.notes && lhs.driverLicense == rhs.driverLicense
 //    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        if object is Contact{
+            let contact = object as! Contact
+            let a = self.firstName == contact.firstName && self.lastName == contact.lastName && self.phoneNumber == contact.phoneNumber && self.email == contact.email && self.birthday == contact.birthday && self.height == contact.height && self.notes == contact.notes && self.driverLicense == contact.driverLicense
+            return a
+        }
+        return false
+    }
 }
 
 extension Contact : NSCopying{

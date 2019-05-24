@@ -17,6 +17,7 @@ class NewContactViewController: UITableViewController {
     
     var contactBeforeUpdate: Contact!
     private var contactAfterUpdate: Contact!
+    private var imageChanges: ImageChanges = .noChanges
     
     var update: UpdateClosure?
     var delete: (()->())?
@@ -42,22 +43,9 @@ class NewContactViewController: UITableViewController {
         }else{
             contactAfterUpdate = Contact(firstName: "", lastName: nil, email: nil, phoneNumber: "", birthday: nil, height: nil, notes: nil, driverLicense: nil)
         }
-      //  setupUI()
         setupCells()
         setupUI()
-        isValidFirstName = {
-            return Validation.isValidName(self.contactAfterUpdate.firstName)
-        }
-        isValidLastName = {
-            return true
-        }
-        isValidEmail = {
-            return true
-        }
-        isValidPhoneNumber = {
-            return Validation.isValidPhoneNumber(self.contactAfterUpdate.phoneNumber)
-        }
-        
+        setupValidationConditions()
     }
     
     //MARK: IBActions
@@ -83,6 +71,40 @@ class NewContactViewController: UITableViewController {
 
 //MARK: Private funcs
 private extension NewContactViewController{
+    private func checkValidation(){
+        if checkContactChanges() && isValidFirstName() && isValidPhoneNumber() && isValidEmail() && isValidLastName() {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+    }
+    
+    private func checkContactChanges() -> Bool{
+        var isImageChanged = false
+        switch self.imageChanges {
+        case .noChanges:
+            isImageChanged = false
+        default:
+            isImageChanged = true
+        }
+        return isImageChanged || !contactAfterUpdate.isEqual(contactBeforeUpdate)
+    }
+    
+    private func setupValidationConditions(){
+        isValidFirstName = {
+            return Validation.isValidName(self.contactAfterUpdate.firstName)
+        }
+        isValidLastName = {
+            return true
+        }
+        isValidEmail = {
+            return true
+        }
+        isValidPhoneNumber = {
+            return Validation.isValidPhoneNumber(self.contactAfterUpdate.phoneNumber)
+        }
+    }
+    
     private func setupCells(){
         cells.append(.image(contactAfterUpdate.presentationForImage))
         cells.append(.firstName(contactAfterUpdate.presentationForFirstName))
@@ -92,6 +114,9 @@ private extension NewContactViewController{
         cells.append(.birthday(contactAfterUpdate.presentationForBirthday))
         cells.append(.height(contactAfterUpdate.presentationForHeight))
         cells.append(.driverLicenseSwitch(contactAfterUpdate.presentationForDriverLicense))
+        if contactAfterUpdate.driverLicense != nil && !contactAfterUpdate.driverLicense!.isEmpty{
+            cells.append(.driverLicenseText(contactAfterUpdate.presentationForDriverLicenseText))
+        }
         cells.append(.note(contactAfterUpdate.presentationForNote))
     }
     
@@ -101,9 +126,24 @@ private extension NewContactViewController{
             navigationItem.rightBarButtonItem?.title = NSLocalizedString("SAVE_BUTTON_TEXT", comment: "Save")
         }else{
             navigationItem.rightBarButtonItem?.title = NSLocalizedString("ADD_BUTTON_TEXT", comment: "Add")
-            navigationItem.rightBarButtonItem?.isEnabled = false
         }
+        navigationItem.rightBarButtonItem?.isEnabled = false
         tableView.tableFooterView = UIView(frame: .zero)
+    }
+    
+    private func insertCell(cellType: CellType, indexPath: IndexPath){
+        cells.insert(cellType, at: indexPath.row)
+        tableView.beginUpdates()
+        tableView.insertRows(at: [indexPath], with: .bottom)
+        tableView.endUpdates()
+    }
+    
+    private func removeCell(indexPath: IndexPath){
+        cells.remove(at: indexPath.row)
+        tableView.beginUpdates()
+        tableView.deleteRows(at: [indexPath], with: .top)
+        tableView.endUpdates()
+        
     }
 }
 
@@ -132,26 +172,29 @@ extension NewContactViewController: UIImagePickerControllerDelegate{
     
     private func changeImage(){
         #if targetEnvironment(simulator)
-        self.chooseImagePickerAction(source: .photoLibrary)
-        #else
-        let alertController = UIAlertController(title: NSLocalizedString("SOURCE_ACTION_TITLE", comment: "Photo source"), message: nil, preferredStyle: .actionSheet)
-        let cameraAction = UIAlertAction(title: NSLocalizedString("CAMERA_ACTION_BUTTON_TEXT", comment: "Camera"), style: .default, handler: { (action) in
-            self.chooseImagePickerAction(source: .camera)
-        })
-        let libraryAction = UIAlertAction(title: NSLocalizedString("LIBRARY_ACTION_BUTTON_TEXT", comment: "Library"), style: .default, handler: { (action) in
             self.chooseImagePickerAction(source: .photoLibrary)
-        })
-        let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL_ACTION_BUTTON_TEXT", comment: "Cancel"), style: .cancel, handler: nil)
-        alertController.addAction(cameraAction)
-        alertController.addAction(libraryAction)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true, completion: nil)
+        #else
+            let alertController = UIAlertController(title: NSLocalizedString("SOURCE_ACTION_TITLE", comment: "Photo source"), message: nil, preferredStyle: .actionSheet)
+            let cameraAction = UIAlertAction(title: NSLocalizedString("CAMERA_ACTION_BUTTON_TEXT", comment: "Camera"), style: .default, handler: { (action) in
+                self.chooseImagePickerAction(source: .camera)
+            })
+            let libraryAction = UIAlertAction(title: NSLocalizedString("LIBRARY_ACTION_BUTTON_TEXT", comment: "Library"), style: .default, handler: { (action) in
+                self.chooseImagePickerAction(source: .photoLibrary)
+            })
+            let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL_ACTION_BUTTON_TEXT", comment: "Cancel"), style: .cancel, handler: nil)
+            alertController.addAction(cameraAction)
+            alertController.addAction(libraryAction)
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
         #endif
     }
+    
     private func assignImage(_ image: UIImage?){
         contactAfterUpdate.imagePhoto = image
+        imageChanges = .changed
         cells[indexPathForImageCell.row] = .image(contactAfterUpdate.presentationForImage)
         tableView.reloadRows(at: [indexPathForImageCell], with: .none)
+        checkValidation()
     }
     
     private func chooseImagePickerAction(source: UIImagePickerController.SourceType){
@@ -183,14 +226,6 @@ extension NewContactViewController: UITextFieldDelegate{
         textField.resignFirstResponder()
         return true
     }
-    
-    private func checkTextFieldsValidation(){
-        if isValidFirstName() && isValidPhoneNumber() && isValidEmail() && isValidLastName() {
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }else{
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
-    }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -204,6 +239,16 @@ extension NewContactViewController{
         case .image(_):
             pickImageButtonPressed()
             indexPathForImageCell = indexPath
+        case .note(_):
+            if let notesViewController = storyboard?.instantiateViewController(withIdentifier: "NotesViewController") as? NotesViewController{
+                notesViewController.notes = contactAfterUpdate.notes ?? ""
+                notesViewController.returnBackNotes = {[unowned self] text in
+                    self.contactAfterUpdate.notes = text
+                    self.cells[indexPath.row] = .note(self.contactAfterUpdate.presentationForNote)
+                    self.tableView.reloadRows(at: [indexPath], with: .right)
+                }
+                navigationController?.pushViewController(notesViewController, animated: true)
+            }
         default:
             break
         }
@@ -220,35 +265,39 @@ private extension Contact{
     }
     
     var presentationForFirstName: Presentation{
-        return Presentation(keyboardType: .default, placeholder: "First name", title: "First name *:", dataType: .text(firstName))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("FIRSTNAME_PLACEHOLDER", comment: ""), title: NSLocalizedString("FIRSTNAME_TITLE", comment: ""), dataType: .text(firstName))
     }
     
     var presentationForLastName: Presentation{
-        return Presentation(keyboardType: .default, placeholder: "Last name", title: "Last:", dataType: .text(lastName))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("LASTNAME_PLACEHOLDER", comment: ""), title: NSLocalizedString("LASTNAME_TITLE", comment: ""), dataType: .text(lastName))
     }
     
     var presentationForEmail: Presentation{
-        return Presentation(keyboardType: .emailAddress, placeholder: "Email", title: "Email:", dataType: .text(email))
+        return Presentation(keyboardType: .emailAddress, placeholder: NSLocalizedString("EMAIL_PLACEHOLDER", comment: ""), title: NSLocalizedString("EMAIL_TITLE", comment: ""), dataType: .text(email))
     }
     
     var presentationForPhone: Presentation{
-        return Presentation(keyboardType: .phonePad, placeholder: "+380XXXXXXXXX", title: "Phone *:", dataType: .text(phoneNumber))
+        return Presentation(keyboardType: .phonePad, placeholder: NSLocalizedString("PHONE_PLACEHOLDER", comment: ""), title: NSLocalizedString("PHONE_TITLE", comment: ""), dataType: .text(phoneNumber))
     }
     
     var presentationForBirthday: Presentation{
-        return Presentation(keyboardType: .default, placeholder: "Birthday", title: "Birthday:", dataType: .date(birthday))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("BIRTHDAY_PLACEHOLDER", comment: ""), title: NSLocalizedString("BIRTHDAY_TITLE", comment: ""), dataType: .date(birthday))
     }
     
     var presentationForHeight: Presentation{
-        return Presentation(keyboardType: .default, placeholder: "Height", title: "Height:", dataType: .height(height))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("HEIGHT_PLACEHOLDER", comment: ""), title: NSLocalizedString("HEIGHT_TITLE", comment: ""), dataType: .height(height))
     }
     
     var presentationForDriverLicense: Presentation{
-         return Presentation(keyboardType: .default, placeholder: "Driver license", title: "Driver license:", dataType: .text(driverLicense))
+         return Presentation(keyboardType: nil, placeholder: nil, title: NSLocalizedString("EXIST_DRIVER_LICENSE_TITLE", comment: ""), dataType: nil)
+    }
+    
+    var presentationForDriverLicenseText: Presentation{
+        return Presentation(keyboardType: .numberPad, placeholder: NSLocalizedString("DRIVER_LICENSE_PLACEHOLDER", comment: ""), title: NSLocalizedString("DRIVER_LICENSE_TITLE", comment: ""), dataType: .text(driverLicense))
     }
     
     var presentationForNote: Presentation{
-        return Presentation(keyboardType: .default, placeholder: "Note", title: "Note:", dataType: .text(notes))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("NOTES_PLACEHOLDER", comment: ""), title: NSLocalizedString("NOTES_TITLE", comment: ""), dataType: .text(notes))
     }
     
 }
@@ -269,8 +318,11 @@ extension NewContactViewController{
         case .driverLicenseSwitch:
             let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.switchCellId) as! ContactSwitchTableViewCell
             cell.cellType = cellType
-            cell.updateClosure = {[weak self] text, cell in
-                self?.updateDriverLicenseSwitch(text: text, cell: cell)
+            cell.updateSwitchClosure = {[weak self] isOn, cell in
+                self?.updateDriverLicenseSwitch(isOn: isOn, cell: cell)
+            }
+            if contactAfterUpdate.driverLicense != nil && !contactAfterUpdate.driverLicense!.isEmpty{
+                cell.fieldSwitch.isOn = true
             }
             return cell
         default:
@@ -287,9 +339,9 @@ extension NewContactViewController{
         let cellType = cells[indexPath.row]
         switch cellType {
         case .image:
-            return 200
+            return CGFloat(CellSetings.imageCellHeight)
         default:
-            return 45
+            return CGFloat(CellSetings.regularCellHeight)
         }
     }
 }
@@ -351,20 +403,28 @@ private extension NewContactViewController{
         case .note(_):
             contactAfterUpdate.notes = text
             cells[indexPath.row] = CellType.note(contactAfterUpdate.presentationForNote)
+        case .driverLicenseText(_):
+            contactAfterUpdate.driverLicense = text
+            cells[indexPath.row] = CellType.note(contactAfterUpdate.presentationForDriverLicenseText)
         default:
             break
         }
-        checkTextFieldsValidation()
+        checkValidation()
     }
     
-    private func updateDriverLicenseSwitch(text: String, cell: ContactSwitchTableViewCell){
+    private func updateDriverLicenseSwitch(isOn: Bool, cell: ContactSwitchTableViewCell){
         guard let indexPath = tableView.indexPath(for: cell) else{
             return
         }
         switch cell.cellType! {
         case .driverLicenseSwitch(_):
-            contactAfterUpdate.driverLicense = text
-            cells[indexPath.row] = CellType.driverLicenseSwitch(contactAfterUpdate.presentationForDriverLicense)
+            let newIndexPath = IndexPath(item: indexPath.row+1, section: indexPath.section)
+            if isOn{
+                insertCell(cellType: .driverLicenseText(contactAfterUpdate.presentationForDriverLicenseText), indexPath: newIndexPath)
+            }else{
+                removeCell(indexPath: newIndexPath)
+                contactAfterUpdate.driverLicense = nil
+            }
         default:
             break
         }

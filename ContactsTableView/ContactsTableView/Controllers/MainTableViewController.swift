@@ -14,6 +14,8 @@ class MainTableViewController: UITableViewController {
     private var contactDictionary = [String: [Contact]](){
         didSet{
             DataManager.updateUserDefaults(with: contactDictionary)
+            checkNumberOfContactsForSearchBar()
+            checkNumberOfRows()
         }
     }
     private var contactSectionTitles = [String]()
@@ -50,6 +52,7 @@ class MainTableViewController: UITableViewController {
         contactDictionary = DataManager.unarchiveContacts()
         reloadSectionTitles()
         checkNumberOfRows()
+        checkNumberOfContactsForSearchBar()
     }
     
     // MARK: IBActions
@@ -62,9 +65,16 @@ class MainTableViewController: UITableViewController {
         addButtonItemPressed()
     }
 }
-
+//MARK: private help methods
 private extension MainTableViewController{
-    //MARK: private help methods
+    
+    private func checkNumberOfContactsForSearchBar(){
+        if contactDictionary.values.flatMap({$0}).count > ContactDefault.contactSearchBarShowAt{
+            contactSearchController.searchBar.isHidden = false
+        }else{
+            contactSearchController.searchBar.isHidden = true
+        }
+    }
     
     private func setupUI(){
         tableView.backgroundView = backgroundView
@@ -127,7 +137,6 @@ extension MainTableViewController{
         else{
             deleteIfNotFiltering(indexPath: indexPath)
         }
-        checkNumberOfRows()
     }
     
     private func deleteIfNotFiltering(indexPath: IndexPath){
@@ -207,11 +216,6 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if contactDictionary.values.flatMap({$0}).count > 9{
-            contactSearchController.searchBar.isHidden = false
-        }else{
-            contactSearchController.searchBar.isHidden = true
-        }
         let contactKey = contactSectionTitles[section]
         if let contactValues = contactDictionary[contactKey]{
             return contactValues.count
@@ -236,7 +240,7 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
+        return CGFloat(CellSetings.mainCellHeight)
     }
 }
 
@@ -273,7 +277,6 @@ extension MainTableViewController: NewContactViewControllerDelegate{
         let indexPath = IndexPath(item: row ?? 0, section: section!)
         tableView.insertRows(at: [indexPath], with: .none)
         tableView.endUpdates()
-        checkNumberOfRows()
     }
 }
 

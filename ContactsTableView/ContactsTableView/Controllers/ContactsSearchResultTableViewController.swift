@@ -47,14 +47,13 @@ private extension ContactsSearchResultTableViewController{
         return nil
     }
     
-    private func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString?{
-        var attribute: NSMutableAttributedString?
-        attribute = NSMutableAttributedString(string: currentString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+    private func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString{
+        let attribute = NSMutableAttributedString(string: currentString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         for currentSearchString in searchStringItems{
             if currentString.lowercased().contains(currentSearchString){
-                let rangeString = attribute?.string.lowercased().range(of: currentSearchString)
-                let range = NSRange(rangeString!, in: attribute!.string)
-                attribute?.setAttributes([.foregroundColor: UIColor.black], range: range)
+                let rangeString = attribute.string.lowercased().range(of: currentSearchString)
+                let range = NSRange(rangeString!, in: attribute.string)
+                attribute.setAttributes([.foregroundColor: UIColor.black], range: range)
             }
         }
         return attribute

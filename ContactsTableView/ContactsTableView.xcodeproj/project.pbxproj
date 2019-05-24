@@ -27,6 +27,9 @@
 		F56FAEC72296BEA0006BC4C1 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56FAEC62296BEA0006BC4C1 /* DataManager.swift */; };
 		F58DA0D8228967A900B511FF /* ContactActionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58DA0D7228967A900B511FF /* ContactActionHelper.swift */; };
 		F58DA0DA228ACE5700B511FF /* ContactsSearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58DA0D9228ACE5700B511FF /* ContactsSearchResultTableViewController.swift */; };
+		F5911E1A22981DC5009C40F4 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5911E1822981DC5009C40F4 /* NotesViewController.swift */; };
+		F5911E1B22981DC5009C40F4 /* NotesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5911E1922981DC5009C40F4 /* NotesViewController.xib */; };
+		F5911E1D22982EB0009C40F4 /* ImageChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5911E1C22982EB0009C40F4 /* ImageChanges.swift */; };
 		F5A8A52A228D8BAC00D12B94 /* ContactsSearchResultDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A529228D8BAC00D12B94 /* ContactsSearchResultDelegate.swift */; };
 		F5A8A52C228D8C2100D12B94 /* NewContactViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A52B228D8C2100D12B94 /* NewContactViewControllerDelegate.swift */; };
 		F5A8A52E228D8CF600D12B94 /* SearchStringHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A52D228D8CF600D12B94 /* SearchStringHelper.swift */; };
@@ -57,6 +60,9 @@
 		F56FAEC62296BEA0006BC4C1 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		F58DA0D7228967A900B511FF /* ContactActionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactActionHelper.swift; sourceTree = "<group>"; };
 		F58DA0D9228ACE5700B511FF /* ContactsSearchResultTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsSearchResultTableViewController.swift; sourceTree = "<group>"; };
+		F5911E1822981DC5009C40F4 /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
+		F5911E1922981DC5009C40F4 /* NotesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotesViewController.xib; sourceTree = "<group>"; };
+		F5911E1C22982EB0009C40F4 /* ImageChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageChanges.swift; sourceTree = "<group>"; };
 		F5A8A529228D8BAC00D12B94 /* ContactsSearchResultDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsSearchResultDelegate.swift; sourceTree = "<group>"; };
 		F5A8A52B228D8C2100D12B94 /* NewContactViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewContactViewControllerDelegate.swift; sourceTree = "<group>"; };
 		F5A8A52D228D8CF600D12B94 /* SearchStringHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStringHelper.swift; sourceTree = "<group>"; };
@@ -120,6 +126,8 @@
 				F58DA0D9228ACE5700B511FF /* ContactsSearchResultTableViewController.swift */,
 				F5236CDC2280819600FF98E9 /* NewContactViewController.swift */,
 				F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */,
+				F5911E1822981DC5009C40F4 /* NotesViewController.swift */,
+				F5911E1922981DC5009C40F4 /* NotesViewController.xib */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -131,6 +139,7 @@
 				F56FAEBE229539CC006BC4C1 /* DataType.swift */,
 				F56FAEC022953A5C006BC4C1 /* Presentation.swift */,
 				F56FAEC222953B40006BC4C1 /* CellType.swift */,
+				F5911E1C22982EB0009C40F4 /* ImageChanges.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -231,6 +240,7 @@
 				F5BD995F22928A8600C1AB4A /* Localizable.strings in Resources */,
 				F5236CCC2280666800FF98E9 /* Assets.xcassets in Resources */,
 				F5236CCA2280666700FF98E9 /* Main.storyboard in Resources */,
+				F5911E1B22981DC5009C40F4 /* NotesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +253,9 @@
 			files = (
 				F5236CDB22806B7D00FF98E9 /* Contact.swift in Sources */,
 				F56FAEC122953A5C006BC4C1 /* Presentation.swift in Sources */,
+				F5911E1A22981DC5009C40F4 /* NotesViewController.swift in Sources */,
 				F5236CDD2280819600FF98E9 /* NewContactViewController.swift in Sources */,
+				F5911E1D22982EB0009C40F4 /* ImageChanges.swift in Sources */,
 				F5A8A52A228D8BAC00D12B94 /* ContactsSearchResultDelegate.swift in Sources */,
 				F5236CD72280671600FF98E9 /* MainTableViewController.swift in Sources */,
 				F56FAEB922953790006BC4C1 /* ContactImageTableViewCell.swift in Sources */,

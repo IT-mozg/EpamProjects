@@ -11,6 +11,7 @@ import Foundation
 class CellSetings{
     static let imageCellHeight: Int = 200
     static let regularCellHeight: Int = 45
+    static let mainCellHeight: Int = 85
     static let resultCellId = "resultCell"
     static let mainCellId = "MainCell"
     static let imageCellId = "imageCell"
