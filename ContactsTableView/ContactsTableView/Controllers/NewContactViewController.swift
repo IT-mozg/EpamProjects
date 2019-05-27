@@ -71,6 +71,7 @@ class NewContactViewController: UITableViewController {
 
 //MARK: Private funcs
 private extension NewContactViewController{
+    
     private func checkValidation(){
         if checkContactChanges() && isValidFirstName() && isValidPhoneNumber() && isValidEmail() && isValidLastName() {
             navigationItem.rightBarButtonItem?.isEnabled = true
@@ -131,14 +132,14 @@ private extension NewContactViewController{
         tableView.tableFooterView = UIView(frame: .zero)
     }
     
-    private func insertCell(cellPresent: Presentation, indexPath: IndexPath){
+    private func insertCell(at indexPath: IndexPath, with cellPresent: Presentation){
         cells.insert(cellPresent, at: indexPath.row)
         tableView.beginUpdates()
         tableView.insertRows(at: [indexPath], with: .bottom)
         tableView.endUpdates()
     }
     
-    private func removeCell(indexPath: IndexPath){
+    private func removeCell(at indexPath: IndexPath){
         cells.remove(at: indexPath.row)
         tableView.beginUpdates()
         tableView.deleteRows(at: [indexPath], with: .top)
@@ -461,9 +462,9 @@ private extension NewContactViewController{
         guard let indexPath = tableView.indexPath(for: cell) else{return}
         let newIndexPath = IndexPath(item: indexPath.row+1, section: indexPath.section)
         if isOn{
-            insertCell(cellPresent: contactAfterUpdate.presentationForDriverLicenseText, indexPath: newIndexPath)
+            insertCell(at: newIndexPath, with: contactAfterUpdate.presentationForDriverLicenseText)
         }else{
-            removeCell(indexPath: newIndexPath)
+            removeCell(at: newIndexPath)
             contactAfterUpdate.driverLicense = nil
         }
     }
