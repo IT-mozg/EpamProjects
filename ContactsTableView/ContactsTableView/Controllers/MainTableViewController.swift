@@ -304,11 +304,9 @@ extension MainTableViewController{
 extension MainTableViewController{
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing{
-            goToNewContactController(indexPath: indexPath)
-        }else{
-            didSelectRow(tableView, indexPath)
-        }
+        
+        didSelectRow(tableView, indexPath)
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
