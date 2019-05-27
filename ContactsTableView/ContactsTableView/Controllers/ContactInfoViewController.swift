@@ -44,8 +44,10 @@ class ContactInfoViewController: UIViewController {
         present(alertController, animated: true)
         
     }
-    
-    //MARK: Private help methods
+}
+
+//MARK: Private help methods
+private extension ContactInfoViewController{
     private func presentContact(){
         firstNameLabel.text = contact?.firstName
         lastNameLabel.text = contact?.lastName

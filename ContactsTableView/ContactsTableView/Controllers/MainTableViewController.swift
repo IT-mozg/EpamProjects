@@ -26,7 +26,6 @@ class MainTableViewController: UITableViewController {
             searchResultController?.searchString = contactSearchController.searchBar.text
         }
     }
-    private var userDefaults: UserDefaults!
     private var contactSearchController: UISearchController!
     private var searchBarIsEmpty: Bool{
         guard let text = contactSearchController.searchBar.text else {
@@ -50,7 +49,7 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        unurchiveContacts()
+        unarchiveContacts()
         checkNumberOfRows()
         checkNumberOfContacts()
     }
@@ -64,19 +63,16 @@ class MainTableViewController: UITableViewController {
     @IBAction func addNewButtonPressed(_ sender: Any) {
         addButtonItemPressed()
     }
-    
+}
+
     //MARK: private help methods
-    
+private extension MainTableViewController{
     private func checkNumberOfContacts(){
-        if contactDictionary.values.flatMap({$0}).count > 9{
-            contactSearchController.searchBar.isHidden = false
-        }else{
-            contactSearchController.searchBar.isHidden = true
-        }
+        contactSearchController.searchBar.isHidden = contactDictionary.values.flatMap({$0}).count <= ContactDefault.contactSearchBarShowAt
     }
     
-    private func unurchiveContacts(){
-        userDefaults = UserDefaults.standard
+    private func unarchiveContacts(){
+        let userDefaults = UserDefaults.standard
         do{
             if let decoded = userDefaults.data(forKey: "contacts"){
                 contactDictionary = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [String: [Contact]]
@@ -89,6 +85,7 @@ class MainTableViewController: UITableViewController {
     
     private func setupUI(){
         tableView.backgroundView = backgroundView
+        tableView.tableFooterView = UIView(frame: .zero)
         searchResultController = storyboard?.instantiateViewController(withIdentifier: "ContactsSearchResultTableViewController") as? ContactsSearchResultTableViewController
         searchResultController!.delegate = self
         contactSearchController = UISearchController(searchResultsController: searchResultController)
@@ -107,6 +104,7 @@ class MainTableViewController: UITableViewController {
     }
     
     private func updateUserDefaults(){
+        let userDefaults = UserDefaults.standard
         do{
             let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: contactDictionary, requiringSecureCoding: false)
             userDefaults.set(encodedData, forKey: "contacts")
@@ -217,8 +215,8 @@ extension MainTableViewController{
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
         }
         else{
-            addNewContact(newItem: updatedContact)
             deleteContact(at: indexPath)
+            addNewContact(newItem: updatedContact)
         }
     }
 }

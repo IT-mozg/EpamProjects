@@ -33,27 +33,7 @@ class NewContactViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        
-//        firstNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-//        lastNameTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-//        phoneTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-//        emailTextField.addTarget(self, action: #selector(validateTextFields), for: .editingChanged)
-    }
-    
-    private func setupUI(){
-        if let contact = editingContact{
-            navigationItem.title = "Editing"
-            navigationItem.rightBarButtonItem?.title = "Save"
-            firstNameTextField.text = contact.firstName
-            lastNameTextField.text = contact.lastName
-            phoneTextField.text = contact.phoneNumber
-            emailTextField.text = contact.email
-            photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
-            contactImage = contact.imagePhoto
-        }else{
-            navigationItem.rightBarButtonItem?.title = "Add"
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
+
     }
     
     //MARK: IBActions
@@ -74,12 +54,12 @@ class NewContactViewController: UIViewController {
             updated.lastName = lastName
             updated.email = email
             updated.phoneNumber = phone
-            updated.saveImage(image: contactImage)
+            updated.saveImage()
             updateClosure(updated)
         }
         if delegate != nil{
             let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone)
-            newItem.saveImage(image: contactImage)
+            newItem.saveImage()
             delegate!.addNewContact(newItem: newItem)
 
         }
@@ -112,28 +92,70 @@ class NewContactViewController: UIViewController {
         }
     }
     
-    private func changeImage(){
-        #if targetEnvironment(simulator)
-            self.chooseImagePickerAction(source: .photoLibrary)
-        #else
-            let alertController = UIAlertController(title: "Photo source", message: nil, preferredStyle: .actionSheet)
-            let cameraAction = UIAlertAction(title: "Camera", style: .default, handler: { (action) in
-                self.chooseImagePickerAction(source: .camera)
-            })
-            let libraryAction = UIAlertAction(title: "Library", style: .default, handler: { (action) in
-                self.chooseImagePickerAction(source: .photoLibrary)
-            })
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            alertController.addAction(cameraAction)
-            alertController.addAction(libraryAction)
-            alertController.addAction(cancelAction)
-            self.present(alertController, animated: true, completion: nil)
-        #endif
+    @IBAction func validateTextFields(){
+        var firstNameChecker = false
+        var lastNameChecker = true
+        var phoneChecker = false
+        var emailChecker = true
+        if !firstNameTextField.text!.isEmpty{
+            firstNameChecker = isValidFirstNameTextField()
+        }
+        if !lastNameTextField.text!.isEmpty{
+            lastNameChecker = isValidLastNameTextField()
+        }
+        if !phoneTextField.text!.isEmpty{
+            phoneChecker = isValidPhoneTextField()
+        }
+        if !emailTextField.text!.isEmpty{
+            emailChecker = isValidEmailTextField()
+        }
+        if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
     }
+}
 
+// MARK: private funcs
+private extension NewContactViewController{
+    private func setupUI(){
+        if let contact = editingContact{
+            navigationItem.title = "Editing"
+            navigationItem.rightBarButtonItem?.title = "Save"
+            firstNameTextField.text = contact.firstName
+            lastNameTextField.text = contact.lastName
+            phoneTextField.text = contact.phoneNumber
+            emailTextField.text = contact.email
+            photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
+            contactImage = contact.imagePhoto
+        }else{
+            navigationItem.rightBarButtonItem?.title = "Add"
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+    }
 }
 // MARK: Image picker
 extension NewContactViewController: UIImagePickerControllerDelegate{
+    private func changeImage(){
+        #if targetEnvironment(simulator)
+        self.chooseImagePickerAction(source: .photoLibrary)
+        #else
+        let alertController = UIAlertController(title: "Photo source", message: nil, preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default, handler: { (action) in
+            self.chooseImagePickerAction(source: .camera)
+        })
+        let libraryAction = UIAlertAction(title: "Library", style: .default, handler: { (action) in
+            self.chooseImagePickerAction(source: .photoLibrary)
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cameraAction)
+        alertController.addAction(libraryAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+        #endif
+    }
+    
     private func assingImage(_ image: UIImage){
         contactImage = image
         photoContactImageView.image = contactImage
@@ -172,29 +194,6 @@ extension NewContactViewController: UITextFieldDelegate{
     }
 
     // MARK: Validation
-    @IBAction func validateTextFields(){
-        var firstNameChecker = false
-        var lastNameChecker = true
-        var phoneChecker = false
-        var emailChecker = true
-        if !firstNameTextField.text!.isEmpty{
-            firstNameChecker = isValidFirstNameTextField()
-        }
-        if !lastNameTextField.text!.isEmpty{
-            lastNameChecker = isValidLastNameTextField()
-        }
-        if !phoneTextField.text!.isEmpty{
-            phoneChecker = isValidPhoneTextField()
-        }
-        if !emailTextField.text!.isEmpty{
-            emailChecker = isValidEmailTextField()
-        }
-        if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }else{
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
-    }
     
     private func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{
         if let text = textField.text{
@@ -209,24 +208,24 @@ extension NewContactViewController: UITextFieldDelegate{
         return false
     }
     
-    @objc private func isValidFirstNameTextField() -> Bool{
+    private func isValidFirstNameTextField() -> Bool{
         return isValidTextField(textField: firstNameTextField){ (text) -> (Bool) in
             return Validation.isValidName(text)
         }
     }
     
-    @objc private func isValidLastNameTextField() -> Bool{
+    private func isValidLastNameTextField() -> Bool{
         return isValidTextField(textField: lastNameTextField){ (text) -> (Bool) in
             return Validation.isValidName(text)
         }
     }
-    @objc private func isValidEmailTextField() -> Bool{
+    private func isValidEmailTextField() -> Bool{
         return isValidTextField(textField: emailTextField){ (text) -> (Bool) in
             return Validation.isValidEmail(text)
         }
     }
     
-    @objc private func isValidPhoneTextField() -> Bool{
+    private func isValidPhoneTextField() -> Bool{
         return isValidTextField(textField: phoneTextField){ (text) -> (Bool) in
             return Validation.isValidPhoneNumber(text)
         }

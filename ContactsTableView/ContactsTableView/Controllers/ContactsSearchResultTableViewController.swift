@@ -25,6 +25,7 @@ class ContactsSearchResultTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
         backgroundView.isHidden = !filteredContacts.isEmpty
+        tableView.tableFooterView = UIView(frame: .zero)
     }
 
     // MARK: - Table view data source
@@ -46,7 +47,8 @@ class ContactsSearchResultTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         return delegate?.editActionsForRow(tableView, indexPath)
     }
-    
+}
+private extension ContactsSearchResultTableViewController{
     private func findMostSimilarString(contact: Contact) -> NSAttributedString?{
         let searchItems = searchString.splitString(separator: " ")
         let findMatches = SearchStringHelper.findMatches
@@ -65,14 +67,13 @@ class ContactsSearchResultTableViewController: UITableViewController {
         return nil
     }
     
-    private func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString?{
-        var attribute: NSMutableAttributedString?
-        attribute = NSMutableAttributedString(string: currentString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+    private func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString{
+        let attribute = NSMutableAttributedString(string: currentString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         for currentSearchString in searchStringItems{
             if currentString.lowercased().contains(currentSearchString){
-                let rangeString = attribute?.string.lowercased().range(of: currentSearchString)
-                let range = NSRange(rangeString!, in: attribute!.string)
-                attribute?.setAttributes([.foregroundColor: UIColor.black], range: range)
+                let rangeString = attribute.string.lowercased().range(of: currentSearchString)
+                let range = NSRange(rangeString!, in: attribute.string)
+                attribute.setAttributes([.foregroundColor: UIColor.black], range: range)
             }
         }
         return attribute
