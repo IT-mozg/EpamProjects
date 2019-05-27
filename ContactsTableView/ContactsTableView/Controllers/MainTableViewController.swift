@@ -146,25 +146,23 @@ private extension MainTableViewController{
     }
     
     private func goToNewContactController(indexPath: IndexPath){
-        if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
-            if let controller = navigationController.viewControllers.first as? NewContactViewController{
-                if self.isFiltering{
-                    controller.editingContact = self.filteredContacts[indexPath.row]
-                }
-                else{
-                    let contactKey = self.contactSectionTitles[indexPath.section]
-                    if let contactValues = self.contactDictionary[contactKey]{
-                        controller.editingContact = contactValues[indexPath.row]
-                    }
-                }
-                controller.update = {[unowned self] updatedContact in
-                    self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
-                }
-                controller.delete = {[unowned self] in
-                    self.deleteContact(at: indexPath)
-                }
-                self.present(navigationController, animated: true, completion: nil)
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
+            if self.isFiltering{
+                controller.editingContact = self.filteredContacts[indexPath.row]
             }
+            else{
+                let contactKey = self.contactSectionTitles[indexPath.section]
+                if let contactValues = self.contactDictionary[contactKey]{
+                    controller.editingContact = contactValues[indexPath.row]
+                }
+            }
+            controller.update = {[unowned self] updatedContact in
+                self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
+            }
+            controller.delete = {[unowned self] in
+                self.deleteContact(at: indexPath)
+            }
+            self.navigationController?.pushViewController(controller, animated: true)
         }
     }
     

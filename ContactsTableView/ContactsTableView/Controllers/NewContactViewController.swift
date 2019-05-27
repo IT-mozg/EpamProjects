@@ -40,10 +40,11 @@ class NewContactViewController: UIViewController {
 
     @IBAction func cancelButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
-        
+    
         guard let firstName = firstNameTextField.text else { return }
         guard let lastName = lastNameTextField.text else { return  }
         guard let phone = phoneTextField.text else { return  }
@@ -64,7 +65,7 @@ class NewContactViewController: UIViewController {
 
         }
         dismiss(animated: true, completion: nil)
-    
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
