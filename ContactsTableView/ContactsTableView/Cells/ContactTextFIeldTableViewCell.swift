@@ -21,36 +21,30 @@ class ContactTextFIeldTableViewCell: UITableViewCell {
     private var datePicker: UIDatePicker!
     private var heightPickerView: UIPickerView!
     
-    var cellType: CellType! {
+    var presentation: Presentation! {
         didSet{
-            guard let cell = cellType else{
+            guard let present = presentation else{
                 return
             }
-            switch cell {
-                case .firstName (let present):
-                    setupComponents(with: present)
-                case .lastName(let present):
-                    setupComponents(with: present)
-                case .email(let present):
-                    setupComponents(with: present)
-                case .phone(let present):
-                    setupComponents(with: present)
-                case .birthday(let present):
-                    setupComponents(with: present)
-                case .height(let present):
-                    setupComponents(with: present)
-                case .note(let present):
-                    contactPropertyTextField.isEnabled = false
-                    setupComponents(with: present)
-                case .driverLicenseText(let present):
-                    setupComponents(with: present)
-                default:
-                    break
-            }
+            setupComponents(with: present)
         }
     }
     @IBAction func editingChanged(_ sender: UITextField) {
         updateClosure?(sender.text!, self)
+        
+        if let dataType = presentation.dataType{
+            switch dataType{
+            case .text:
+                presentation.updateDataType(.text(sender.text))
+            case .date:
+                presentation.updateDataType(.date(datePicker!.date))
+            case .height:
+                let height = Int(sender.text!)
+                presentation.updateDataType(.height(height))
+            case .image(_):
+                break
+            }
+        }
     }
 }
 

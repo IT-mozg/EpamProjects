@@ -8,15 +8,15 @@
 
 import Foundation
 
-enum CellType{
-    case image(Presentation)
-    case firstName(Presentation)
-    case lastName(Presentation)
-    case email(Presentation)
-    case phone(Presentation)
-    case birthday(Presentation)
-    case height(Presentation)
-    case driverLicenseSwitch(Presentation)
-    case driverLicenseText(Presentation)
-    case note(Presentation)
+enum CellType : String{
+    case imagePhoto
+    case firstName
+    case lastName
+    case email
+    case phoneNumber
+    case birthday
+    case height
+    case driverLicenseSwitch
+    case driverLicense
+    case notes
 }

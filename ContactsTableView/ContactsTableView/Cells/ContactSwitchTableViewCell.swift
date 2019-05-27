@@ -13,17 +13,12 @@ class ContactSwitchTableViewCell: UITableViewCell {
     @IBOutlet weak var fieldSwitch: UISwitch!
     
     var updateSwitchClosure:((Bool, ContactSwitchTableViewCell)->())!
-    var cellType: CellType!{
+    var presentation: Presentation!{
         didSet{
-            guard let cell = cellType else {
+            guard let present = presentation else {
                 return
             }
-            switch cell {
-            case .driverLicenseSwitch(let present):
-                setupComponents(with: present)
-            default:
-                break
-            }
+            setupComponents(with: present)
         }
     }
     

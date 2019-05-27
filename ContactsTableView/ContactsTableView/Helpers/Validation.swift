@@ -30,7 +30,7 @@ class Validation{
         return phonePredicate.evaluate(with: number)
     }
     
-    static func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{
+    static func isValidTextField(textField: UITextField, _ validate: ((String)->(Bool)))->Bool{
         if let text = textField.text{
             if validate(text){
                 textField.backgroundColor = ContactDefault.validColor

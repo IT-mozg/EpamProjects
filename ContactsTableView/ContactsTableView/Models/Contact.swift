@@ -8,10 +8,7 @@
 import UIKit
 import Foundation
 
-class Contact: NSObject, NSCoding{
-    private var imageExtension: String{
-        return "jpg"
-    }
+@objcMembers class Contact: NSObject, NSCoding{
     private(set) var contactId: String
     var firstName: String
     var lastName: String?
@@ -42,7 +39,7 @@ class Contact: NSObject, NSCoding{
     convenience init(id: String, firstName: String, lastName: String?, email: String?, phoneNumber: String, birthday: Date?, height: Int?, notes: String?, driverLicense: String?){
         self.init(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
         contactId = id
-        self.imagePhoto = DataManager.getImage(with: imageName, and: imageExtension)
+        self.imagePhoto = DataManager.getImage(with: imageName, and: ContactDefault.imageExtension)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -57,7 +54,7 @@ class Contact: NSObject, NSCoding{
         let driverLicense = aDecoder.decodeObject(forKey: "driverLicense") as? String
         
         self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
-        self.imagePhoto = DataManager.getImage(with: imageName, and: imageExtension)
+        self.imagePhoto = DataManager.getImage(with: imageName, and: ContactDefault.imageExtension)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -73,22 +70,17 @@ class Contact: NSObject, NSCoding{
     }
     
     func saveImage(){
-        DataManager.saveImage(image: imagePhoto, with: imageName, and: imageExtension)
+        DataManager.saveImage(image: imagePhoto, with: imageName, and: ContactDefault.imageExtension)
     }
     
     func deleteImage(){
-        DataManager.deleteImage(with: imageName, and: imageExtension)
+        DataManager.deleteImage(with: imageName, and: ContactDefault.imageExtension)
     }
-    
-//    static func == (lhs: Contact, rhs: Contact) -> Bool {
-//        return lhs.firstName == rhs.firstName && lhs.lastName == rhs.lastName && lhs.phoneNumber == rhs.phoneNumber && lhs.email == rhs.email && lhs.birthday == rhs.birthday && lhs.height == rhs.height && lhs.notes == rhs.notes && lhs.driverLicense == rhs.driverLicense
-//    }
     
     override func isEqual(_ object: Any?) -> Bool {
         if object is Contact{
             let contact = object as! Contact
-            let a = self.firstName == contact.firstName && self.lastName == contact.lastName && self.phoneNumber == contact.phoneNumber && self.email == contact.email && self.birthday == contact.birthday && self.height == contact.height && self.notes == contact.notes && self.driverLicense == contact.driverLicense
-            return a
+            return self.firstName == contact.firstName && self.lastName == contact.lastName && self.phoneNumber == contact.phoneNumber && self.email == contact.email && self.birthday == contact.birthday && self.height == contact.height && self.notes == contact.notes && self.driverLicense == contact.driverLicense
         }
         return false
     }
@@ -97,7 +89,7 @@ class Contact: NSObject, NSCoding{
 extension Contact : NSCopying{
     func copy(with zone: NSZone? = nil) -> Any{
         let copyContact = Contact(id: contactId, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
-        copyContact.imagePhoto = DataManager.getImage(with: imageName, and: imageExtension)
+        copyContact.imagePhoto = DataManager.getImage(with: imageName, and: ContactDefault.imageExtension)
         return copyContact
     }
 }

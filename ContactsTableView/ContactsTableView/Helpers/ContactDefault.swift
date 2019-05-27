@@ -25,4 +25,5 @@ struct ContactDefault{
         }
     }
     static let contactSearchBarShowAt = 9
+    static let imageExtension = "jpg"
 }

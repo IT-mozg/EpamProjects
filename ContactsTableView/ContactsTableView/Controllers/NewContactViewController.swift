@@ -13,7 +13,7 @@ typealias UpdateClosure = (_ contact: Contact) -> ()
 class NewContactViewController: UITableViewController {
     weak var delegate: NewContactViewControllerDelegate?
     
-    var cells = [CellType]()
+    var cells = [Presentation]()
     
     var contactBeforeUpdate: Contact!
     private var contactAfterUpdate: Contact!
@@ -92,32 +92,32 @@ private extension NewContactViewController{
     
     private func setupValidationConditions(){
         isValidFirstName = {
-            return Validation.isValidName(self.contactAfterUpdate.firstName)
+            return self.contactAfterUpdate.presentationForFirstName.validation!()
         }
         isValidLastName = {
-            return true
+            return self.contactAfterUpdate.presentationForLastName.validation!()
         }
         isValidEmail = {
-            return true
+            return self.contactAfterUpdate.presentationForEmail.validation!()
         }
         isValidPhoneNumber = {
-            return Validation.isValidPhoneNumber(self.contactAfterUpdate.phoneNumber)
+            return self.contactAfterUpdate.presentationForPhone.validation!()
         }
     }
     
     private func setupCells(){
-        cells.append(.image(contactAfterUpdate.presentationForImage))
-        cells.append(.firstName(contactAfterUpdate.presentationForFirstName))
-        cells.append(.lastName(contactAfterUpdate.presentationForLastName))
-        cells.append(.phone(contactAfterUpdate.presentationForPhone))
-        cells.append(.email(contactAfterUpdate.presentationForEmail))
-        cells.append(.birthday(contactAfterUpdate.presentationForBirthday))
-        cells.append(.height(contactAfterUpdate.presentationForHeight))
-        cells.append(.driverLicenseSwitch(contactAfterUpdate.presentationForDriverLicense))
+        cells.append(contactAfterUpdate.presentationForImage)
+        cells.append(contactAfterUpdate.presentationForFirstName)
+        cells.append(contactAfterUpdate.presentationForLastName)
+        cells.append(contactAfterUpdate.presentationForPhone)
+        cells.append(contactAfterUpdate.presentationForEmail)
+        cells.append(contactAfterUpdate.presentationForBirthday)
+        cells.append(contactAfterUpdate.presentationForHeight)
+        cells.append(contactAfterUpdate.presentationForDriverLicense)
         if contactAfterUpdate.driverLicense != nil && !contactAfterUpdate.driverLicense!.isEmpty{
-            cells.append(.driverLicenseText(contactAfterUpdate.presentationForDriverLicenseText))
+            cells.append(contactAfterUpdate.presentationForDriverLicenseText)
         }
-        cells.append(.note(contactAfterUpdate.presentationForNote))
+        cells.append(contactAfterUpdate.presentationForNote)
     }
     
     private func setupUI(){
@@ -131,8 +131,8 @@ private extension NewContactViewController{
         tableView.tableFooterView = UIView(frame: .zero)
     }
     
-    private func insertCell(cellType: CellType, indexPath: IndexPath){
-        cells.insert(cellType, at: indexPath.row)
+    private func insertCell(cellPresent: Presentation, indexPath: IndexPath){
+        cells.insert(cellPresent, at: indexPath.row)
         tableView.beginUpdates()
         tableView.insertRows(at: [indexPath], with: .bottom)
         tableView.endUpdates()
@@ -192,7 +192,7 @@ extension NewContactViewController: UIImagePickerControllerDelegate{
     private func assignImage(_ image: UIImage?){
         contactAfterUpdate.imagePhoto = image
         imageChanges = .changed
-        cells[indexPathForImageCell.row] = .image(contactAfterUpdate.presentationForImage)
+        cells[indexPathForImageCell.row] = contactAfterUpdate.presentationForImage
         tableView.reloadRows(at: [indexPathForImageCell], with: .none)
         checkValidation()
     }
@@ -235,16 +235,16 @@ extension NewContactViewController: UITextFieldDelegate{
 //MARK: TableViewControllerDelegate
 extension NewContactViewController{
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch cells[indexPath.row] {
-        case .image(_):
+        switch cells[indexPath.row].cellType {
+        case .imagePhoto:
             pickImageButtonPressed()
             indexPathForImageCell = indexPath
-        case .note(_):
+        case .notes:
             if let notesViewController = storyboard?.instantiateViewController(withIdentifier: "NotesViewController") as? NotesViewController{
                 notesViewController.notes = contactAfterUpdate.notes ?? ""
                 notesViewController.returnBackNotes = {[unowned self] text in
                     self.contactAfterUpdate.notes = text
-                    self.cells[indexPath.row] = .note(self.contactAfterUpdate.presentationForNote)
+                    self.cells[indexPath.row] = self.contactAfterUpdate.presentationForNote
                     self.tableView.reloadRows(at: [indexPath], with: .right)
                 }
                 navigationController?.pushViewController(notesViewController, animated: true)
@@ -261,43 +261,57 @@ extension NewContactViewController{
 private extension Contact{
     
     var presentationForImage: Presentation{
-        return Presentation(keyboardType: nil, placeholder: nil, title: nil, dataType: .image(imagePhoto))
+        return Presentation(keyboardType: nil, placeholder: nil, title: nil, dataType: .image(imagePhoto), cellType: .imagePhoto, validation: nil)
     }
     
     var presentationForFirstName: Presentation{
-        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("FIRSTNAME_PLACEHOLDER", comment: ""), title: NSLocalizedString("FIRSTNAME_TITLE", comment: ""), dataType: .text(firstName))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("FIRSTNAME_PLACEHOLDER", comment: ""), title: NSLocalizedString("FIRSTNAME_TITLE", comment: ""), dataType: .text(firstName), cellType: .firstName){
+            return Validation.isValidName(self.firstName)
+        }
     }
     
     var presentationForLastName: Presentation{
-        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("LASTNAME_PLACEHOLDER", comment: ""), title: NSLocalizedString("LASTNAME_TITLE", comment: ""), dataType: .text(lastName))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("LASTNAME_PLACEHOLDER", comment: ""), title: NSLocalizedString("LASTNAME_TITLE", comment: ""), dataType: .text(lastName), cellType: .lastName){
+            if self.lastName == nil || self.lastName!.isEmpty {
+                return true
+            }
+            return Validation.isValidName(self.lastName!)
+        }
     }
     
     var presentationForEmail: Presentation{
-        return Presentation(keyboardType: .emailAddress, placeholder: NSLocalizedString("EMAIL_PLACEHOLDER", comment: ""), title: NSLocalizedString("EMAIL_TITLE", comment: ""), dataType: .text(email))
+        return Presentation(keyboardType: .emailAddress, placeholder: NSLocalizedString("EMAIL_PLACEHOLDER", comment: ""), title: NSLocalizedString("EMAIL_TITLE", comment: ""), dataType: .text(email), cellType: .email){
+            if self.email == nil || self.email!.isEmpty{
+                return true
+            }
+            return Validation.isValidEmail(self.email!)
+        }
     }
     
     var presentationForPhone: Presentation{
-        return Presentation(keyboardType: .phonePad, placeholder: NSLocalizedString("PHONE_PLACEHOLDER", comment: ""), title: NSLocalizedString("PHONE_TITLE", comment: ""), dataType: .text(phoneNumber))
+        return Presentation(keyboardType: .phonePad, placeholder: NSLocalizedString("PHONE_PLACEHOLDER", comment: ""), title: NSLocalizedString("PHONE_TITLE", comment: ""), dataType: .text(phoneNumber), cellType: .phoneNumber){
+            return Validation.isValidPhoneNumber(self.phoneNumber)
+        }
     }
     
     var presentationForBirthday: Presentation{
-        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("BIRTHDAY_PLACEHOLDER", comment: ""), title: NSLocalizedString("BIRTHDAY_TITLE", comment: ""), dataType: .date(birthday))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("BIRTHDAY_PLACEHOLDER", comment: ""), title: NSLocalizedString("BIRTHDAY_TITLE", comment: ""), dataType: .date(birthday), cellType: .birthday, validation: nil)
     }
     
     var presentationForHeight: Presentation{
-        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("HEIGHT_PLACEHOLDER", comment: ""), title: NSLocalizedString("HEIGHT_TITLE", comment: ""), dataType: .height(height))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("HEIGHT_PLACEHOLDER", comment: ""), title: NSLocalizedString("HEIGHT_TITLE", comment: ""), dataType: .height(height), cellType: .height, validation: nil)
     }
     
     var presentationForDriverLicense: Presentation{
-         return Presentation(keyboardType: nil, placeholder: nil, title: NSLocalizedString("EXIST_DRIVER_LICENSE_TITLE", comment: ""), dataType: nil)
+         return Presentation(keyboardType: nil, placeholder: nil, title: NSLocalizedString("EXIST_DRIVER_LICENSE_TITLE", comment: ""), dataType: nil, cellType: .driverLicenseSwitch, validation: nil)
     }
     
     var presentationForDriverLicenseText: Presentation{
-        return Presentation(keyboardType: .numberPad, placeholder: NSLocalizedString("DRIVER_LICENSE_PLACEHOLDER", comment: ""), title: NSLocalizedString("DRIVER_LICENSE_TITLE", comment: ""), dataType: .text(driverLicense))
+        return Presentation(keyboardType: .numberPad, placeholder: NSLocalizedString("DRIVER_LICENSE_PLACEHOLDER", comment: ""), title: NSLocalizedString("DRIVER_LICENSE_TITLE", comment: ""), dataType: .text(driverLicense), cellType: .driverLicense, validation: nil)
     }
     
     var presentationForNote: Presentation{
-        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("NOTES_PLACEHOLDER", comment: ""), title: NSLocalizedString("NOTES_TITLE", comment: ""), dataType: .text(notes))
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("NOTES_PLACEHOLDER", comment: ""), title: NSLocalizedString("NOTES_TITLE", comment: ""), dataType: .text(notes), cellType: .notes, validation: nil)
     }
     
 }
@@ -309,15 +323,15 @@ extension NewContactViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellType = cells[indexPath.row]
-        switch cellType {
-        case .image:
+        let present = cells[indexPath.row]
+        switch present.cellType {
+        case .imagePhoto:
             let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.imageCellId) as! ContactImageTableViewCell
-            cell.cellType = cellType
+            cell.presentation = present
             return cell
         case .driverLicenseSwitch:
             let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.switchCellId) as! ContactSwitchTableViewCell
-            cell.cellType = cellType
+            cell.presentation = present
             cell.updateSwitchClosure = {[weak self] isOn, cell in
                 self?.updateDriverLicenseSwitch(isOn: isOn, cell: cell)
             }
@@ -327,7 +341,7 @@ extension NewContactViewController{
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.textFieldCellId) as! ContactTextFIeldTableViewCell
-            cell.cellType = cellType
+            cell.presentation = present
             cell.updateClosure = {[weak self] text, cell in
                 self?.updateTextFields(text: text, cell: cell)
             }
@@ -336,9 +350,9 @@ extension NewContactViewController{
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let cellType = cells[indexPath.row]
-        switch cellType {
-        case .image:
+        let present = cells[indexPath.row]
+        switch present.cellType {
+        case .imagePhoto:
             return CGFloat(CellSetings.imageCellHeight)
         default:
             return CGFloat(CellSetings.regularCellHeight)
@@ -348,85 +362,109 @@ extension NewContactViewController{
 
 //MARK: Update cells
 private extension NewContactViewController{
+//    private func updateTextFields(text: String, cell: ContactTextFIeldTableViewCell){
+//        guard let indexPath = tableView.indexPath(for: cell) else{
+//            return
+//        }
+//        switch cell.presentation.cellType {
+//        case .firstName:
+//            contactAfterUpdate.firstName = text
+//            cells[indexPath.row] = contactAfterUpdate.presentationForFirstName
+//            _ = Validation.isValidTextField(textField: cell.contactPropertyTextField) { (text) -> (Bool) in
+//                return isValidFirstName()
+//            }
+//        case .lastName:
+//            contactAfterUpdate.lastName = text
+//            cells[indexPath.row] = contactAfterUpdate.presentationForLastName
+//            if text.isEmpty{
+//                isValidLastName = {return true}
+//            }else{
+//                isValidLastName = {
+//                    return Validation.isValidName(self.contactAfterUpdate.lastName ?? "")
+//                }
+//            }
+//            _ = Validation.isValidTextField(textField: cell.contactPropertyTextField) { (text) -> (Bool) in
+//                return isValidLastName()
+//            }
+//
+//        case .email:
+//            contactAfterUpdate.email = text
+//            cells[indexPath.row] = contactAfterUpdate.presentationForEmail
+//            if text.isEmpty{
+//                isValidEmail = {return true}
+//            }else{
+//                isValidEmail = {
+//                    return Validation.isValidEmail(self.contactAfterUpdate.email ?? "")
+//                }
+//            }
+//            _ = Validation.isValidTextField(textField: cell.contactPropertyTextField) { (text) -> (Bool) in
+//                return isValidEmail()
+//            }
+//        case .phoneNumber:
+//            contactAfterUpdate.phoneNumber = text
+//            cells[indexPath.row] = contactAfterUpdate.presentationForPhone
+//            _ = Validation.isValidTextField(textField: cell.contactPropertyTextField) { (text) -> (Bool) in
+//                return isValidPhoneNumber()
+//            }
+//        case .birthday:
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = ContactDefault.dateFormat
+//            contactAfterUpdate.birthday = dateFormatter.date(from: text)
+//            cells[indexPath.row] = contactAfterUpdate.presentationForBirthday
+//        case .height:
+//            contactAfterUpdate.height = Int(text)
+//            cells[indexPath.row] = contactAfterUpdate.presentationForHeight
+//        case .notes:
+//            contactAfterUpdate.notes = text
+//            cells[indexPath.row] = contactAfterUpdate.presentationForNote
+//        case .driverLicense:
+//            contactAfterUpdate.driverLicense = text
+//            cells[indexPath.row] = contactAfterUpdate.presentationForDriverLicenseText
+//        default:
+//            break
+//        }
+//        checkValidation()
+//    }
+//
+//    private func updateDriverLicenseSwitch(isOn: Bool, cell: ContactSwitchTableViewCell){
+//        guard let indexPath = tableView.indexPath(for: cell) else{
+//            return
+//        }
+//        switch cell.presentation.cellType {
+//        case .driverLicenseSwitch:
+//            let newIndexPath = IndexPath(item: indexPath.row+1, section: indexPath.section)
+//            if isOn{
+//                insertCell(cellPresent: contactAfterUpdate.presentationForDriverLicenseText, indexPath: newIndexPath)
+//            }else{
+//                removeCell(indexPath: newIndexPath)
+//                contactAfterUpdate.driverLicense = nil
+//            }
+//        default:
+//            break
+//        }
+//    }
+    
     private func updateTextFields(text: String, cell: ContactTextFIeldTableViewCell){
-        guard let indexPath = tableView.indexPath(for: cell) else{
-            return
-        }
-        switch cell.cellType! {
-        case .firstName(_):
-            contactAfterUpdate.firstName = text
-            cells[indexPath.row] = CellType.firstName(contactAfterUpdate.presentationForFirstName)
-            _ = Validation.isValidTextField(textField: cell.contactPropertyTextField) { (text) -> (Bool) in
-                return isValidFirstName()
+        guard let indexPath = tableView.indexPath(for: cell) else{return}
+        contactAfterUpdate.setValue(text, forKey: cell.presentation.cellType.rawValue)
+        cells[indexPath.row] = cell.presentation
+        _ = Validation.isValidTextField(textField: cell.contactPropertyTextField, { (text) -> (Bool) in
+            guard let validation = cell.presentation.validation else{
+                return true
             }
-        case .lastName(_):
-            contactAfterUpdate.lastName = text
-            cells[indexPath.row] = CellType.lastName(contactAfterUpdate.presentationForLastName)
-            if text.isEmpty{
-                isValidLastName = {return true}
-            }else{
-                isValidLastName = {
-                    return Validation.isValidName(self.contactAfterUpdate.lastName ?? "")
-                }
-            }
-            _ = Validation.isValidTextField(textField: cell.contactPropertyTextField) { (text) -> (Bool) in
-                return isValidLastName()
-            }
-
-        case .email(_):
-            contactAfterUpdate.email = text
-            cells[indexPath.row] = CellType.email(contactAfterUpdate.presentationForEmail)
-            if text.isEmpty{
-                isValidEmail = {return true}
-            }else{
-                isValidEmail = {
-                    return Validation.isValidEmail(self.contactAfterUpdate.email ?? "")
-                }
-            }
-            _ = Validation.isValidTextField(textField: cell.contactPropertyTextField) { (text) -> (Bool) in
-                return isValidEmail()
-            }
-        case .phone(_):
-            contactAfterUpdate.phoneNumber = text
-            cells[indexPath.row] = CellType.phone(contactAfterUpdate.presentationForPhone)
-            _ = Validation.isValidTextField(textField: cell.contactPropertyTextField) { (text) -> (Bool) in
-                return isValidPhoneNumber()
-            }
-        case .birthday(_):
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = ContactDefault.dateFormat
-            contactAfterUpdate.birthday = dateFormatter.date(from: text)
-            cells[indexPath.row] = CellType.birthday(contactAfterUpdate.presentationForBirthday)
-        case .height(_):
-            contactAfterUpdate.height = Int(text)
-            cells[indexPath.row] = CellType.height(contactAfterUpdate.presentationForHeight)
-        case .note(_):
-            contactAfterUpdate.notes = text
-            cells[indexPath.row] = CellType.note(contactAfterUpdate.presentationForNote)
-        case .driverLicenseText(_):
-            contactAfterUpdate.driverLicense = text
-            cells[indexPath.row] = CellType.note(contactAfterUpdate.presentationForDriverLicenseText)
-        default:
-            break
-        }
+            return validation()
+        })
         checkValidation()
     }
     
     private func updateDriverLicenseSwitch(isOn: Bool, cell: ContactSwitchTableViewCell){
-        guard let indexPath = tableView.indexPath(for: cell) else{
-            return
-        }
-        switch cell.cellType! {
-        case .driverLicenseSwitch(_):
-            let newIndexPath = IndexPath(item: indexPath.row+1, section: indexPath.section)
-            if isOn{
-                insertCell(cellType: .driverLicenseText(contactAfterUpdate.presentationForDriverLicenseText), indexPath: newIndexPath)
-            }else{
-                removeCell(indexPath: newIndexPath)
-                contactAfterUpdate.driverLicense = nil
-            }
-        default:
-            break
+        guard let indexPath = tableView.indexPath(for: cell) else{return}
+        let newIndexPath = IndexPath(item: indexPath.row+1, section: indexPath.section)
+        if isOn{
+            insertCell(cellPresent: contactAfterUpdate.presentationForDriverLicenseText, indexPath: newIndexPath)
+        }else{
+            removeCell(indexPath: newIndexPath)
+            contactAfterUpdate.driverLicense = nil
         }
     }
 }

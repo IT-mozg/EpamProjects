@@ -10,17 +10,12 @@ import UIKit
 
 class ContactImageTableViewCell: UITableViewCell {
     @IBOutlet weak var contactImage: UIImageView!
-    var cellType: CellType!{
+    var presentation: Presentation!{
         didSet{
-            guard let cell = cellType else {
+            guard let present = presentation else {
                 return
             }
-            switch cell {
-            case .image(let present):
-                setupComponents(with: present)
-            default:
-                break
-            }
+            setupComponents(with: present)
         }
     }
     
