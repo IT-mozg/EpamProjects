@@ -49,7 +49,7 @@ class ContactsSearchResultTableViewController: UITableViewController {
     }
 }
 private extension ContactsSearchResultTableViewController{
-    private func findMostSimilarString(contact: Contact) -> NSAttributedString?{
+     func findMostSimilarString(contact: Contact) -> NSAttributedString?{
         let searchItems = searchString.splitString(separator: " ")
         let findMatches = SearchStringHelper.findMatches
         if findMatches(searchItems, contact.phoneNumber){
@@ -67,7 +67,7 @@ private extension ContactsSearchResultTableViewController{
         return nil
     }
     
-    private func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString{
+     func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString{
         let attribute = NSMutableAttributedString(string: currentString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         for currentSearchString in searchStringItems{
             if currentString.lowercased().contains(currentSearchString){

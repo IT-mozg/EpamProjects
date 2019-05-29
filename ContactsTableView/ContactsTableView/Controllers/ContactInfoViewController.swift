@@ -48,7 +48,7 @@ class ContactInfoViewController: UIViewController {
 
 //MARK: Private help methods
 private extension ContactInfoViewController{
-    private func presentContact(){
+     func presentContact(){
         firstNameLabel.text = contact?.firstName
         lastNameLabel.text = contact?.lastName
         phoneLabel.text = contact?.phoneNumber
@@ -56,7 +56,7 @@ private extension ContactInfoViewController{
         photoImageView.image = contact?.imagePhoto ?? ContactDefault.defaultImage
     }
     
-    @objc private func editButtonPressed(){
+    @objc func editButtonPressed(){
         if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
             controller.update = {[unowned self] updatedContact in
                 self.contact = updatedContact

@@ -67,11 +67,11 @@ class MainTableViewController: UITableViewController {
 
     //MARK: private help methods
 private extension MainTableViewController{
-    private func checkNumberOfContacts(){
+    func checkNumberOfContacts(){
         contactSearchController.searchBar.isHidden = contactDictionary.values.flatMap({$0}).count <= ContactDefault.contactSearchBarShowAt
     }
     
-    private func unarchiveContacts(){
+    func unarchiveContacts(){
         let userDefaults = UserDefaults.standard
         do{
             if let decoded = userDefaults.data(forKey: "contacts"){
@@ -83,7 +83,7 @@ private extension MainTableViewController{
         }
     }
     
-    private func setupUI(){
+    func setupUI(){
         tableView.backgroundView = backgroundView
         tableView.tableFooterView = UIView(frame: .zero)
         searchResultController = storyboard?.instantiateViewController(withIdentifier: "ContactsSearchResultTableViewController") as? ContactsSearchResultTableViewController
@@ -98,12 +98,12 @@ private extension MainTableViewController{
         definesPresentationContext = true
     }
     
-    private func reloadSectionTitles(){
+    func reloadSectionTitles(){
         contactSectionTitles = [String](contactDictionary.keys)
         contactSectionTitles = contactSectionTitles.sorted(by: <)
     }
     
-    private func updateUserDefaults(){
+    func updateUserDefaults(){
         let userDefaults = UserDefaults.standard
         do{
             let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: contactDictionary, requiringSecureCoding: false)
@@ -114,7 +114,7 @@ private extension MainTableViewController{
         }
     }
 
-    @objc private func addButtonItemPressed(){
+    @objc func addButtonItemPressed(){
         if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
             if let viewController = navigationController.viewControllers.first as? NewContactViewController{
                 viewController.delegate = self
@@ -123,7 +123,7 @@ private extension MainTableViewController{
         }
     }
     
-    private func checkNumberOfRows(){
+    func checkNumberOfRows(){
         backgroundView.isHidden = !contactDictionary.isEmpty
         if !contactDictionary.isEmpty{
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
@@ -135,7 +135,7 @@ private extension MainTableViewController{
         }
     }
     
-    private func checkIsEmptyArray(contactKey: String, contactValues: [Contact]) -> Bool{
+    func checkIsEmptyArray(contactKey: String, contactValues: [Contact]) -> Bool{
         let isLast = contactValues.isEmpty
         contactDictionary[contactKey] = contactValues
         if isLast{
@@ -145,7 +145,7 @@ private extension MainTableViewController{
         return isLast
     }
     
-    private func goToNewContactController(indexPath: IndexPath){
+     func goToNewContactController(indexPath: IndexPath){
         if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
             controller.contactBeforeUpdate = getContact(at: indexPath)
             controller.update = {[unowned self] updatedContact in
@@ -158,7 +158,7 @@ private extension MainTableViewController{
         }
     }
     
-    private func getContact(at indexPath: IndexPath) -> Contact?{
+     func getContact(at indexPath: IndexPath) -> Contact?{
         if self.isFiltering{
             return self.filteredContacts[indexPath.row]
         }
@@ -169,7 +169,7 @@ private extension MainTableViewController{
         return nil
     }
     
-    private func goToContactInfoController(indexPath: IndexPath){
+     func goToContactInfoController(indexPath: IndexPath){
         if let controller = storyboard?.instantiateViewController(withIdentifier: "ContactInfoViewController") as? ContactInfoViewController{
             controller.update = {[unowned self] updatedContact in
                 self.updateContact(updatedContact: updatedContact, indexPath: indexPath)
@@ -181,64 +181,7 @@ private extension MainTableViewController{
             navigationController?.pushViewController(controller, animated: true)
         }
     }
-}
-
-// MARK: Deleting contacts
-extension MainTableViewController{
-    private func deleteContact(at indexPath: IndexPath){
-        if isFiltering{
-            deleteIfFiltering(indexPath: indexPath)
-        }
-        else{
-            deleteIfNotFiltering(indexPath: indexPath)
-        }
-    }
-    
-    private func deleteIfNotFiltering(indexPath: IndexPath){
-        let contactKey = contactSectionTitles[indexPath.section]
-        if var contactValues = contactDictionary[contactKey]{
-            let id = contactValues[indexPath.row].contactId
-            guard let index = contactValues.firstIndex(where: { (contact) in return contact.contactId == id})else{
-                return
-            }
-            guard let section = contactSectionTitles.firstIndex(of: contactKey)else {return}
-            contactValues.removeAll{$0.contactId == id}
-            let isLast = checkIsEmptyArray(contactKey: contactKey, contactValues: contactValues)
-            deleteTableRows(index, section, isLast)
-        }
-    }
-    
-    private func deleteIfFiltering(indexPath: IndexPath) {
-        let id = filteredContacts[indexPath.row].contactId
-        guard let index = filteredContacts.firstIndex(where: { $0.contactId == id }) else { return }
-        let contactKey = contactSectionTitles[indexPath.section]
-        filteredContacts.removeAll { $0.contactId == id }
-        var isLast = false
-        guard let section = contactSectionTitles.firstIndex(of: contactKey) else { return }
-        if var contactValues = contactDictionary[contactKey]{
-            contactValues.removeAll{$0.contactId == id}
-            isLast = checkIsEmptyArray(contactKey: contactKey, contactValues: contactValues)
-        }
-        deleteTableRows(index, section, isLast)
-    }
-    
-    private func deleteTableRows(_ row: Int,_ section: Int = 0,_ isLast: Bool = false){
-        tableView.beginUpdates()
-        
-        let indexPath = IndexPath(item: row, section: section)
-        self.tableView.deleteRows(at: [indexPath], with: .top)
-        
-        if isLast{
-            let indexSet = IndexSet(arrayLiteral: section)
-            tableView.deleteSections(indexSet, with: .automatic)
-        }
-        tableView.endUpdates()
-    }
-}
-
-//MARK: Updating contacts
-extension MainTableViewController{
-    private func updateContact(updatedContact: Contact, indexPath: IndexPath){
+    func updateContact(updatedContact: Contact, indexPath: IndexPath){
         let name = updatedContact.contactName
         let updatedContactsKey = String(name.prefix(1))
         let oldContactsKey = contactSectionTitles[indexPath.section]
@@ -253,6 +196,57 @@ extension MainTableViewController{
             deleteContact(at: indexPath)
             addNewContact(newItem: updatedContact)
         }
+    }
+
+// MARK: Deleting contacts
+     func deleteContact(at indexPath: IndexPath){
+        if isFiltering{
+            deleteIfFiltering(indexPath: indexPath)
+        }
+        else{
+            deleteIfNotFiltering(indexPath: indexPath)
+        }
+    }
+    
+     func deleteIfNotFiltering(indexPath: IndexPath){
+        let contactKey = contactSectionTitles[indexPath.section]
+        if var contactValues = contactDictionary[contactKey]{
+            let id = contactValues[indexPath.row].contactId
+            guard let index = contactValues.firstIndex(where: { (contact) in return contact.contactId == id})else{
+                return
+            }
+            guard let section = contactSectionTitles.firstIndex(of: contactKey)else {return}
+            contactValues.removeAll{$0.contactId == id}
+            let isLast = checkIsEmptyArray(contactKey: contactKey, contactValues: contactValues)
+            deleteTableRows(index, section, isLast)
+        }
+    }
+    
+     func deleteIfFiltering(indexPath: IndexPath) {
+        let id = filteredContacts[indexPath.row].contactId
+        guard let index = filteredContacts.firstIndex(where: { $0.contactId == id }) else { return }
+        let contactKey = contactSectionTitles[indexPath.section]
+        filteredContacts.removeAll { $0.contactId == id }
+        var isLast = false
+        guard let section = contactSectionTitles.firstIndex(of: contactKey) else { return }
+        if var contactValues = contactDictionary[contactKey]{
+            contactValues.removeAll{$0.contactId == id}
+            isLast = checkIsEmptyArray(contactKey: contactKey, contactValues: contactValues)
+        }
+        deleteTableRows(index, section, isLast)
+    }
+    
+     func deleteTableRows(_ row: Int,_ section: Int = 0,_ isLast: Bool = false){
+        tableView.beginUpdates()
+        
+        let indexPath = IndexPath(item: row, section: section)
+        self.tableView.deleteRows(at: [indexPath], with: .top)
+        
+        if isLast{
+            let indexSet = IndexSet(arrayLiteral: section)
+            tableView.deleteSections(indexSet, with: .automatic)
+        }
+        tableView.endUpdates()
     }
 }
 

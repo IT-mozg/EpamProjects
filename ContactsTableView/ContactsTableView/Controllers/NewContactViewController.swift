@@ -93,7 +93,7 @@ class NewContactViewController: UIViewController {
 
 // MARK: private funcs
 private extension NewContactViewController{
-    private func checkValidation(){
+     func checkValidation(){
         var isValid = isValidFirstNameTextField()
         if isValid{
             isValid = isValidLastNameTextField()
@@ -110,7 +110,7 @@ private extension NewContactViewController{
         navigationItem.rightBarButtonItem?.isEnabled = isValid && checkContactChanges()
     }
     
-    private func checkContactChanges() -> Bool{
+     func checkContactChanges() -> Bool{
         var isImageChanged = false
         switch self.imageChanges {
         case .noChanges:
@@ -121,7 +121,7 @@ private extension NewContactViewController{
         return isImageChanged || !contactAfterUpdate.isEqual(contactBeforeUpdate)
     }
     
-    private func setupUI(){
+     func setupUI(){
         if let contact = contactAfterUpdate{
             navigationItem.title = "Editing"
             navigationItem.rightBarButtonItem?.title = "Save"
@@ -135,10 +135,7 @@ private extension NewContactViewController{
         }
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
-}
-// MARK: Image picker
-extension NewContactViewController: UIImagePickerControllerDelegate{
-    private func changeImage(){
+     func changeImage(){
         #if targetEnvironment(simulator)
         self.chooseImagePickerAction(source: .photoLibrary)
         #else
@@ -157,7 +154,7 @@ extension NewContactViewController: UIImagePickerControllerDelegate{
         #endif
     }
     
-    private func assingImage(_ image: UIImage?){
+     func assingImage(_ image: UIImage?){
         contactAfterUpdate.imagePhoto = image
         imageChanges = .changed
         photoContactImageView.image = image ?? ContactDefault.defaultCameraImage
@@ -166,7 +163,7 @@ extension NewContactViewController: UIImagePickerControllerDelegate{
         checkValidation()
     }
     
-    private func chooseImagePickerAction(source: UIImagePickerController.SourceType){
+     func chooseImagePickerAction(source: UIImagePickerController.SourceType){
         guard UIImagePickerController.isSourceTypeAvailable(source) else {
             return
         }
@@ -176,6 +173,66 @@ extension NewContactViewController: UIImagePickerControllerDelegate{
         imagePicker.sourceType = source
         self.present(imagePicker, animated: true, completion: nil)
     }
+    // MARK: Validation
+    
+     func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{
+        if let text = textField.text{
+            if validate(text){
+                navigationItem.rightBarButtonItem?.isEnabled = true
+                textField.backgroundColor = ContactDefault.validColor
+                return true
+            }
+        }
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        textField.backgroundColor = ContactDefault.invalidColor
+        return false
+    }
+    
+     func isValidFirstNameTextField() -> Bool{
+        return isValidTextField(textField: firstNameTextField){ (text) -> (Bool) in
+            self.contactAfterUpdate.firstName = text
+            if text.isEmpty {
+                return true
+            }
+            return Validation.isValidName(text)
+        }
+    }
+    
+     func isValidLastNameTextField() -> Bool{
+        return isValidTextField(textField: lastNameTextField){ (text) -> (Bool) in
+            self.contactAfterUpdate.lastName = text
+            if text.isEmpty {
+                return true
+            }
+            return Validation.isValidName(text)
+        }
+    }
+     func isValidEmailTextField() -> Bool{
+        return isValidTextField(textField: emailTextField){ (text) -> (Bool) in
+            self.contactAfterUpdate.email = text
+            if text.isEmpty {
+                return true
+            }
+            return Validation.isValidEmail(text)
+        }
+    }
+    
+     func isValidPhoneTextField() -> Bool{
+        return isValidTextField(textField: phoneTextField){ (text) -> (Bool) in
+            self.contactAfterUpdate.phoneNumber = text
+            if text.isEmpty {
+                return true
+            }
+            return Validation.isValidPhoneNumber(text)
+        }
+    }
+    
+     func isAllTextFieldsEmpty() -> Bool{
+        return firstNameTextField.text!.isEmpty && lastNameTextField.text!.isEmpty && phoneTextField.text!.isEmpty && emailTextField.text!.isEmpty
+    }
+}
+// MARK: Image picker
+extension NewContactViewController: UIImagePickerControllerDelegate{
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.editedImage] as? UIImage{
@@ -196,63 +253,7 @@ extension NewContactViewController: UITextFieldDelegate{
         return true
     }
 
-    // MARK: Validation
-    
-    private func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{
-        if let text = textField.text{
-            if validate(text){
-                navigationItem.rightBarButtonItem?.isEnabled = true
-                textField.backgroundColor = ContactDefault.validColor
-                return true
-            }
-        }
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        textField.backgroundColor = ContactDefault.invalidColor
-        return false
-    }
-    
-    private func isValidFirstNameTextField() -> Bool{
-        return isValidTextField(textField: firstNameTextField){ (text) -> (Bool) in
-            self.contactAfterUpdate.firstName = text
-            if text.isEmpty {
-                return true
-            }
-            return Validation.isValidName(text)
-        }
-    }
-    
-    private func isValidLastNameTextField() -> Bool{
-        return isValidTextField(textField: lastNameTextField){ (text) -> (Bool) in
-            self.contactAfterUpdate.lastName = text
-            if text.isEmpty {
-                return true
-            }
-            return Validation.isValidName(text)
-        }
-    }
-    private func isValidEmailTextField() -> Bool{
-        return isValidTextField(textField: emailTextField){ (text) -> (Bool) in
-            self.contactAfterUpdate.email = text
-            if text.isEmpty {
-                return true
-            }
-            return Validation.isValidEmail(text)
-        }
-    }
-    
-    private func isValidPhoneTextField() -> Bool{
-        return isValidTextField(textField: phoneTextField){ (text) -> (Bool) in
-            self.contactAfterUpdate.phoneNumber = text
-            if text.isEmpty {
-                return true
-            }
-            return Validation.isValidPhoneNumber(text)
-        }
-    }
-    
-    private func isAllTextFieldsEmpty() -> Bool{
-        return firstNameTextField.text!.isEmpty && lastNameTextField.text!.isEmpty && phoneTextField.text!.isEmpty && emailTextField.text!.isEmpty
-    }
+   
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
