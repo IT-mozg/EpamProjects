@@ -14,6 +14,7 @@ class ContactsSearchResultTableViewController: UITableViewController {
     
     var filteredContacts = [Contact](){
         didSet{
+            backgroundView.isHidden = !filteredContacts.isEmpty
             tableView.reloadData()
         }
     }
@@ -23,20 +24,22 @@ class ContactsSearchResultTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundView = backgroundView
+        backgroundView.isHidden = !filteredContacts.isEmpty
         tableView.tableFooterView = UIView(frame: .zero)
     }
 }
 
-//MARK: Private funcs
+
 private extension ContactsSearchResultTableViewController{
-    private func findMostSimilarString(contact: Contact) -> NSAttributedString?{
+     func findMostSimilarString(contact: Contact) -> NSAttributedString?{
+
         let searchItems = searchString.splitString(separator: " ")
         let findMatches = SearchStringHelper.findMatches
         if findMatches(searchItems, contact.phoneNumber){
-            return replaceMatches(searchItems, contact.phoneNumber)
+            return replaceMatches(searchItems, contact.phoneNumber!)
         }
         if findMatches(searchItems, contact.firstName){
-            return replaceMatches(searchItems, contact.firstName)
+            return replaceMatches(searchItems, contact.firstName!)
         }
         if findMatches(searchItems, contact.lastName){
             return replaceMatches(searchItems, contact.lastName!)
@@ -47,12 +50,12 @@ private extension ContactsSearchResultTableViewController{
         return nil
     }
     
-    private func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString{
+     func replaceMatches(_ searchStringItems: [String], _ currentString: String) -> NSMutableAttributedString{
         let attribute = NSMutableAttributedString(string: currentString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         for currentSearchString in searchStringItems{
             if currentString.lowercased().contains(currentSearchString){
-                let rangeString = attribute.string.lowercased().range(of: currentSearchString)
-                let range = NSRange(rangeString!, in: attribute.string)
+                let rangeString = attribute.string.lowercased().range(of: currentSearchString)!
+                let range = NSRange(rangeString, in: attribute.string)
                 attribute.setAttributes([.foregroundColor: UIColor.black], range: range)
             }
         }
@@ -82,4 +85,3 @@ extension ContactsSearchResultTableViewController{
         return delegate?.editActionsForRow(tableView, indexPath)
     }
 }
-

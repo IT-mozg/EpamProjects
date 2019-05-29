@@ -25,7 +25,6 @@ class ContactInfoViewController: UIViewController {
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var driverLicenseLabel: UILabel!
     @IBOutlet weak var nodesLabel: UILabel!
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,9 +38,11 @@ class ContactInfoViewController: UIViewController {
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
         ContactActionHelper.delete(delete, viewController: self)
     }
-    
-    //MARK: Private help methods
-    private func presentContact(){
+}
+
+//MARK: Private help methods
+private extension ContactInfoViewController{
+    func presentContact(){
         firstNameLabel.text = contact.firstName
         lastNameLabel.text = contact.lastName ?? noText
         phoneLabel.text = contact.phoneNumber
@@ -51,21 +52,19 @@ class ContactInfoViewController: UIViewController {
         nodesLabel.text = contact.notes ?? noText
     }
     
-    @objc private func editButtonPressed(){
-        if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
-            if let controller = navigationController.viewControllers.first as? NewContactViewController{
-                controller.update = {[unowned self] updatedContact in
-                    self.contact = updatedContact
-                    self.update?(updatedContact)
-                    self.presentContact()
-                }
-                controller.delete = {[unowned self] in
-                    self.delete?()
-                    self.navigationController?.popToRootViewController(animated: true)
-                }
-                controller.contactBeforeUpdate = contact
-                self.present(navigationController, animated: true, completion: nil)
+    @objc func editButtonPressed(){
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
+            controller.update = {[unowned self] updatedContact in
+                self.contact = updatedContact
+                self.update?(updatedContact)
+                self.presentContact()
             }
+            controller.delete = {[unowned self] in
+                self.delete?()
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+            controller.contactBeforeUpdate = contact
+            self.navigationController?.pushViewController(controller, animated: true)
         }
     }
 }
