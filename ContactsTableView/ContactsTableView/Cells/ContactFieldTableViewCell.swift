@@ -1,18 +1,19 @@
 //
-//  ContactTextFIeldTableViewCell.swift
+//  ContactFieldTableViewCell.swift
 //  ContactsTableView
 //
-//  Created by Vlad on 5/22/19.
+//  Created by Vlad on 5/29/19.
 //  Copyright © 2019 Vlad Tkachuk. All rights reserved.
 //
 
 import UIKit
 
-class ContactTextFIeldTableViewCell: UITableViewCell {
+class ContactFieldTableViewCell: UITableViewCell {
+
     @IBOutlet weak var fieldNameLabel: UILabel!
     @IBOutlet weak var contactPropertyTextField: UITextField!
     
-    var updateClosure:((String, ContactTextFIeldTableViewCell)->())?
+    var updateClosure:((String, ContactFieldTableViewCell)->())?
     
     private var meter = 0
     private var decimeter = 0
@@ -49,14 +50,25 @@ class ContactTextFIeldTableViewCell: UITableViewCell {
 }
 
 //MARK: Private funcs
-private extension ContactTextFIeldTableViewCell{
+private extension ContactFieldTableViewCell{
     private func setupComponents(with presentation: Presentation?){
         guard let presentation = presentation else {
             return
         }
+        contactPropertyTextField.delegate = self
         fieldNameLabel.text = presentation.title
         contactPropertyTextField.keyboardType = presentation.keyboardType!
         contactPropertyTextField.placeholder = presentation.placeholder
+        switch presentation.cellType {
+        case .notes:
+            contactPropertyTextField.isEnabled = false
+        default:
+            break
+        }
+        setupDataType(presentation: presentation)
+    }
+    
+    private func setupDataType(presentation: Presentation){
         if let dataType = presentation.dataType{
             switch dataType{
             case .text(let text):
@@ -127,7 +139,7 @@ private extension ContactTextFIeldTableViewCell{
     }
 }
 
-extension ContactTextFIeldTableViewCell: UIPickerViewDataSource{
+extension ContactFieldTableViewCell: UIPickerViewDataSource{
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 3
     }
@@ -141,19 +153,31 @@ extension ContactTextFIeldTableViewCell: UIPickerViewDataSource{
     }
 }
 
-extension ContactTextFIeldTableViewCell: UIPickerViewDelegate{
+extension ContactFieldTableViewCell: UIPickerViewDelegate{
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch component {
-            case 0:
-                meter = row
-            case 1:
-                decimeter = row
-            case 2:
-                santimeter = row
-            default:
-                break
+        case 0:
+            meter = row
+        case 1:
+            decimeter = row
+        case 2:
+            santimeter = row
+        default:
+            break
         }
         contactPropertyTextField.text = "\(meter)\(decimeter)\(santimeter)"
         updateClosure?(contactPropertyTextField.text!, self)
     }
+}
+
+//MARK: TextFieldDelegate
+extension ContactFieldTableViewCell: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        self.endEditing(true)
+//    }
 }

@@ -32,5 +32,4 @@ class ContactSwitchTableViewCell: UITableViewCell {
         }
         fieldNameLabel.text = presentation.title
     }
-    
 }

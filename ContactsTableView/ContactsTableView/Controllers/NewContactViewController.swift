@@ -146,6 +146,18 @@ private extension NewContactViewController{
         tableView.endUpdates()
         
     }
+    
+    private func showNoteViewController(indexPath: IndexPath){
+        if let notesViewController = storyboard?.instantiateViewController(withIdentifier: "NotesViewController") as? NotesViewController{
+            notesViewController.notes = contactAfterUpdate.notes ?? ""
+            notesViewController.returnBackNotes = {[unowned self] text in
+                self.contactAfterUpdate.notes = text
+                self.cells[indexPath.row] = self.contactAfterUpdate.presentationForNote
+                self.tableView.reloadRows(at: [indexPath], with: .right)
+            }
+            navigationController?.pushViewController(notesViewController, animated: true)
+        }
+    }
 }
 
 // MARK: Image picker
@@ -221,18 +233,6 @@ extension NewContactViewController: UINavigationControllerDelegate{
     
 }
 
-//MARK: TextFieldDelegate
-extension NewContactViewController: UITextFieldDelegate{
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-}
-
 //MARK: TableViewControllerDelegate
 extension NewContactViewController{
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -241,15 +241,7 @@ extension NewContactViewController{
             pickImageButtonPressed()
             indexPathForImageCell = indexPath
         case .notes:
-            if let notesViewController = storyboard?.instantiateViewController(withIdentifier: "NotesViewController") as? NotesViewController{
-                notesViewController.notes = contactAfterUpdate.notes ?? ""
-                notesViewController.returnBackNotes = {[unowned self] text in
-                    self.contactAfterUpdate.notes = text
-                    self.cells[indexPath.row] = self.contactAfterUpdate.presentationForNote
-                    self.tableView.reloadRows(at: [indexPath], with: .right)
-                }
-                navigationController?.pushViewController(notesViewController, animated: true)
-            }
+            showNoteViewController(indexPath: indexPath)
         default:
             break
         }
@@ -341,7 +333,7 @@ extension NewContactViewController{
             }
             return cell
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.textFieldCellId) as! ContactTextFIeldTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.textFieldCellId) as! ContactFieldTableViewCell
             cell.presentation = present
             cell.updateClosure = {[weak self] text, cell in
                 self?.updateTextFields(text: text, cell: cell)
@@ -444,8 +436,8 @@ private extension NewContactViewController{
 //            break
 //        }
 //    }
-    
-    private func updateTextFields(text: String, cell: ContactTextFIeldTableViewCell){
+//
+    private func updateTextFields(text: String, cell: ContactFieldTableViewCell){
         guard let indexPath = tableView.indexPath(for: cell) else{return}
         contactAfterUpdate.setValue(text, forKey: cell.presentation.cellType.rawValue)
         cells[indexPath.row] = cell.presentation
@@ -457,7 +449,7 @@ private extension NewContactViewController{
         })
         checkValidation()
     }
-    
+
     private func updateDriverLicenseSwitch(isOn: Bool, cell: ContactSwitchTableViewCell){
         guard let indexPath = tableView.indexPath(for: cell) else{return}
         let newIndexPath = IndexPath(item: indexPath.row+1, section: indexPath.section)

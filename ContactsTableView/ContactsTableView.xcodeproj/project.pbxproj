@@ -18,7 +18,6 @@
 		F5236CDF2281780C00FF98E9 /* ContactInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */; };
 		F5236CE12282052900FF98E9 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5236CE02282052900FF98E9 /* Validation.swift */; };
 		F56FAEB922953790006BC4C1 /* ContactImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56FAEB822953790006BC4C1 /* ContactImageTableViewCell.swift */; };
-		F56FAEBB229537A6006BC4C1 /* ContactTextFIeldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56FAEBA229537A6006BC4C1 /* ContactTextFIeldTableViewCell.swift */; };
 		F56FAEBD229537B2006BC4C1 /* ContactSwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56FAEBC229537B2006BC4C1 /* ContactSwitchTableViewCell.swift */; };
 		F56FAEBF229539CC006BC4C1 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56FAEBE229539CC006BC4C1 /* DataType.swift */; };
 		F56FAEC122953A5C006BC4C1 /* Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56FAEC022953A5C006BC4C1 /* Presentation.swift */; };
@@ -28,12 +27,12 @@
 		F58DA0D8228967A900B511FF /* ContactActionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58DA0D7228967A900B511FF /* ContactActionHelper.swift */; };
 		F58DA0DA228ACE5700B511FF /* ContactsSearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58DA0D9228ACE5700B511FF /* ContactsSearchResultTableViewController.swift */; };
 		F5911E1A22981DC5009C40F4 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5911E1822981DC5009C40F4 /* NotesViewController.swift */; };
-		F5911E1B22981DC5009C40F4 /* NotesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5911E1922981DC5009C40F4 /* NotesViewController.xib */; };
 		F5911E1D22982EB0009C40F4 /* ImageChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5911E1C22982EB0009C40F4 /* ImageChanges.swift */; };
 		F5A8A52A228D8BAC00D12B94 /* ContactsSearchResultDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A529228D8BAC00D12B94 /* ContactsSearchResultDelegate.swift */; };
 		F5A8A52C228D8C2100D12B94 /* NewContactViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A52B228D8C2100D12B94 /* NewContactViewControllerDelegate.swift */; };
 		F5A8A52E228D8CF600D12B94 /* SearchStringHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A52D228D8CF600D12B94 /* SearchStringHelper.swift */; };
 		F5A8A530228EB90A00D12B94 /* ContactDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A52F228EB90900D12B94 /* ContactDefault.swift */; };
+		F5AE170B229E691B006A1C96 /* ContactFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AE170A229E691B006A1C96 /* ContactFieldTableViewCell.swift */; };
 		F5BD995F22928A8600C1AB4A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F5BD996122928A8600C1AB4A /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
@@ -51,7 +50,6 @@
 		F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactInfoViewController.swift; sourceTree = "<group>"; };
 		F5236CE02282052900FF98E9 /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
 		F56FAEB822953790006BC4C1 /* ContactImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactImageTableViewCell.swift; sourceTree = "<group>"; };
-		F56FAEBA229537A6006BC4C1 /* ContactTextFIeldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTextFIeldTableViewCell.swift; sourceTree = "<group>"; };
 		F56FAEBC229537B2006BC4C1 /* ContactSwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSwitchTableViewCell.swift; sourceTree = "<group>"; };
 		F56FAEBE229539CC006BC4C1 /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
 		F56FAEC022953A5C006BC4C1 /* Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presentation.swift; sourceTree = "<group>"; };
@@ -61,12 +59,12 @@
 		F58DA0D7228967A900B511FF /* ContactActionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactActionHelper.swift; sourceTree = "<group>"; };
 		F58DA0D9228ACE5700B511FF /* ContactsSearchResultTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsSearchResultTableViewController.swift; sourceTree = "<group>"; };
 		F5911E1822981DC5009C40F4 /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
-		F5911E1922981DC5009C40F4 /* NotesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotesViewController.xib; sourceTree = "<group>"; };
 		F5911E1C22982EB0009C40F4 /* ImageChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageChanges.swift; sourceTree = "<group>"; };
 		F5A8A529228D8BAC00D12B94 /* ContactsSearchResultDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsSearchResultDelegate.swift; sourceTree = "<group>"; };
 		F5A8A52B228D8C2100D12B94 /* NewContactViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewContactViewControllerDelegate.swift; sourceTree = "<group>"; };
 		F5A8A52D228D8CF600D12B94 /* SearchStringHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStringHelper.swift; sourceTree = "<group>"; };
 		F5A8A52F228EB90900D12B94 /* ContactDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDefault.swift; sourceTree = "<group>"; };
+		F5AE170A229E691B006A1C96 /* ContactFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactFieldTableViewCell.swift; sourceTree = "<group>"; };
 		F5BD9959229288D600C1AB4A /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Main.strings; sourceTree = "<group>"; };
 		F5BD995A229288D600C1AB4A /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		F5BD995C2292891800C1AB4A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 				F5236CDC2280819600FF98E9 /* NewContactViewController.swift */,
 				F5236CDE2281780C00FF98E9 /* ContactInfoViewController.swift */,
 				F5911E1822981DC5009C40F4 /* NotesViewController.swift */,
-				F5911E1922981DC5009C40F4 /* NotesViewController.xib */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -149,7 +146,7 @@
 			children = (
 				F5236CD822806AA700FF98E9 /* MainContactTableViewCell.swift */,
 				F56FAEB822953790006BC4C1 /* ContactImageTableViewCell.swift */,
-				F56FAEBA229537A6006BC4C1 /* ContactTextFIeldTableViewCell.swift */,
+				F5AE170A229E691B006A1C96 /* ContactFieldTableViewCell.swift */,
 				F56FAEBC229537B2006BC4C1 /* ContactSwitchTableViewCell.swift */,
 			);
 			path = Cells;
@@ -240,7 +237,6 @@
 				F5BD995F22928A8600C1AB4A /* Localizable.strings in Resources */,
 				F5236CCC2280666800FF98E9 /* Assets.xcassets in Resources */,
 				F5236CCA2280666700FF98E9 /* Main.storyboard in Resources */,
-				F5911E1B22981DC5009C40F4 /* NotesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +260,7 @@
 				F56FAEC322953B40006BC4C1 /* CellType.swift in Sources */,
 				F56FAEC52296B6CD006BC4C1 /* CellSetings.swift in Sources */,
 				F56FAEC72296BEA0006BC4C1 /* DataManager.swift in Sources */,
+				F5AE170B229E691B006A1C96 /* ContactFieldTableViewCell.swift in Sources */,
 				F5236CC52280666700FF98E9 /* AppDelegate.swift in Sources */,
 				F56FAEBF229539CC006BC4C1 /* DataType.swift in Sources */,
 				F56FAEBD229537B2006BC4C1 /* ContactSwitchTableViewCell.swift in Sources */,
@@ -271,7 +268,6 @@
 				F5236CDF2281780C00FF98E9 /* ContactInfoViewController.swift in Sources */,
 				F5A8A52E228D8CF600D12B94 /* SearchStringHelper.swift in Sources */,
 				F58DA0D8228967A900B511FF /* ContactActionHelper.swift in Sources */,
-				F56FAEBB229537A6006BC4C1 /* ContactTextFIeldTableViewCell.swift in Sources */,
 				F5236CE12282052900FF98E9 /* Validation.swift in Sources */,
 				F58DA0DA228ACE5700B511FF /* ContactsSearchResultTableViewController.swift in Sources */,
 			);

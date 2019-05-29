@@ -404,7 +404,7 @@
                                     <outlet property="contactImage" destination="zmB-Q5-vAA" id="ZVV-H9-EjW"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textFieldCell" rowHeight="45" id="Pqo-Uy-sDz" customClass="ContactTextFIeldTableViewCell" customModule="ContactsTableView" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="textFieldCell" rowHeight="45" id="Pqo-Uy-sDz" customClass="ContactFieldTableViewCell" customModule="ContactsTableView" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="228" width="375" height="45"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Pqo-Uy-sDz" id="MND-gu-RHw">
