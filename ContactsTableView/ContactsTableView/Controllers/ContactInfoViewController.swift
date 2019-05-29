@@ -9,17 +9,17 @@
 import UIKit
 
 class ContactInfoViewController: UIViewController {
+    var editBarButtonItem: UIBarButtonItem!
+    var contact: Contact!
+    var update: ((_ contact: Contact)->())?
+    var delete: (()->())?
+    
+    //MARK: IBOutlets
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var lastNameLabel: UILabel!
     @IBOutlet weak var phoneLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
-    var editBarButtonItem: UIBarButtonItem!
-    
-    var contact: Contact!
-    
-    var update: ((_ contact: Contact)->())?
-    var delete: (()->())?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,32 +29,7 @@ class ContactInfoViewController: UIViewController {
         navigationItem.rightBarButtonItem = editBarButtonItem
     }
     
-    private func presentContact(){
-        firstNameLabel.text = contact?.firstName
-        lastNameLabel.text = contact?.lastName
-        phoneLabel.text = contact?.phoneNumber
-        emailLabel.text = contact?.email
-        photoImageView.image = contact?.imagePhoto ?? ContactDefault.defaultImage
-    }
-    
-    @objc private func editButtonPressed(){
-        if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
-            if let controller = navigationController.viewControllers.first as? NewContactViewController{
-                controller.update = {[unowned self] updatedContact in
-                    self.contact = updatedContact
-                    self.update?(updatedContact)
-                    self.presentContact()
-                }
-                controller.delete = {[unowned self] in
-                    self.delete?()
-                    self.navigationController?.popToRootViewController(animated: true)
-                }
-                controller.editingContact = contact
-                self.present(navigationController, animated: true, completion: nil)
-            }
-        }
-    }
-
+    //MARK: IBActions
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
         let alertController = UIAlertController(title: "Delete", message: "Do you realy wanna delete current contact?", preferredStyle: .alert)
         let noAlertAction = UIAlertAction(title: "No", style: .default, handler: nil)
@@ -68,5 +43,32 @@ class ContactInfoViewController: UIViewController {
         alertController.addAction(yesAlertAction)
         present(alertController, animated: true)
         
+    }
+}
+
+//MARK: Private help methods
+private extension ContactInfoViewController{
+     func presentContact(){
+        firstNameLabel.text = contact?.firstName
+        lastNameLabel.text = contact?.lastName
+        phoneLabel.text = contact?.phoneNumber
+        emailLabel.text = contact?.email
+        photoImageView.image = contact?.imagePhoto ?? ContactDefault.defaultImage
+    }
+    
+    @objc func editButtonPressed(){
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "NewContactViewController") as? NewContactViewController{
+            controller.update = {[unowned self] updatedContact in
+                self.contact = updatedContact
+                self.update?(updatedContact)
+                self.presentContact()
+            }
+            controller.delete = {[unowned self] in
+                self.delete?()
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+            controller.contactBeforeUpdate = contact
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
 }
