@@ -181,6 +181,7 @@ private extension MainTableViewController{
             navigationController?.pushViewController(controller, animated: true)
         }
     }
+    
     func updateContact(updatedContact: Contact, indexPath: IndexPath){
         let name = updatedContact.contactName
         let updatedContactsKey = String(name.prefix(1))

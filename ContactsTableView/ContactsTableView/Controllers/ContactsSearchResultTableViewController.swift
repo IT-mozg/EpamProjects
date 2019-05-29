@@ -48,6 +48,7 @@ class ContactsSearchResultTableViewController: UITableViewController {
         return delegate?.editActionsForRow(tableView, indexPath)
     }
 }
+
 private extension ContactsSearchResultTableViewController{
      func findMostSimilarString(contact: Contact) -> NSAttributedString?{
         let searchItems = searchString.splitString(separator: " ")
