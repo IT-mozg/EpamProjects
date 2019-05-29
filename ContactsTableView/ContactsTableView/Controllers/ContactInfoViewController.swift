@@ -67,7 +67,7 @@ private extension ContactInfoViewController{
                 self.delete?()
                 self.navigationController?.popToRootViewController(animated: true)
             }
-            controller.editingContact = contact
+            controller.contactBeforeUpdate = contact
             self.navigationController?.pushViewController(controller, animated: true)
         }
     }

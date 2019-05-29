@@ -12,11 +12,12 @@ typealias UpdateClosure = (_ contact: Contact) -> ()
 class NewContactViewController: UIViewController {
     weak var delegate: NewContactViewControllerDelegate?
     
-    var editingContact: Contact?
+    var contactBeforeUpdate: Contact!
+    private var contactAfterUpdate: Contact!
+    private var imageChanges: ImageChanges = .noChanges
+    
     var update: UpdateClosure?
     var delete: (()->())?
-    
-    var contactImage: UIImage?
     
     @IBOutlet weak var photoContactImageView: UIImageView!
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -27,11 +28,16 @@ class NewContactViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        deleteButton.isHidden = editingContact == nil
+         deleteButton.isEnabled = !(contactBeforeUpdate == nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let contact = contactBeforeUpdate{
+            contactAfterUpdate = (contact.copy() as! Contact)
+        }else{
+            contactAfterUpdate = Contact(firstName: nil, lastName: nil, email: nil, phoneNumber: nil)
+        }
         setupUI()
 
     }
@@ -44,26 +50,13 @@ class NewContactViewController: UIViewController {
     }
     
     @IBAction func addNewContactButtonPressed(_ sender: UIBarButtonItem) {
-    
-        guard let firstName = firstNameTextField.text else { return }
-        guard let lastName = lastNameTextField.text else { return  }
-        guard let phone = phoneTextField.text else { return  }
-        guard let email = emailTextField.text else { return  }
         if let updateClosure = self.update{
-            let updated = editingContact!.copy() as! Contact
-            updated.firstName = firstName
-            updated.lastName = lastName
-            updated.email = email
-            updated.phoneNumber = phone
-            updated.saveImage()
-            updateClosure(updated)
+            updateClosure(contactAfterUpdate)
         }
         if delegate != nil{
-            let newItem = Contact(firstName: firstName, lastName: lastName, email: email, phoneNumber: phone)
-            newItem.saveImage()
-            delegate!.addNewContact(newItem: newItem)
-
+            delegate!.addNewContact(newItem: contactAfterUpdate)
         }
+        contactAfterUpdate.saveImage()
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
     }
@@ -73,13 +66,13 @@ class NewContactViewController: UIViewController {
     }
     
     @IBAction func pickImageButtonPressed(_ sender: UIButton) {
-        if editingContact == nil && contactImage == nil{
+        if contactAfterUpdate.imagePhoto == nil{
             changeImage()
         }
         else{
             let alertController = UIAlertController(title: "Edit image", message: nil, preferredStyle: .actionSheet)
             let removeAction = UIAlertAction(title: "Remove", style: .default) { (action) in
-                self.contactImage = nil
+                self.assingImage(nil)
             }
             let changeAction = UIAlertAction(title: "Change", style: .default) { (action) in
                 alertController.dismiss(animated: true, completion: nil)
@@ -94,34 +87,42 @@ class NewContactViewController: UIViewController {
     }
     
     @IBAction func validateTextFields(){
-        var firstNameChecker = false
-        var lastNameChecker = true
-        var phoneChecker = false
-        var emailChecker = true
-        if !firstNameTextField.text!.isEmpty{
-            firstNameChecker = isValidFirstNameTextField()
-        }
-        if !lastNameTextField.text!.isEmpty{
-            lastNameChecker = isValidLastNameTextField()
-        }
-        if !phoneTextField.text!.isEmpty{
-            phoneChecker = isValidPhoneTextField()
-        }
-        if !emailTextField.text!.isEmpty{
-            emailChecker = isValidEmailTextField()
-        }
-        if firstNameChecker && lastNameChecker && phoneChecker && emailChecker{
-            navigationItem.rightBarButtonItem?.isEnabled = true
-        }else{
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
+        checkValidation()
     }
 }
 
 // MARK: private funcs
 private extension NewContactViewController{
+    private func checkValidation(){
+        var isValid = isValidFirstNameTextField()
+        if isValid{
+            isValid = isValidLastNameTextField()
+            if isValid{
+                isValid = isValidEmailTextField()
+                if isValid{
+                    isValid = isValidPhoneTextField()
+                    if isValid{
+                        isValid = !isAllTextFieldsEmpty()
+                    }
+                }
+            }
+        }
+        navigationItem.rightBarButtonItem?.isEnabled = isValid && checkContactChanges()
+    }
+    
+    private func checkContactChanges() -> Bool{
+        var isImageChanged = false
+        switch self.imageChanges {
+        case .noChanges:
+            isImageChanged = false
+        default:
+            isImageChanged = true
+        }
+        return isImageChanged || !contactAfterUpdate.isEqual(contactBeforeUpdate)
+    }
+    
     private func setupUI(){
-        if let contact = editingContact{
+        if let contact = contactAfterUpdate{
             navigationItem.title = "Editing"
             navigationItem.rightBarButtonItem?.title = "Save"
             firstNameTextField.text = contact.firstName
@@ -129,11 +130,10 @@ private extension NewContactViewController{
             phoneTextField.text = contact.phoneNumber
             emailTextField.text = contact.email
             photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
-            contactImage = contact.imagePhoto
         }else{
             navigationItem.rightBarButtonItem?.title = "Add"
-            navigationItem.rightBarButtonItem?.isEnabled = false
         }
+        navigationItem.rightBarButtonItem?.isEnabled = false
     }
 }
 // MARK: Image picker
@@ -157,11 +157,13 @@ extension NewContactViewController: UIImagePickerControllerDelegate{
         #endif
     }
     
-    private func assingImage(_ image: UIImage){
-        contactImage = image
-        photoContactImageView.image = contactImage
+    private func assingImage(_ image: UIImage?){
+        contactAfterUpdate.imagePhoto = image
+        imageChanges = .changed
+        photoContactImageView.image = image ?? ContactDefault.defaultCameraImage
         photoContactImageView.contentMode = .scaleAspectFill
         photoContactImageView.clipsToBounds = true
+        checkValidation()
     }
     
     private func chooseImagePickerAction(source: UIImagePickerController.SourceType){
@@ -211,25 +213,45 @@ extension NewContactViewController: UITextFieldDelegate{
     
     private func isValidFirstNameTextField() -> Bool{
         return isValidTextField(textField: firstNameTextField){ (text) -> (Bool) in
+            self.contactAfterUpdate.firstName = text
+            if text.isEmpty {
+                return true
+            }
             return Validation.isValidName(text)
         }
     }
     
     private func isValidLastNameTextField() -> Bool{
         return isValidTextField(textField: lastNameTextField){ (text) -> (Bool) in
+            self.contactAfterUpdate.lastName = text
+            if text.isEmpty {
+                return true
+            }
             return Validation.isValidName(text)
         }
     }
     private func isValidEmailTextField() -> Bool{
         return isValidTextField(textField: emailTextField){ (text) -> (Bool) in
+            self.contactAfterUpdate.email = text
+            if text.isEmpty {
+                return true
+            }
             return Validation.isValidEmail(text)
         }
     }
     
     private func isValidPhoneTextField() -> Bool{
         return isValidTextField(textField: phoneTextField){ (text) -> (Bool) in
+            self.contactAfterUpdate.phoneNumber = text
+            if text.isEmpty {
+                return true
+            }
             return Validation.isValidPhoneNumber(text)
         }
+    }
+    
+    private func isAllTextFieldsEmpty() -> Bool{
+        return firstNameTextField.text!.isEmpty && lastNameTextField.text!.isEmpty && phoneTextField.text!.isEmpty && emailTextField.text!.isEmpty
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+enum ImageChanges{
+    case noChanges
+    case changed
+}

@@ -10,17 +10,27 @@ import Foundation
 
 class Contact: NSObject, NSCoding{
     private(set) var contactId: String
-    var firstName: String
+    var firstName: String?
     var lastName: String?
     var email: String?
-    var phoneNumber: String
+    var phoneNumber: String?
     var imagePhoto: UIImage?
     
     private var imageName: String{
         return "image-\(contactId)"
     }
     
-    init(firstName: String, lastName: String?, email: String?, phoneNumber: String){
+    var contactName: String{
+        if firstName != nil && !firstName!.isEmpty{
+            return firstName!
+        }
+        if lastName != nil && !lastName!.isEmpty{
+            return lastName!
+        }
+        return "~"
+    }
+    
+    init(firstName: String?, lastName: String?, email: String?, phoneNumber: String?){
         contactId = UUID().uuidString
         self.firstName = firstName
         self.lastName = lastName
@@ -28,7 +38,7 @@ class Contact: NSObject, NSCoding{
         self.phoneNumber = phoneNumber
     }
     
-    convenience init(id: String, firstName: String, lastName: String?, email: String?, phoneNumber: String){
+    convenience init(id: String, firstName: String?, lastName: String?, email: String?, phoneNumber: String?){
         self.init(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
         contactId = id
         self.imagePhoto = DataManager.getImage(with: imageName, and: ContactDefault.imageExtension)
@@ -36,10 +46,10 @@ class Contact: NSObject, NSCoding{
     
     required convenience init?(coder aDecoder: NSCoder) {
         let id = aDecoder.decodeObject(forKey: "contactId") as! String
-        let firstName = aDecoder.decodeObject(forKey: "firstName") as! String
+        let firstName = aDecoder.decodeObject(forKey: "firstName") as? String
         let lastName = aDecoder.decodeObject(forKey: "lastName") as? String
         let email = aDecoder.decodeObject(forKey: "email") as? String
-        let phoneNumber = aDecoder.decodeObject(forKey: "phoneNumber") as! String
+        let phoneNumber = aDecoder.decodeObject(forKey: "phoneNumber") as? String
         
         self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber)
         self.imagePhoto = DataManager.getImage(with: imageName, and: ContactDefault.imageExtension)

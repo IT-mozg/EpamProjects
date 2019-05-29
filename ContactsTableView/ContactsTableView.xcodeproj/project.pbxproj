@@ -24,6 +24,7 @@
 		F5A8A52E228D8CF600D12B94 /* SearchStringHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A52D228D8CF600D12B94 /* SearchStringHelper.swift */; };
 		F5A8A530228EB90A00D12B94 /* ContactsDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A52F228EB90900D12B94 /* ContactsDefault.swift */; };
 		F5A8A6F1229BDFC900FAD720 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A8A6F0229BDFC800FAD720 /* DataManager.swift */; };
+		F5AE170D229E8A64006A1C96 /* ImageChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AE170C229E8A64006A1C96 /* ImageChanges.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		F5A8A52D228D8CF600D12B94 /* SearchStringHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStringHelper.swift; sourceTree = "<group>"; };
 		F5A8A52F228EB90900D12B94 /* ContactsDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsDefault.swift; sourceTree = "<group>"; };
 		F5A8A6F0229BDFC800FAD720 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		F5AE170C229E8A64006A1C96 /* ImageChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageChanges.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 			children = (
 				F5236CDA22806B7D00FF98E9 /* Contact.swift */,
 				F5A8A52F228EB90900D12B94 /* ContactsDefault.swift */,
+				F5AE170C229E8A64006A1C96 /* ImageChanges.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -221,6 +224,7 @@
 				F5236CC52280666700FF98E9 /* AppDelegate.swift in Sources */,
 				F5236CD922806AA700FF98E9 /* MainContactTableViewCell.swift in Sources */,
 				F5236CDF2281780C00FF98E9 /* ContactInfoViewController.swift in Sources */,
+				F5AE170D229E8A64006A1C96 /* ImageChanges.swift in Sources */,
 				F5A8A52E228D8CF600D12B94 /* SearchStringHelper.swift in Sources */,
 				F58DA0D8228967A900B511FF /* ContactActionHelper.swift in Sources */,
 				F5236CE12282052900FF98E9 /* Validation.swift in Sources */,

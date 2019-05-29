@@ -53,10 +53,10 @@ private extension ContactsSearchResultTableViewController{
         let searchItems = searchString.splitString(separator: " ")
         let findMatches = SearchStringHelper.findMatches
         if findMatches(searchItems, contact.phoneNumber){
-            return replaceMatches(searchItems, contact.phoneNumber)
+            return replaceMatches(searchItems, contact.phoneNumber!)
         }
         if findMatches(searchItems, contact.firstName){
-            return replaceMatches(searchItems, contact.firstName)
+            return replaceMatches(searchItems, contact.firstName!)
         }
         if findMatches(searchItems, contact.lastName){
             return replaceMatches(searchItems, contact.lastName!)
@@ -71,8 +71,8 @@ private extension ContactsSearchResultTableViewController{
         let attribute = NSMutableAttributedString(string: currentString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         for currentSearchString in searchStringItems{
             if currentString.lowercased().contains(currentSearchString){
-                let rangeString = attribute.string.lowercased().range(of: currentSearchString)
-                let range = NSRange(rangeString!, in: attribute.string)
+                let rangeString = attribute.string.lowercased().range(of: currentSearchString)!
+                let range = NSRange(rangeString, in: attribute.string)
                 attribute.setAttributes([.foregroundColor: UIColor.black], range: range)
             }
         }
