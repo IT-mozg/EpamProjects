@@ -17,9 +17,31 @@ import Foundation
 
     var phoneNumber: String?
     var birthday: Date?
+    var birthdayString: String?{
+        set{
+            guard let newValue = newValue else {
+                return
+            }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = ContactDefault.dateFormat
+            birthday = dateFormatter.date(from: newValue)
+        }
+        get{
+            guard let birthday = birthday else {
+                return nil
+            }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = ContactDefault.dateFormat
+            return dateFormatter.string(from: birthday)
+        }
+    }
     var height: Int?
+    var heightString: String?{
+        guard let height = height else {return nil}
+        return String(height)
+    }
     var notes: String?
-    var driverLicense: String?
+    var driverLicense: String? 
 
     var imagePhoto: UIImage?
     
@@ -35,6 +57,7 @@ import Foundation
         }
         return "~"
     }
+    
     
     init(firstName: String?, lastName: String?, email: String?, phoneNumber: String?, birthday: Date?, height: Int?, notes: String?, driverLicense: String?){
         contactId = UUID().uuidString
@@ -67,21 +90,19 @@ import Foundation
         let driverLicense = aDecoder.decodeObject(forKey: "driverLicense") as? String
         
         self.init(id: id, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
-
         self.imagePhoto = DataManager.getImage(with: imageName, and: ContactDefault.imageExtension)
     }
     
     func encode(with aCoder: NSCoder) {
+        aCoder.encode(height, forKey: "height")
         aCoder.encode(contactId, forKey: "contactId")
         aCoder.encode(firstName, forKey: "firstName")
         aCoder.encode(lastName, forKey: "lastName")
         aCoder.encode(email, forKey: "email")
         aCoder.encode(phoneNumber, forKey: "phoneNumber")
         aCoder.encode(birthday, forKey: "birthday")
-        aCoder.encode(height, forKey: "height")
         aCoder.encode(notes, forKey: "notes")
         aCoder.encode(driverLicense, forKey: "driverLicense")
-
     }
     
     func saveImage(){

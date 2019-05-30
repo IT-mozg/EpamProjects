@@ -30,10 +30,10 @@
 "DELETE_ACTION_TITLE" = "Видалити";
 "SEARCH_PLACEHOLDER_TEXT" = "Пошук контакту";
 
-"FIRSTNAME_TITLE" = "Імя *:";
+"FIRSTNAME_TITLE" = "Імя:";
 "LASTNAME_TITLE" = "Прізвище:";
 "EMAIL_TITLE" = "Email:";
-"PHONE_TITLE" = "Телефон *:";
+"PHONE_TITLE" = "Телефон:";
 "BIRTHDAY_TITLE" = "Дата народження:";
 "HEIGHT_TITLE" = "Зріст:";
 "EXIST_DRIVER_LICENSE_TITLE" = "Маю водійські права:";

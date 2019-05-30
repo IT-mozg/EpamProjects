@@ -13,11 +13,13 @@ class ContactFieldTableViewCell: UITableViewCell {
     @IBOutlet weak var fieldNameLabel: UILabel!
     @IBOutlet weak var contactPropertyTextField: UITextField!
     
-    var updateClosure:((String, ContactFieldTableViewCell)->())?
+    var updateClosure:((Any?, ContactFieldTableViewCell)->())?
     
     private var meter = 0
     private var decimeter = 0
     private var santimeter = 0
+    
+    private let heightMeter = [[0,1,2,3], [0,1,2,3,4,5,6,7,8,9]]
     
     private var datePicker: UIDatePicker!
     private var heightPickerView: UIPickerView!
@@ -31,11 +33,10 @@ class ContactFieldTableViewCell: UITableViewCell {
         }
     }
     @IBAction func editingChanged(_ sender: UITextField) {
-        updateClosure?(sender.text!, self)
-        
         if let dataType = presentation.dataType{
             switch dataType{
             case .text:
+                updateClosure?(sender.text!, self)
                 presentation.updateDataType(.text(sender.text))
             case .date:
                 presentation.updateDataType(.date(datePicker!.date))
@@ -51,7 +52,7 @@ class ContactFieldTableViewCell: UITableViewCell {
 
 //MARK: Private funcs
 private extension ContactFieldTableViewCell{
-    private func setupComponents(with presentation: Presentation?){
+    func setupComponents(with presentation: Presentation?){
         guard let presentation = presentation else {
             return
         }
@@ -68,7 +69,7 @@ private extension ContactFieldTableViewCell{
         setupDataType(presentation: presentation)
     }
     
-    private func setupDataType(presentation: Presentation){
+    func setupDataType(presentation: Presentation){
         if let dataType = presentation.dataType{
             switch dataType{
             case .text(let text):
@@ -83,10 +84,15 @@ private extension ContactFieldTableViewCell{
                     datePicker.date = date
                 }
             case .height(let height):
+                
                 contactPropertyTextField.textAlignment = .center
                 setupHeightPicker()
                 if var height = height{
-                    contactPropertyTextField.text = String(height)
+                    if height == 0 {
+                        contactPropertyTextField.text = ""
+                    }else{
+                        contactPropertyTextField.text = String(height)
+                    }
                     heightPickerView.selectRow(height % 10, inComponent: 2, animated: false)
                     height /= 10
                     heightPickerView.selectRow(height % 10, inComponent: 1, animated: false)
@@ -98,7 +104,7 @@ private extension ContactFieldTableViewCell{
         }
     }
     
-    private func setupHeightPicker(){
+    func setupHeightPicker(){
         createToolbar()
         heightPickerView = UIPickerView()
         heightPickerView.delegate = self
@@ -106,7 +112,7 @@ private extension ContactFieldTableViewCell{
         contactPropertyTextField.inputView = heightPickerView
     }
     
-    private func setupDatePicker(){
+    func setupDatePicker(){
         createToolbar()
         datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
@@ -116,7 +122,7 @@ private extension ContactFieldTableViewCell{
         datePicker.addTarget(self, action: #selector(changeDate(datePicker:)), for: .valueChanged)
     }
     
-    private func createToolbar(){
+    func createToolbar(){
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
         
@@ -127,29 +133,35 @@ private extension ContactFieldTableViewCell{
         contactPropertyTextField.inputAccessoryView = toolbar
     }
     
-    @objc private func doneToolbarButtonPressed(){
+    @objc func doneToolbarButtonPressed(){
         contactPropertyTextField.resignFirstResponder()
     }
     
-    @objc private func changeDate(datePicker: UIDatePicker){
+    @objc func changeDate(datePicker: UIDatePicker){
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = ContactDefault.dateFormat
         contactPropertyTextField.text = dateFormatter.string(from: datePicker.date)
-        updateClosure?(contactPropertyTextField.text!, self)
+        updateClosure?(datePicker.date, self)
     }
 }
 
 extension ContactFieldTableViewCell: UIPickerViewDataSource{
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 3
+        return heightMeter.count + 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 10
+        if component == 2 {
+            return heightMeter[component - 1].count
+        }
+        return heightMeter[component].count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return String(row)
+        if component == 2 {
+            return String(heightMeter[component - 1][row])
+        }
+        return String(heightMeter[component][row])
     }
 }
 
@@ -157,16 +169,16 @@ extension ContactFieldTableViewCell: UIPickerViewDelegate{
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch component {
         case 0:
-            meter = row
+            meter = heightMeter[component][row]
         case 1:
-            decimeter = row
+            decimeter = heightMeter[component][row]
         case 2:
-            santimeter = row
+            santimeter = heightMeter[component-1][row]
         default:
             break
         }
         contactPropertyTextField.text = "\(meter)\(decimeter)\(santimeter)"
-        updateClosure?(contactPropertyTextField.text!, self)
+        updateClosure?(Int(contactPropertyTextField.text!) ?? 0, self)
     }
 }
 

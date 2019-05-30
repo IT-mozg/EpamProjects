@@ -30,10 +30,10 @@
 "EDITING_NAVIGATION_TITLE" = "Editing";
 "SEARCH_PLACEHOLDER_TEXT" = "Search contact";
 
-"FIRSTNAME_TITLE" = "First name *:";
+"FIRSTNAME_TITLE" = "First name:";
 "LASTNAME_TITLE" = "Last name:";
 "EMAIL_TITLE" = "Email:";
-"PHONE_TITLE" = "Phone *:";
+"PHONE_TITLE" = "Phone:";
 "BIRTHDAY_TITLE" = "Birthday:";
 "HEIGHT_TITLE" = "Height:";
 "EXIST_DRIVER_LICENSE_TITLE" = "Exist driver license:";

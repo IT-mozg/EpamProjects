@@ -74,7 +74,7 @@ class NewContactViewController: UITableViewController {
 //MARK: Private funcs
 private extension NewContactViewController{
     func checkValidation(){
-        if checkContactChanges() && isValidFirstName() && isValidPhoneNumber() && isValidEmail() && isValidLastName() {
+        if checkContactChanges() && isValidFirstName() && isValidPhoneNumber() && isValidEmail() && isValidLastName() && !contactAfterUpdate.isAllFieldsEmpty{
             navigationItem.rightBarButtonItem?.isEnabled = true
         }else{
             navigationItem.rightBarButtonItem?.isEnabled = false
@@ -161,7 +161,7 @@ private extension NewContactViewController{
     }
     
     //MARK: Update cells
-    func updateTextFields(text: String, cell: ContactFieldTableViewCell){
+    func updateTextFields(text: Any?, cell: ContactFieldTableViewCell){
         guard let indexPath = tableView.indexPath(for: cell) else{return}
         contactAfterUpdate.setValue(text, forKey: cell.presentation.cellType.rawValue)
         cells[indexPath.row] = cell.presentation
@@ -172,6 +172,10 @@ private extension NewContactViewController{
             return validation()
         })
         checkValidation()
+    }
+    
+    func updateHeightField(height: Int, cell: ContactFieldTableViewCell){
+        contactAfterUpdate.setValue(height, forKey: cell.presentation.cellType.rawValue)
     }
     
     func updateDriverLicenseSwitch(isOn: Bool, cell: ContactSwitchTableViewCell){
@@ -340,6 +344,10 @@ private extension Contact{
         return Presentation(keyboardType: .default, placeholder: NSLocalizedString("NOTES_PLACEHOLDER", comment: ""), title: NSLocalizedString("NOTES_TITLE", comment: ""), dataType: .text(notes), cellType: .notes, validation: nil)
     }
     
+    var isAllFieldsEmpty: Bool{
+        return email?.isEmpty ?? true && firstName?.isEmpty ?? true && lastName?.isEmpty ?? true && phoneNumber?.isEmpty ?? true
+    }
+    
 }
 
 //MARK: TableViewDataSource
@@ -368,6 +376,9 @@ extension NewContactViewController{
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.textFieldCellId) as! ContactFieldTableViewCell
             cell.presentation = present
+//            cell.updateHeight = {[weak self] text, cell in
+//                self?.updateHeightField(height: text, cell: cell)
+//            }
             cell.updateClosure = {[weak self] text, cell in
                 self?.updateTextFields(text: text, cell: cell)
             }

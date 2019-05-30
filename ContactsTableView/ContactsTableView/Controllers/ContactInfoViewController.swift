@@ -13,7 +13,6 @@ class ContactInfoViewController: UIViewController {
     var contact: Contact!
     var update: ((_ contact: Contact)->())?
     var delete: (()->())?
-    private var noText: String = NSLocalizedString("NO_LABLE_TEXT", comment: "No")
     
     //MARK: IBOutlets
     @IBOutlet weak var firstNameLabel: UILabel!
@@ -43,13 +42,15 @@ class ContactInfoViewController: UIViewController {
 //MARK: Private help methods
 private extension ContactInfoViewController{
     func presentContact(){
-        firstNameLabel.text = contact.firstName
-        lastNameLabel.text = contact.lastName ?? noText
-        phoneLabel.text = contact.phoneNumber
-        emailLabel.text = contact.email ?? noText
+        firstNameLabel.text = contact.firstName ?? NSLocalizedString("FIRSTNAME_TITLE", comment: "FIRSTNAME_TITLE")
+        lastNameLabel.text = contact.lastName ?? NSLocalizedString("LASTNAME_TITLE", comment: "LASTNAME_TITLE")
+        phoneLabel.text = contact.phoneNumber ?? NSLocalizedString("PHONE_TITLE", comment: "PHONE_TITLE")
+        emailLabel.text = contact.email ?? NSLocalizedString("EMAIL_TITLE", comment: "EMAIL_TITLE")
         photoImageView.image = contact.imagePhoto ?? ContactDefault.defaultImage
-        driverLicenseLabel.text = contact.driverLicense ?? noText
-        nodesLabel.text = contact.notes ?? noText
+        driverLicenseLabel.text = contact.driverLicense ?? NSLocalizedString("DRIVER_LICENSE_TITLE", comment: "DRIVER_LICENSE_TITLE")
+        nodesLabel.text = contact.notes ?? NSLocalizedString("NOTES_TITLE", comment: "NOTES_TITLE")
+        birthdayLabel.text = contact.birthdayString ?? NSLocalizedString("BIRTHDAY_TITLE", comment: "BIRTHDAY_TITLE")
+        heightLabel.text = contact.heightString ?? NSLocalizedString("HEIGHT_TITLE", comment: "HEIGHT_TITLE")
     }
     
     @objc func editButtonPressed(){
