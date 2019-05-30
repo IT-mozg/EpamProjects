@@ -16,6 +16,7 @@ class ContactActionHelper{
             if let deleteClosure = delete{
                 deleteClosure()
                 viewController.dismiss(animated: true)
+                viewController.navigationController?.popViewController(animated: true)
             }
         }
         alertController.addAction(noAlertAction)

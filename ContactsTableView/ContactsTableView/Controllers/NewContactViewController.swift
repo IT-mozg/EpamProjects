@@ -174,9 +174,9 @@ private extension NewContactViewController{
         checkValidation()
     }
     
-    func updateHeightField(height: Int, cell: ContactFieldTableViewCell){
-        contactAfterUpdate.setValue(height, forKey: cell.presentation.cellType.rawValue)
-    }
+//    func updateHeightField(height: Int, cell: ContactFieldTableViewCell){
+//        contactAfterUpdate.setValue(height, forKey: cell.presentation.cellType.rawValue)
+//    }
     
     func updateDriverLicenseSwitch(isOn: Bool, cell: ContactSwitchTableViewCell){
         guard let indexPath = tableView.indexPath(for: cell) else{return}
@@ -376,9 +376,6 @@ extension NewContactViewController{
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.textFieldCellId) as! ContactFieldTableViewCell
             cell.presentation = present
-//            cell.updateHeight = {[weak self] text, cell in
-//                self?.updateHeightField(height: text, cell: cell)
-//            }
             cell.updateClosure = {[weak self] text, cell in
                 self?.updateTextFields(text: text, cell: cell)
             }

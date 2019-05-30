@@ -14,6 +14,7 @@ class ContactFieldTableViewCell: UITableViewCell {
     @IBOutlet weak var contactPropertyTextField: UITextField!
     
     var updateClosure:((Any?, ContactFieldTableViewCell)->())?
+    //sdfvar updateHeight:((Int, ContactFieldTableViewCell)->())?
     
     private var meter = 0
     private var decimeter = 0
@@ -41,7 +42,7 @@ class ContactFieldTableViewCell: UITableViewCell {
             case .date:
                 presentation.updateDataType(.date(datePicker!.date))
             case .height:
-                let height = Int(sender.text!)
+                let height = NSNumber(pointer: sender.text!)
                 presentation.updateDataType(.height(height))
             case .image(_):
                 break
@@ -64,7 +65,7 @@ private extension ContactFieldTableViewCell{
         case .notes:
             contactPropertyTextField.isEnabled = false
         default:
-            break
+            contactPropertyTextField.isEnabled = true
         }
         setupDataType(presentation: presentation)
     }
@@ -87,7 +88,7 @@ private extension ContactFieldTableViewCell{
                 
                 contactPropertyTextField.textAlignment = .center
                 setupHeightPicker()
-                if var height = height{
+                if var height = height as? Int{
                     if height == 0 {
                         contactPropertyTextField.text = ""
                     }else{
@@ -178,7 +179,7 @@ extension ContactFieldTableViewCell: UIPickerViewDelegate{
             break
         }
         contactPropertyTextField.text = "\(meter)\(decimeter)\(santimeter)"
-        updateClosure?(Int(contactPropertyTextField.text!) ?? 0, self)
+        updateClosure?(Int(contactPropertyTextField.text!), self)
     }
 }
 

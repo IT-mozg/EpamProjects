@@ -35,10 +35,10 @@ import Foundation
             return dateFormatter.string(from: birthday)
         }
     }
-    var height: Int?
+    var height: NSNumber?
     var heightString: String?{
         guard let height = height else {return nil}
-        return String(height)
+        return height.stringValue
     }
     var notes: String?
     var driverLicense: String? 
@@ -59,7 +59,7 @@ import Foundation
     }
     
     
-    init(firstName: String?, lastName: String?, email: String?, phoneNumber: String?, birthday: Date?, height: Int?, notes: String?, driverLicense: String?){
+    init(firstName: String?, lastName: String?, email: String?, phoneNumber: String?, birthday: Date?, height: NSNumber?, notes: String?, driverLicense: String?){
         contactId = UUID().uuidString
         self.firstName = firstName
         self.lastName = lastName
@@ -71,7 +71,7 @@ import Foundation
         self.driverLicense = driverLicense
     }
     
-    convenience init(id: String, firstName: String?, lastName: String?, email: String?, phoneNumber: String?, birthday: Date?, height: Int?, notes: String?, driverLicense: String?){
+    convenience init(id: String, firstName: String?, lastName: String?, email: String?, phoneNumber: String?, birthday: Date?, height: NSNumber?, notes: String?, driverLicense: String?){
         self.init(firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, birthday: birthday, height: height, notes: notes, driverLicense: driverLicense)
         contactId = id
         self.imagePhoto = DataManager.getImage(with: imageName, and: ContactDefault.imageExtension)
@@ -85,7 +85,7 @@ import Foundation
         let email = aDecoder.decodeObject(forKey: "email") as? String
         let phoneNumber = aDecoder.decodeObject(forKey: "phoneNumber") as? String
         let birthday = aDecoder.decodeObject(forKey: "birthday") as? Date
-        let height = aDecoder.decodeObject(forKey: "height") as? Int
+        let height = aDecoder.decodeObject(forKey: "height") as? NSNumber
         let notes = aDecoder.decodeObject(forKey: "notes") as? String
         let driverLicense = aDecoder.decodeObject(forKey: "driverLicense") as? String
         

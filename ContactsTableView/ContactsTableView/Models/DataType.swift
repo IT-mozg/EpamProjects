@@ -12,5 +12,5 @@ enum DataType{
     case text(String?)
     case image(UIImage?)
     case date(Date?)
-    case height(Int?)
+    case height(NSNumber?)
 }
