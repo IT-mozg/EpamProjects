@@ -15,7 +15,7 @@ class ContactActionHelper{
         let yesAlertAction = UIAlertAction(title: NSLocalizedString("YES_ACTION_BUTTON_TEXT", comment: "Yes"), style: .default) { (action) in
             if let deleteClosure = delete{
                 deleteClosure()
-                viewController.dismiss(animated: true)
+                //viewController.dismiss(animated: true)
                 viewController.navigationController?.popViewController(animated: true)
             }
         }
