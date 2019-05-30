@@ -66,7 +66,6 @@ private extension ContactsSearchResultTableViewController{
 //MARK: TableViewControllerDataSource
 extension ContactsSearchResultTableViewController{
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        backgroundView.isHidden = !filteredContacts.isEmpty
         return filteredContacts.count
     }
     

@@ -14,7 +14,7 @@ class MainTableViewController: UITableViewController {
     private var contactDictionary = [String: [Contact]](){
         didSet{
             DataManager.updateUserDefaults(with: contactDictionary)
-            checkNumberOfContactsForSearchBar()
+            hideShowSearchBar()
             checkNumberOfRows()
         }
     }
@@ -51,7 +51,7 @@ class MainTableViewController: UITableViewController {
         contactDictionary = DataManager.unarchiveContacts()
         reloadSectionTitles()
         checkNumberOfRows()
-        checkNumberOfContactsForSearchBar()
+        hideShowSearchBar()
     }
     
     // MARK: IBActions
@@ -68,7 +68,7 @@ class MainTableViewController: UITableViewController {
 //MARK: private help methods
 private extension MainTableViewController{
     
-    func checkNumberOfContactsForSearchBar(){
+    func hideShowSearchBar(){
         contactSearchController.searchBar.isHidden = contactDictionary.values.flatMap({$0}).count <= ContactDefault.contactSearchBarShowAt
     }
     
