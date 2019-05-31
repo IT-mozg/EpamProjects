@@ -13,13 +13,13 @@ class ViewController: UIViewController {
     private var dataArrayCells = [[String]]()
     private var progressCounter: Float = 0.0{
         didSet {
-            print(progressCounter)
             DispatchQueue.main.async {
+                print(self.progressCounter)
                 self.progressView.setProgress(self.progressCounter, animated: true)
-            }
-            if progressCounter >= 0.98{
-                self.refreshBarButtonItem.isEnabled = true
-                 self.progressView.setProgress(0, animated: true)
+                if self.progressCounter > 0.99{
+                    self.refreshBarButtonItem.isEnabled = true
+                    self.progressView.setProgress(0, animated: true)
+                }
             }
         }
     }
@@ -52,32 +52,33 @@ class ViewController: UIViewController {
         refreshBarButtonItem.isEnabled = false
         sortAllArrays()
     }
-    
-    private func setupCellData(){
+}
+private extension ViewController{
+    func setupCellData(){
         for alg in algorithms{
             dataArrayCells.append(alg.getDefaultStringResult())
         }
     }
 
-    private func sortAllArrays(){
+    func sortAllArrays(){
         var result = 0.0
         let algorithms = self.algorithms
         let queue = DispatchQueue.global(qos: .utility)
         for alg in 0..<algorithms.count{
             queue.async {
                 for array in 0..<algorithms[alg].arraysToSort.count{
-                        result = algorithms[alg].sortType.getAverageTimeOfSort(array: algorithms[alg].arraysToSort[array].resultArray, times: 50)
-                        self.dataArrayCells[alg][array] = "\(algorithms[alg].arraysToSort[array].arrayType) - \(algorithms[alg].arraysToSort[array].count.rawValue): \(NSString(format: "%.5f",  -result))"
+                    result = algorithms[alg].sortType.getAverageTimeOfSort(array: algorithms[alg].arraysToSort[array].resultArray, times: 50)
+                    self.dataArrayCells[alg][array] = "\(algorithms[alg].arraysToSort[array].arrayType) - \(algorithms[alg].arraysToSort[array].count.rawValue): \(NSString(format: "%.5f",  -result))"
+                    DispatchQueue.main.sync {
                         self.progressCounter += self.counter
-                        DispatchQueue.main.async {
-                            self.tableView.reloadRows(at: [IndexPath(item: array, section: alg)], with: .none)
-                        }
+                        self.tableView.reloadRows(at: [IndexPath(item: array, section: alg)], with: .none)
+                    }
                 }
             }
         }
     }
     
-    private func setupArrays(){
+    func setupArrays(){
         var array = [ArrayToSort]()
         array.append(ArrayToSort(arrayType: .random, count: .oneTones))
         array.append(ArrayToSort(arrayType: .random, count: .fourTones))
@@ -94,7 +95,7 @@ class ViewController: UIViewController {
         setupAlgorithm(array: array)
     }
     
-    private func setupAlgorithm(array: [ArrayToSort]){
+    func setupAlgorithm(array: [ArrayToSort]){
         algorithms.append(SortResultManager(sortType: .select, arraysToSort: array))
         algorithms.append(SortResultManager(sortType: .insert, arraysToSort: array))
         algorithms.append(SortResultManager(sortType: .shell, arraysToSort: array))
