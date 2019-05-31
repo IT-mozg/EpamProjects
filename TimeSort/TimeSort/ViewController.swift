@@ -14,9 +14,9 @@ class ViewController: UIViewController {
     private var progressCounter: Float = 0.0{
         didSet {
             DispatchQueue.main.async {
-                print(self.progressCounter)
                 self.progressView.setProgress(self.progressCounter, animated: true)
                 if self.progressCounter > 0.99{
+                    self.cancelButtonItem.isEnabled = false
                     self.refreshBarButtonItem.isEnabled = true
                     self.progressView.setProgress(0, animated: true)
                 }
@@ -31,17 +31,30 @@ class ViewController: UIViewController {
     
     private var isStarted: Bool = false
     
+    private let operationQueue = OperationQueue()
+    
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var refreshBarButtonItem: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
-
+    @IBOutlet weak var cancelButtonItem: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        cancelButtonItem.isEnabled = false
         self.progressView.setProgress(0, animated: true)
         setupArrays()
         setupCellData()
+        operationQueue.qualityOfService = .utility
     }
+    
+    @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
+        operationQueue.cancelAllOperations()
+        sender.isEnabled = false
+        refreshBarButtonItem.isEnabled = true
+    }
+    
     @IBAction func refreshBarButtonPressed(_ sender: UIBarButtonItem) {
+        cancelButtonItem.isEnabled = true
         if isStarted{
             dataArrayCells = []
             setupCellData()
@@ -63,15 +76,15 @@ private extension ViewController{
     func sortAllArrays(){
         var result = 0.0
         let algorithms = self.algorithms
-        let queue = DispatchQueue.global(qos: .utility)
         for alg in 0..<algorithms.count{
-            queue.async {
+            
                 for array in 0..<algorithms[alg].arraysToSort.count{
+                    operationQueue.addOperation {
                     result = algorithms[alg].sortType.getAverageTimeOfSort(array: algorithms[alg].arraysToSort[array].resultArray, times: 50)
                     self.dataArrayCells[alg][array] = "\(algorithms[alg].arraysToSort[array].arrayType) - \(algorithms[alg].arraysToSort[array].count.rawValue): \(NSString(format: "%.5f",  -result))"
                     DispatchQueue.main.sync {
                         self.progressCounter += self.counter
-                        self.tableView.reloadRows(at: [IndexPath(item: array, section: alg)], with: .none)
+                        self.tableView.reloadRows(at: [IndexPath(item: array, section: alg)], with: .right)
                     }
                 }
             }

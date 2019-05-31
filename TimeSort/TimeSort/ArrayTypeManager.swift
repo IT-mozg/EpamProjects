@@ -9,9 +9,9 @@
 import Foundation
 
 enum CountElementsForArray: Int{
-    case oneTones = 100
-    case fourTones = 400
-    case eightTones = 800
+    case oneTones = 1000
+    case fourTones = 4000
+    case eightTones = 8000
 }
 
 enum ArrayType: String{

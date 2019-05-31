@@ -50,16 +50,24 @@
                     <navigationItem key="navigationItem" id="MMH-dc-jte">
                         <nil key="title"/>
                         <progressView key="titleView" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" id="Ojs-pJ-3gq">
-                            <rect key="frame" x="12" y="21" width="317" height="2.5"/>
+                            <rect key="frame" x="12" y="21" width="253" height="2.5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </progressView>
-                        <barButtonItem key="rightBarButtonItem" title="Refresh" id="QpK-r0-eLo">
-                            <connections>
-                                <action selector="refreshBarButtonPressed:" destination="BYZ-38-t0r" id="sOt-8U-ctT"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Refresh" id="QpK-r0-eLo">
+                                <connections>
+                                    <action selector="refreshBarButtonPressed:" destination="BYZ-38-t0r" id="sOt-8U-ctT"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Cancel" id="IlV-1c-gei">
+                                <connections>
+                                    <action selector="cancelButtonPressed:" destination="BYZ-38-t0r" id="wMG-YR-ORh"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="cancelButtonItem" destination="IlV-1c-gei" id="IsG-vL-KJM"/>
                         <outlet property="progressView" destination="Ojs-pJ-3gq" id="S5G-nx-qe9"/>
                         <outlet property="refreshBarButtonItem" destination="QpK-r0-eLo" id="4aJ-s4-5Wj"/>
                         <outlet property="tableView" destination="hLg-bT-Nrp" id="DmB-fJ-I39"/>
