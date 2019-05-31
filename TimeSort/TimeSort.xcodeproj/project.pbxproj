@@ -34,16 +34,16 @@
 		F5A69CBE22A001B10032BE5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F5A69CC022A001B10032BE5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5A69CC622A002C40032BE5D /* Sortable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sortable.swift; sourceTree = "<group>"; };
-		F5A69CC822A005D00032BE5D /* HeapSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeapSort.swift; sourceTree = "<group>"; };
-		F5A69CCA22A0078B0032BE5D /* InsertSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertSort.swift; sourceTree = "<group>"; };
-		F5A69CCC22A007A90032BE5D /* ShellSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellSort.swift; sourceTree = "<group>"; };
-		F5A69CCE22A007B00032BE5D /* SelectSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSort.swift; sourceTree = "<group>"; };
-		F5A69CD022A007BF0032BE5D /* BubbleSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleSort.swift; sourceTree = "<group>"; };
-		F5A69CD222A009AB0032BE5D /* MergeSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeSort.swift; sourceTree = "<group>"; };
-		F5A69CD422A00B820032BE5D /* QuickSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSort.swift; sourceTree = "<group>"; };
-		F5BF5D2222A10EB30063389E /* SortTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortTypeManager.swift; sourceTree = "<group>"; };
-		F5BF5D2422A112750063389E /* ArrayTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTypeManager.swift; sourceTree = "<group>"; };
-		F5BF5D2622A123900063389E /* SortResultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortResultManager.swift; sourceTree = "<group>"; };
+		F5A69CC822A005D00032BE5D /* HeapSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HeapSort.swift; path = ../HeapSort.swift; sourceTree = "<group>"; };
+		F5A69CCA22A0078B0032BE5D /* InsertSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InsertSort.swift; path = ../InsertSort.swift; sourceTree = "<group>"; };
+		F5A69CCC22A007A90032BE5D /* ShellSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ShellSort.swift; path = ../ShellSort.swift; sourceTree = "<group>"; };
+		F5A69CCE22A007B00032BE5D /* SelectSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SelectSort.swift; path = ../SelectSort.swift; sourceTree = "<group>"; };
+		F5A69CD022A007BF0032BE5D /* BubbleSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BubbleSort.swift; path = ../BubbleSort.swift; sourceTree = "<group>"; };
+		F5A69CD222A009AB0032BE5D /* MergeSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MergeSort.swift; path = ../MergeSort.swift; sourceTree = "<group>"; };
+		F5A69CD422A00B820032BE5D /* QuickSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuickSort.swift; path = ../QuickSort.swift; sourceTree = "<group>"; };
+		F5BF5D2222A10EB30063389E /* SortTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SortTypeManager.swift; path = ../SortTypeManager.swift; sourceTree = "<group>"; };
+		F5BF5D2422A112750063389E /* ArrayTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ArrayTypeManager.swift; path = ../ArrayTypeManager.swift; sourceTree = "<group>"; };
+		F5BF5D2622A123900063389E /* SortResultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SortResultManager.swift; path = ../SortResultManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,16 +78,8 @@
 			children = (
 				F5A69CB422A001B00032BE5D /* AppDelegate.swift */,
 				F5A69CB622A001B00032BE5D /* ViewController.swift */,
-				F5BF5D2622A123900063389E /* SortResultManager.swift */,
-				F5BF5D2222A10EB30063389E /* SortTypeManager.swift */,
-				F5BF5D2422A112750063389E /* ArrayTypeManager.swift */,
-				F5A69CD422A00B820032BE5D /* QuickSort.swift */,
-				F5A69CCA22A0078B0032BE5D /* InsertSort.swift */,
-				F5A69CC822A005D00032BE5D /* HeapSort.swift */,
-				F5A69CD022A007BF0032BE5D /* BubbleSort.swift */,
-				F5A69CCE22A007B00032BE5D /* SelectSort.swift */,
-				F5A69CD222A009AB0032BE5D /* MergeSort.swift */,
-				F5A69CCC22A007A90032BE5D /* ShellSort.swift */,
+				F5BF5D2A22A1532C0063389E /* Managers */,
+				F5BF5D2922A1531E0063389E /* Model */,
 				F5A69CC622A002C40032BE5D /* Sortable.swift */,
 				F5A69CB822A001B00032BE5D /* Main.storyboard */,
 				F5A69CBB22A001B10032BE5D /* Assets.xcassets */,
@@ -95,6 +87,30 @@
 				F5A69CC022A001B10032BE5D /* Info.plist */,
 			);
 			path = TimeSort;
+			sourceTree = "<group>";
+		};
+		F5BF5D2922A1531E0063389E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F5A69CD422A00B820032BE5D /* QuickSort.swift */,
+				F5A69CCA22A0078B0032BE5D /* InsertSort.swift */,
+				F5A69CC822A005D00032BE5D /* HeapSort.swift */,
+				F5A69CD022A007BF0032BE5D /* BubbleSort.swift */,
+				F5A69CCE22A007B00032BE5D /* SelectSort.swift */,
+				F5A69CD222A009AB0032BE5D /* MergeSort.swift */,
+				F5A69CCC22A007A90032BE5D /* ShellSort.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F5BF5D2A22A1532C0063389E /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				F5BF5D2622A123900063389E /* SortResultManager.swift */,
+				F5BF5D2222A10EB30063389E /* SortTypeManager.swift */,
+				F5BF5D2422A112750063389E /* ArrayTypeManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

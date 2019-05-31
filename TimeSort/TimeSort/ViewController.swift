@@ -19,6 +19,7 @@ class ViewController: UIViewController {
             }
             if progressCounter >= 0.98{
                 self.refreshBarButtonItem.isEnabled = true
+                 self.progressView.setProgress(0, animated: true)
             }
         }
     }
@@ -28,16 +29,25 @@ class ViewController: UIViewController {
         return Float(1) / Float(algCount * numberOfArrays)
     }
     
+    private var isStarted: Bool = false
+    
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var refreshBarButtonItem: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.progressView.setProgress(0, animated: true)
         setupArrays()
         setupCellData()
     }
     @IBAction func refreshBarButtonPressed(_ sender: UIBarButtonItem) {
+        if isStarted{
+            dataArrayCells = []
+            setupCellData()
+            tableView.reloadData()
+        }
+        isStarted = true
         progressCounter = 0.0
         refreshBarButtonItem.isEnabled = false
         sortAllArrays()

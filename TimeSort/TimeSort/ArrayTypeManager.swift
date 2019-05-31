@@ -43,7 +43,7 @@ struct ArrayToSort{
         var arr: [Int] = []
         var item :Int
         for _ in 0..<count{
-            item = Int(arc4random_uniform(30) + 1)
+            item = Int(arc4random_uniform(UInt32(count)) + 1)
             arr.append(item)
         }
         return arr
