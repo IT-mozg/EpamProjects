@@ -28,7 +28,7 @@ class QuickSort: Sortable{
         var left = start
         var right = end - 1
         while (left <= right){
-            if (arr[left] < point){
+            if (arr[left] < point){ 
                 left += 1
                 continue
             }

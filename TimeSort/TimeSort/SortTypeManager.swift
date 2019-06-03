@@ -30,7 +30,7 @@ extension SortTypeManager{
         case .shell:
             return ShellSort()
         case .heap:
-            return HeapSort()
+            return Heap()
         case .merge:
             return MergeSort()
         case .quick:

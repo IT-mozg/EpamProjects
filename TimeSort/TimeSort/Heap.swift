@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HeapSort : Sortable{
+class Heap : Sortable{
     var title: String{
         get{
             return "Heap"
@@ -19,7 +19,7 @@ class HeapSort : Sortable{
         return sortHeap(array: array)
     }
     
-    func sink(array:[Int], index: Int, max: Int) -> [Int]{
+    private func sink(array:[Int], index: Int, max: Int) -> [Int]{
         var index = index
         var arr = array
         var bigInteger, leftChild, rightChild: Int

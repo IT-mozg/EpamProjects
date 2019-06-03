@@ -13,7 +13,7 @@
 		F5A69CBC22A001B10032BE5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5A69CBB22A001B10032BE5D /* Assets.xcassets */; };
 		F5A69CBF22A001B10032BE5D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5A69CBD22A001B10032BE5D /* LaunchScreen.storyboard */; };
 		F5A69CC722A002C40032BE5D /* Sortable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A69CC622A002C40032BE5D /* Sortable.swift */; };
-		F5A69CC922A005D00032BE5D /* HeapSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A69CC822A005D00032BE5D /* HeapSort.swift */; };
+		F5A69CC922A005D00032BE5D /* Heap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A69CC822A005D00032BE5D /* Heap.swift */; };
 		F5A69CCB22A0078B0032BE5D /* InsertSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A69CCA22A0078B0032BE5D /* InsertSort.swift */; };
 		F5A69CCD22A007A90032BE5D /* ShellSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A69CCC22A007A90032BE5D /* ShellSort.swift */; };
 		F5A69CCF22A007B00032BE5D /* SelectSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A69CCE22A007B00032BE5D /* SelectSort.swift */; };
@@ -34,7 +34,7 @@
 		F5A69CBE22A001B10032BE5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F5A69CC022A001B10032BE5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5A69CC622A002C40032BE5D /* Sortable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sortable.swift; sourceTree = "<group>"; };
-		F5A69CC822A005D00032BE5D /* HeapSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HeapSort.swift; path = ../HeapSort.swift; sourceTree = "<group>"; };
+		F5A69CC822A005D00032BE5D /* Heap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Heap.swift; path = ../Heap.swift; sourceTree = "<group>"; };
 		F5A69CCA22A0078B0032BE5D /* InsertSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InsertSort.swift; path = ../InsertSort.swift; sourceTree = "<group>"; };
 		F5A69CCC22A007A90032BE5D /* ShellSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ShellSort.swift; path = ../ShellSort.swift; sourceTree = "<group>"; };
 		F5A69CCE22A007B00032BE5D /* SelectSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SelectSort.swift; path = ../SelectSort.swift; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 			children = (
 				F5A69CD422A00B820032BE5D /* QuickSort.swift */,
 				F5A69CCA22A0078B0032BE5D /* InsertSort.swift */,
-				F5A69CC822A005D00032BE5D /* HeapSort.swift */,
+				F5A69CC822A005D00032BE5D /* Heap.swift */,
 				F5A69CD022A007BF0032BE5D /* BubbleSort.swift */,
 				F5A69CCE22A007B00032BE5D /* SelectSort.swift */,
 				F5A69CD222A009AB0032BE5D /* MergeSort.swift */,
@@ -195,7 +195,7 @@
 				F5A69CB522A001B00032BE5D /* AppDelegate.swift in Sources */,
 				F5A69CCF22A007B00032BE5D /* SelectSort.swift in Sources */,
 				F5A69CD322A009AB0032BE5D /* MergeSort.swift in Sources */,
-				F5A69CC922A005D00032BE5D /* HeapSort.swift in Sources */,
+				F5A69CC922A005D00032BE5D /* Heap.swift in Sources */,
 				F5A69CD122A007BF0032BE5D /* BubbleSort.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
