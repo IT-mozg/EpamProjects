@@ -78,7 +78,7 @@ private extension ViewController{
         let algorithms = self.algorithms
         for alg in 0..<algorithms.count{
             for array in 0..<algorithms[alg].arraysToSort.count{
-                    operationQueue.addOperation {
+                operationQueue.addOperation {
                     result = algorithms[alg].sortType.getAverageTimeOfSort(array: algorithms[alg].arraysToSort[array].resultArray, times: 50)
                     self.dataArrayCells[alg][array] = "\(algorithms[alg].arraysToSort[array].arrayType) - \(algorithms[alg].arraysToSort[array].count.rawValue): \(NSString(format: "%.5f",  -result))"
                     DispatchQueue.main.async {
