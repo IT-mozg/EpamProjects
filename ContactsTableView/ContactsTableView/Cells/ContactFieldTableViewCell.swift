@@ -20,7 +20,7 @@ class ContactFieldTableViewCell: UITableViewCell {
     private var decimeter = 0
     private var santimeter = 0
     
-    private let heightMeter = [[0,1,2,3], [0,1,2,3,4,5,6,7,8,9]]
+    private let heightMeter = [[0,1,2,3],[0,1,2,3,4,5,6,7,8,9],[0,1,2,3,4,5,6,7,8,9]]
     
     private var datePicker: UIDatePicker!
     private var heightPickerView: UIPickerView!
@@ -37,15 +37,14 @@ class ContactFieldTableViewCell: UITableViewCell {
         if let dataType = presentation.dataType{
             switch dataType{
             case .text:
-                updateClosure?(sender.text!, self)
+                updateClosure?(sender.text, self)
                 presentation.updateDataType(.text(sender.text))
             case .date:
-                presentation.updateDataType(.date(datePicker!.date))
+                presentation.updateDataType(.date(datePicker.date))
             case .height:
-                let height = NSNumber(pointer: sender.text!)
+                let height = NSNumber(pointer: sender.text)
                 presentation.updateDataType(.height(height))
-            case .image(_):
-                break
+            default: break
             }
         }
     }
@@ -59,53 +58,46 @@ private extension ContactFieldTableViewCell{
         }
         contactPropertyTextField.delegate = self
         fieldNameLabel.text = presentation.title
-        contactPropertyTextField.keyboardType = presentation.keyboardType!
+        contactPropertyTextField.keyboardType = presentation.keyboardType ?? .default
         contactPropertyTextField.placeholder = presentation.placeholder
-        switch presentation.cellType {
-        case .notes:
-            contactPropertyTextField.isEnabled = false
-        default:
-            contactPropertyTextField.isEnabled = true
-        }
+        contactPropertyTextField.isEnabled = presentation.isEnabledTextField
         setupDataType(presentation: presentation)
     }
     
     func setupDataType(presentation: Presentation){
-        if let dataType = presentation.dataType{
-            switch dataType{
-            case .text(let text):
-                contactPropertyTextField.text = text
-            case .date(let date):
-                setupDatePicker()
-                contactPropertyTextField.textAlignment = .center
-                if let date = date{
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = ContactDefault.dateFormat
-                    contactPropertyTextField.text = dateFormatter.string(from: date)
-                    datePicker.date = date
-                }
-            case .height(let height):
-                
-                contactPropertyTextField.textAlignment = .center
-                setupHeightPicker()
-                if var height = height as? Int{
-                    if height == 0 {
-                        contactPropertyTextField.text = ""
-                    }else{
-                        contactPropertyTextField.text = String(height)
-                    }
-                    heightPickerView.selectRow(height % 10, inComponent: 2, animated: false)
-                    height /= 10
-                    heightPickerView.selectRow(height % 10, inComponent: 1, animated: false)
-                    heightPickerView.selectRow(height/10, inComponent: 0, animated: false)
-                }
-            case .image(_):
-                break
+        guard let dataType = presentation.dataType else { return }
+        switch dataType{
+        case .text(let text):
+            contactPropertyTextField.text = text
+        case .date(let date):
+            
+            setupDatePicker()
+            if let date = date{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = ContactDefault.dateFormat
+                contactPropertyTextField.text = dateFormatter.string(from: date)
+                datePicker.date = date
             }
+        case .height(let height):
+            setupHeightPicker()
+            if var height = height as? Int{
+                if height == 0 {
+                    contactPropertyTextField.text = ""
+                }else{
+                    contactPropertyTextField.text = String(height)
+                }
+                heightPickerView.selectRow(height % 10, inComponent: 2, animated: false)
+                height /= 10
+                heightPickerView.selectRow(height % 10, inComponent: 1, animated: false)
+                heightPickerView.selectRow(height/10, inComponent: 0, animated: false)
+            }
+        case .image:
+            break
         }
     }
     
     func setupHeightPicker(){
+        guard heightPickerView == nil else { return }
         createToolbar()
         heightPickerView = UIPickerView()
         heightPickerView.delegate = self
@@ -114,6 +106,7 @@ private extension ContactFieldTableViewCell{
     }
     
     func setupDatePicker(){
+        guard datePicker == nil else { return }
         createToolbar()
         datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
@@ -148,20 +141,14 @@ private extension ContactFieldTableViewCell{
 
 extension ContactFieldTableViewCell: UIPickerViewDataSource{
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return heightMeter.count + 1
+        return heightMeter.count
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 2 {
-            return heightMeter[component - 1].count
-        }
         return heightMeter[component].count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if component == 2 {
-            return String(heightMeter[component - 1][row])
-        }
         return String(heightMeter[component][row])
     }
 }
@@ -174,12 +161,13 @@ extension ContactFieldTableViewCell: UIPickerViewDelegate{
         case 1:
             decimeter = heightMeter[component][row]
         case 2:
-            santimeter = heightMeter[component-1][row]
+            santimeter = heightMeter[component][row]
         default:
             break
         }
-        contactPropertyTextField.text = "\(meter)\(decimeter)\(santimeter)"
-        updateClosure?(Int(contactPropertyTextField.text!), self)
+        let height = meter * 100 + decimeter * 10 + santimeter
+        contactPropertyTextField.text = String(height)
+        updateClosure?(height, self)
     }
 }
 

@@ -341,7 +341,7 @@ private extension Contact{
     }
     
     var presentationForNote: Presentation{
-        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("NOTES_PLACEHOLDER", comment: ""), title: NSLocalizedString("NOTES_TITLE", comment: ""), dataType: .text(notes), cellType: .notes, validation: nil)
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("NOTES_PLACEHOLDER", comment: ""), title: NSLocalizedString("NOTES_TITLE", comment: ""), isEnabledTextField: false, dataType: .text(notes), cellType: .notes, validation: nil)
     }
     
     var isAllFieldsEmpty: Bool{
@@ -387,9 +387,9 @@ extension NewContactViewController{
         let present = cells[indexPath.row]
         switch present.cellType {
         case .imagePhoto:
-            return CGFloat(CellSetings.imageCellHeight)
+            return CellSetings.imageCellHeight
         default:
-            return CGFloat(CellSetings.regularCellHeight)
+            return CellSetings.regularCellHeight
         }
     }
 }

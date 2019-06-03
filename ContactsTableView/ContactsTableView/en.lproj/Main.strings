@@ -66,10 +66,10 @@
 "VQP-wl-p89.text" = "Last name";
 
 /* Class = "UILabel"; text = "First name: *"; ObjectID = "XHn-Yp-lLd"; */
-"XHn-Yp-lLd.text" = "First name: *";
+"XHn-Yp-lLd.text" = "First name:";
 
 /* Class = "UILabel"; text = "Phone: *"; ObjectID = "aV8-TT-68W"; */
-"aV8-TT-68W.text" = "Phone: *";
+"aV8-TT-68W.text" = "Phone:";
 
 /* Class = "UILabel"; text = "Notes"; ObjectID = "aih-Yj-YCQ"; */
 "aih-Yj-YCQ.text" = "Notes";

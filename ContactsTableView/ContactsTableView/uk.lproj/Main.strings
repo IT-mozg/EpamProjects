@@ -54,22 +54,22 @@
 "NVu-zp-aym.text" = "День народження:";
 
 /* Class = "UITextField"; placeholder = "First name"; ObjectID = "PhI-L7-53F"; */
-"PhI-L7-53F.placeholder" = "Імя";
+"PhI-L7-53F.placeholder" = "Ім'я";
 
 /* Class = "UIBarButtonItem"; title = "Edit"; ObjectID = "S8g-1o-oYb"; */
 "S8g-1o-oYb.title" = "Редагувати";
 
 /* Class = "UINavigationItem"; title = "Add new"; ObjectID = "TQJ-d6-7xd"; */
-"TQJ-d6-7xd.title" = "Дадати новий";
+"TQJ-d6-7xd.title" = "Додати новий";
 
 /* Class = "UILabel"; text = "Last name"; ObjectID = "VQP-wl-p89"; */
 "VQP-wl-p89.text" = "Прізвище";
 
 /* Class = "UILabel"; text = "First name: *"; ObjectID = "XHn-Yp-lLd"; */
-"XHn-Yp-lLd.text" = "Імя: *";
+"XHn-Yp-lLd.text" = "Імя:";
 
 /* Class = "UILabel"; text = "Phone: *"; ObjectID = "aV8-TT-68W"; */
-"aV8-TT-68W.text" = "Телефон: *";
+"aV8-TT-68W.text" = "Телефон:";
 
 /* Class = "UILabel"; text = "Notes"; ObjectID = "aih-Yj-YCQ"; */
 "aih-Yj-YCQ.text" = "Замітки";
@@ -81,7 +81,7 @@
 "duP-BA-7eG.title" = "Контакти";
 
 /* Class = "UILabel"; text = "First name"; ObjectID = "f5r-H3-ZSw"; */
-"f5r-H3-ZSw.text" = "Імя";
+"f5r-H3-ZSw.text" = "Ім'я";
 
 /* Class = "UIBarButtonItem"; title = "Back"; ObjectID = "ktc-mM-W4x"; */
 "ktc-mM-W4x.title" = "Назад";

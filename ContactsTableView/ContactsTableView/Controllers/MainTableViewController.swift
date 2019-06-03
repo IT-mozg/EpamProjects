@@ -262,7 +262,7 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(CellSetings.mainCellHeight)
+        return CellSetings.mainCellHeight
     }
 }
 

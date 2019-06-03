@@ -6,12 +6,12 @@
 //  Copyright © 2019 Vlad Tkachuk. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class CellSetings{
-    static let imageCellHeight: Int = 200
-    static let regularCellHeight: Int = 45
-    static let mainCellHeight: Int = 85
+    static let imageCellHeight: CGFloat = 200
+    static let regularCellHeight: CGFloat = 45
+    static let mainCellHeight: CGFloat = 85
     static let resultCellId = "resultCell"
     static let mainCellId = "MainCell"
     static let imageCellId = "imageCell"

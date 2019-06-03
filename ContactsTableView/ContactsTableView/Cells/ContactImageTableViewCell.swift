@@ -25,16 +25,12 @@ class ContactImageTableViewCell: UITableViewCell {
         }
         if let dataType = presentation.dataType{
             switch dataType{
-                case .text(_):
-                    break
-                case .image(let image):
-                    contactImage.image = image ?? ContactDefault.defaultCameraImage
-                    contactImage.contentMode = (image == nil) ? .scaleAspectFit : .scaleAspectFill
-                    contactImage.clipsToBounds = true
-                case .date(_):
-                    break
-                case .height(_):
-                    break
+            case .image(let image):
+                contactImage.image = image ?? ContactDefault.defaultCameraImage
+                contactImage.contentMode = (image == nil) ? .scaleAspectFit : .scaleAspectFill
+                contactImage.clipsToBounds = true
+            default:
+                break
             }
         }
     }
