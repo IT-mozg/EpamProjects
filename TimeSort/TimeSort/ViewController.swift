@@ -81,7 +81,7 @@ private extension ViewController{
                     operationQueue.addOperation {
                     result = algorithms[alg].sortType.getAverageTimeOfSort(array: algorithms[alg].arraysToSort[array].resultArray, times: 50)
                     self.dataArrayCells[alg][array] = "\(algorithms[alg].arraysToSort[array].arrayType) - \(algorithms[alg].arraysToSort[array].count.rawValue): \(NSString(format: "%.5f",  -result))"
-                    DispatchQueue.main.sync {
+                    DispatchQueue.main.async {
                         self.progressCounter += self.counter
                         self.tableView.reloadRows(at: [IndexPath(item: array, section: alg)], with: .right)
                     }
