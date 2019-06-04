@@ -74,17 +74,13 @@ private extension ViewController{
     }
 
     func sortAllArrays(){
-        var result = 0.0
         let algorithms = self.algorithms
-        for alg in 0..<algorithms.count{
-            for array in 0..<algorithms[alg].arraysToSort.count{
-                operationQueue.addOperation {
-                    result = algorithms[alg].sortType.getAverageTimeOfSort(array: algorithms[alg].arraysToSort[array].resultArray, times: 50)
-                    self.dataArrayCells[alg][array] = "\(algorithms[alg].arraysToSort[array].arrayType) - \(algorithms[alg].arraysToSort[array].count.rawValue): \(NSString(format: "%.5f",  -result))"
-                    DispatchQueue.main.async {
-                        self.progressCounter += self.counter
-                        self.tableView.reloadRows(at: [IndexPath(item: array, section: alg)], with: .right)
-                    }
+        for section in 0..<algorithms.count{
+            algorithms[section].getSortStringResult(queue: operationQueue) { (item, result) in
+                self.dataArrayCells[section][item] = result
+                DispatchQueue.main.async {
+                    self.progressCounter += self.counter
+                    self.tableView.reloadRows(at: [IndexPath(item: item, section: section)], with: .right)
                 }
             }
         }
