@@ -2,7 +2,7 @@
 //  ImageChanges.swift
 //  ContactsTableView
 //
-//  Created by Vlad on 5/29/19.
+//  Created by Vlad on 5/24/19.
 //  Copyright © 2019 Vlad Tkachuk. All rights reserved.
 //
 
