@@ -1,22 +1,27 @@
 
-Task3/Task3.xcodeproj/project.xcworkspace/
-Task3/Task3.xcodeproj/xcuserdata.*
-Sorts/Sorts.xcodeproj/project.xcworkspace/
-Sorts/Sorts.xcodeproj/xcuserdata.*
+Task3/Task3.xcodeproj/project.xcworkspace/*
+Task3/Task3.xcodeproj/xcuserdata/*
+Sorts/Sorts.xcodeproj/project.xcworkspace/*
+Sorts/Sorts.xcodeproj/xcuserdata/*
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
-Calcucator/Calcucator.xcodeproj/project.xcworkspace/
-Calcucator/Calcucator.xcodeproj/xcuserdata.*
+Calcucator/Calcucator.xcodeproj/project.xcworkspace/*
+Calcucator/Calcucator.xcodeproj/xcuserdata/*
 
-TableViewSortsTask1/TableViewSortsTask1.xcodeproj/project.xcworkspace/
-TableViewSortsTask1/TableViewSortsTask1.xcodeproj/xcuserdata.*
+TableViewSortsTask1/TableViewSortsTask1.xcodeproj/project.xcworkspace/*
+TableViewSortsTask1/TableViewSortsTask1.xcodeproj/xcuserdata/*
 
 ContactsTableView/ContactsTableView.xcodeproj/project.xcworkspace/*
 ContactsTableView/ContactsTableView.xcodeproj/xcuserdata/*
 
 TimeSort/TimeSort.xcodeproj/project.xcworkspace/*
 TimeSort/TimeSort.xcodeproj/xcuserdata/*
+
+WeatherApp/WeatherApp.xcodeproj/project.xcworkspace/*
+WeatherApp/WeatherApp.xcodeproj/xcuserdata/*
+WeatherApp/Cartfile.resolved
+WeatherApp/Carthage/*

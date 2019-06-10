@@ -2,7 +2,7 @@
 //  DataManager.swift
 //  ContactsTableView
 //
-//  Created by Vlad on 5/27/19.
+//  Created by Vlad on 5/23/19.
 //  Copyright © 2019 Vlad Tkachuk. All rights reserved.
 //
 

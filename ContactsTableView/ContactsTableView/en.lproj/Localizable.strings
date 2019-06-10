@@ -1,0 +1,50 @@
+/* 
+  Localizable.strings
+  ContactsTableView
+
+  Created by Vlad on 5/20/19.
+  Copyright © 2019 Vlad Tkachuk. All rights reserved.
+*/
+
+"EDIT_BUTTON_TEXT" = "Edit";
+"DONE_BUTTON_TEXT" = "Done";
+"DELETE_BUTTON_TEXT" = "Delete";
+"SAVE_BUTTON_TEXT" = "Save";
+"ADD_BUTTON_TEXT" = "Add";
+
+"CANCEL_ACTION_BUTTON_TEXT" = "Cancel";
+"REMOVE_ACTION_BUTTON_TEXT" = "Remove";
+"CHANGE_ACTION_BUTTON_TEXT" = "Change";
+"CAMERA_ACTION_BUTTON_TEXT" = "Camera";
+"LIBRARY_ACTION_BUTTON_TEXT" = "Library";
+"YES_ACTION_BUTTON_TEXT" = "Yes";
+"NO_ACTION_BUTTON_TEXT" = "No";
+"DELETE_ACTION_MESSAGE" = "Do you realy wanna delete current contact?";
+
+"NO_LABLE_TEXT" = "No";
+
+"EDIT_ACTION_TITLE" = "Edit image";
+"DELETE_ACTION_TITLE" = "Delete";
+"SOURCE_ACTION_TITLE" = "Photo source";
+
+"EDITING_NAVIGATION_TITLE" = "Editing";
+"SEARCH_PLACEHOLDER_TEXT" = "Search contact";
+
+"FIRSTNAME_TITLE" = "First name:";
+"LASTNAME_TITLE" = "Last name:";
+"EMAIL_TITLE" = "Email:";
+"PHONE_TITLE" = "Phone:";
+"BIRTHDAY_TITLE" = "Birthday:";
+"HEIGHT_TITLE" = "Height:";
+"EXIST_DRIVER_LICENSE_TITLE" = "Exist driver license:";
+"DRIVER_LICENSE_TITLE" = "Driver license:";
+"NOTES_TITLE" = "Notes:";
+
+"FIRSTNAME_PLACEHOLDER" = "First name";
+"LASTNAME_PLACEHOLDER" = "Last name";
+"EMAIL_PLACEHOLDER" = "Email";
+"PHONE_PLACEHOLDER" = "+380ХХХХХХХХХ";
+"BIRTHDAY_PLACEHOLDER" = "Birthday";
+"HEIGHT_PLACEHOLDER" = "Height";
+"DRIVER_LICENSE_PLACEHOLDER" = "Driver license";
+"NOTES_PLACEHOLDER" = "Notes";
