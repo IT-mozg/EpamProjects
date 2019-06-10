@@ -22,6 +22,7 @@ class ViewController: UIViewController {
                 }
             }
         }
+        
     }
     private var counter: Float{
         let algCount = algorithms.count
