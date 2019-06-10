@@ -7,16 +7,15 @@
 //
 
 import UIKit
-let mainCellID = "MainCell"
 
 class MainTableViewController: UITableViewController {
 
     //MARK: Properties
     private var contactDictionary = [String: [Contact]](){
         didSet{
-            updateUserDefaults()
+            DataManager.updateUserDefaults(with: contactDictionary)
+            hideShowSearchBar()
             checkNumberOfRows()
-            checkNumberOfContacts()
         }
     }
     private var contactSectionTitles = [String]()
@@ -49,15 +48,16 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        unarchiveContacts()
+        contactDictionary = DataManager.unarchiveContacts()
+        reloadSectionTitles()
         checkNumberOfRows()
-        checkNumberOfContacts()
+        hideShowSearchBar()
     }
     
     // MARK: IBActions
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
         self.tableView.isEditing = !self.tableView.isEditing
-        sender.title = (self.tableView.isEditing) ? "Done" : "Edit"
+        sender.title = (self.tableView.isEditing) ? NSLocalizedString("DONE_BUTTON_TEXT", comment: "Done") : NSLocalizedString("EDIT_BUTTON_TEXT", comment: "Edit")
     }
     
     @IBAction func addNewButtonPressed(_ sender: Any) {
@@ -65,22 +65,11 @@ class MainTableViewController: UITableViewController {
     }
 }
 
-    //MARK: private help methods
+//MARK: private help methods
 private extension MainTableViewController{
-    func checkNumberOfContacts(){
-        contactSearchController.searchBar.isHidden = contactDictionary.values.flatMap({$0}).count <= ContactDefault.contactSearchBarShowAt
-    }
     
-    func unarchiveContacts(){
-        let userDefaults = UserDefaults.standard
-        do{
-            if let decoded = userDefaults.data(forKey: "contacts"){
-                contactDictionary = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(decoded) as! [String: [Contact]]
-                reloadSectionTitles()
-            }
-        }catch {
-            print(error)
-        }
+    func hideShowSearchBar(){
+        contactSearchController.searchBar.isHidden = contactDictionary.values.flatMap({$0}).count <= ContactDefault.contactSearchBarShowAt
     }
     
     func setupUI(){
@@ -91,7 +80,7 @@ private extension MainTableViewController{
         contactSearchController = UISearchController(searchResultsController: searchResultController)
         contactSearchController.searchResultsUpdater = self
         contactSearchController.obscuresBackgroundDuringPresentation = false
-        contactSearchController.searchBar.placeholder = "Search contact"
+        contactSearchController.searchBar.placeholder = NSLocalizedString("SEARCH_PLACEHOLDER_TEXT", comment: "Search contact")
         contactSearchController.searchBar.delegate = self
         navigationItem.searchController = contactSearchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -103,17 +92,6 @@ private extension MainTableViewController{
         contactSectionTitles = contactSectionTitles.sorted(by: <)
     }
     
-    func updateUserDefaults(){
-        let userDefaults = UserDefaults.standard
-        do{
-            let encodedData: Data = try NSKeyedArchiver.archivedData(withRootObject: contactDictionary, requiringSecureCoding: false)
-            userDefaults.set(encodedData, forKey: "contacts")
-            userDefaults.synchronize()
-        }catch{
-            print(error)
-        }
-    }
-
     @objc func addButtonItemPressed(){
         if let navigationController = self.storyboard?.instantiateViewController(withIdentifier: "AddNewContactNavigationController") as? UINavigationController{
             if let viewController = navigationController.viewControllers.first as? NewContactViewController{
@@ -127,7 +105,7 @@ private extension MainTableViewController{
         backgroundView.isHidden = !contactDictionary.isEmpty
         if !contactDictionary.isEmpty{
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonItemPressed))
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("EDIT_BUTTON_TEXT", comment: "Edit"), style: .plain, target: self, action: #selector(editButtonPressed))
         }
         else{
             navigationItem.rightBarButtonItem = nil
@@ -212,28 +190,30 @@ private extension MainTableViewController{
      func deleteIfNotFiltering(indexPath: IndexPath){
         let contactKey = contactSectionTitles[indexPath.section]
         if var contactValues = contactDictionary[contactKey]{
-            let id = contactValues[indexPath.row].contactId
-            guard let index = contactValues.firstIndex(where: { (contact) in return contact.contactId == id})else{
+            let contactToDelete = contactValues[indexPath.row]
+            guard let index = contactValues.firstIndex(where: { (contact) in return contact.contactId == contactToDelete.contactId})else{
                 return
             }
             guard let section = contactSectionTitles.firstIndex(of: contactKey)else {return}
-            contactValues.removeAll{$0.contactId == id}
+            contactValues.removeAll{$0.contactId == contactToDelete.contactId}
             let isLast = checkIsEmptyArray(contactKey: contactKey, contactValues: contactValues)
+            contactToDelete.deleteImage()
             deleteTableRows(index, section, isLast)
         }
     }
     
      func deleteIfFiltering(indexPath: IndexPath) {
-        let id = filteredContacts[indexPath.row].contactId
-        guard let index = filteredContacts.firstIndex(where: { $0.contactId == id }) else { return }
+        let contactToDelete = filteredContacts[indexPath.row]
+        guard let index = filteredContacts.firstIndex(where: { $0.contactId == contactToDelete.contactId }) else { return }
         let contactKey = contactSectionTitles[indexPath.section]
-        filteredContacts.removeAll { $0.contactId == id }
+        filteredContacts.removeAll { $0.contactId == contactToDelete.contactId }
         var isLast = false
         guard let section = contactSectionTitles.firstIndex(of: contactKey) else { return }
         if var contactValues = contactDictionary[contactKey]{
-            contactValues.removeAll{$0.contactId == id}
+            contactValues.removeAll{$0.contactId == contactToDelete.contactId}
             isLast = checkIsEmptyArray(contactKey: contactKey, contactValues: contactValues)
         }
+        contactToDelete.deleteImage()
         deleteTableRows(index, section, isLast)
     }
     
@@ -266,7 +246,7 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: mainCellID, for: indexPath) as! MainContactTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.mainCellId, for: indexPath) as! MainContactTableViewCell
         let contactKey = contactSectionTitles[indexPath.section]
         if let contactValues = contactDictionary[contactKey]{
             cell.updateWith(model: contactValues[indexPath.row])
@@ -282,7 +262,7 @@ extension MainTableViewController{
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
+        return CellSetings.mainCellHeight
     }
 }
 
@@ -358,14 +338,14 @@ extension MainTableViewController: UISearchBarDelegate{
 extension MainTableViewController: ContactsSearchResultDelegate{
     func didSelectRow(_ tableView: UITableView, _ indexPath: IndexPath) {
         goToContactInfoController(indexPath: indexPath)
-        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func editActionsForRow(_ tableView: UITableView, _ indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .default, title: "Delete") { (action, indexPath) in
+        let delete = UITableViewRowAction(style: .default, title: NSLocalizedString("DELETE_BUTTON_TEXT", comment: "Delete")) { (action, indexPath) in
             self.deleteContact(at: indexPath)
         }
-        let edit = UITableViewRowAction(style: .default, title: "Edit") { (action, indexPath) in
+        let edit = UITableViewRowAction(style: .default, title: NSLocalizedString("EDIT_BUTTON_TEXT", comment: "Edit")) { (action, indexPath) in
             self.goToNewContactController(indexPath: indexPath)
         }
         delete.backgroundColor = ContactDefault.deleteColor

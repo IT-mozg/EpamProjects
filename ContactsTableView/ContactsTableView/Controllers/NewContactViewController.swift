@@ -9,8 +9,11 @@
 import UIKit
 
 typealias UpdateClosure = (_ contact: Contact) -> ()
-class NewContactViewController: UIViewController {
+
+class NewContactViewController: UITableViewController {
     weak var delegate: NewContactViewControllerDelegate?
+    
+    var cells = [Presentation]()
     
     var contactBeforeUpdate: Contact!
     private var contactAfterUpdate: Contact!
@@ -18,17 +21,19 @@ class NewContactViewController: UIViewController {
     
     var update: UpdateClosure?
     var delete: (()->())?
+    private var indexPathForImageCell: IndexPath!
     
-    @IBOutlet weak var photoContactImageView: UIImageView!
-    @IBOutlet weak var firstNameTextField: UITextField!
-    @IBOutlet weak var lastNameTextField: UITextField!
-    @IBOutlet weak var phoneTextField: UITextField!
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var deleteButton: UIButton!
+    private var isValidFirstName: (()->(Bool))!
+    private var isValidLastName: (()->(Bool))!
+    private var isValidPhoneNumber: (()->(Bool))!
+    private var isValidEmail: (()->(Bool))!
+    
+    @IBOutlet weak var deleteButton: UIBarButtonItem!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-         deleteButton.isEnabled = !(contactBeforeUpdate == nil)
+        deleteButton.isEnabled = !(contactBeforeUpdate == nil)
+
     }
     
     override func viewDidLoad() {
@@ -36,14 +41,14 @@ class NewContactViewController: UIViewController {
         if let contact = contactBeforeUpdate{
             contactAfterUpdate = (contact.copy() as! Contact)
         }else{
-            contactAfterUpdate = Contact(firstName: nil, lastName: nil, email: nil, phoneNumber: nil)
+            contactAfterUpdate = Contact(firstName: nil, lastName: nil, email: nil, phoneNumber: nil, birthday: nil, height: nil, notes: nil, driverLicense: nil)
         }
+        setupCells()
         setupUI()
-
+        setupValidationConditions()
     }
     
     //MARK: IBActions
-
     @IBAction func cancelButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
@@ -61,56 +66,22 @@ class NewContactViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func deleteButtonPressed(_ sender: UIButton) {
+    @IBAction func deleteButtonPressed(_ sender: Any) {
          ContactActionHelper.delete(self.delete, viewController: self)
-    }
-    
-    @IBAction func pickImageButtonPressed(_ sender: UIButton) {
-        if contactAfterUpdate.imagePhoto == nil{
-            changeImage()
-        }
-        else{
-            let alertController = UIAlertController(title: "Edit image", message: nil, preferredStyle: .actionSheet)
-            let removeAction = UIAlertAction(title: "Remove", style: .default) { (action) in
-                self.assingImage(nil)
-            }
-            let changeAction = UIAlertAction(title: "Change", style: .default) { (action) in
-                alertController.dismiss(animated: true, completion: nil)
-                self.changeImage()
-            }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            alertController.addAction(removeAction)
-            alertController.addAction(changeAction)
-            alertController.addAction(cancelAction)
-            present(alertController, animated: true)
-        }
-    }
-    
-    @IBAction func validateTextFields(){
-        checkValidation()
     }
 }
 
-// MARK: private funcs
+//MARK: Private funcs
 private extension NewContactViewController{
-     func checkValidation(){
-        var isValid = isValidFirstNameTextField()
-        if isValid{
-            isValid = isValidLastNameTextField()
-            if isValid{
-                isValid = isValidEmailTextField()
-                if isValid{
-                    isValid = isValidPhoneTextField()
-                    if isValid{
-                        isValid = !isAllTextFieldsEmpty()
-                    }
-                }
-            }
+    func checkValidation(){
+        if checkContactChanges() && isValidFirstName() && isValidPhoneNumber() && isValidEmail() && isValidLastName() && !contactAfterUpdate.isAllFieldsEmpty{
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        }else{
+            navigationItem.rightBarButtonItem?.isEnabled = false
         }
-        navigationItem.rightBarButtonItem?.isEnabled = isValid && checkContactChanges()
     }
     
-     func checkContactChanges() -> Bool{
+    func checkContactChanges() -> Bool{
         var isImageChanged = false
         switch self.imageChanges {
         case .noChanges:
@@ -121,49 +92,163 @@ private extension NewContactViewController{
         return isImageChanged || !contactAfterUpdate.isEqual(contactBeforeUpdate)
     }
     
-     func setupUI(){
-        if let contact = contactAfterUpdate{
-            navigationItem.title = "Editing"
-            navigationItem.rightBarButtonItem?.title = "Save"
-            firstNameTextField.text = contact.firstName
-            lastNameTextField.text = contact.lastName
-            phoneTextField.text = contact.phoneNumber
-            emailTextField.text = contact.email
-            photoContactImageView.image = contact.imagePhoto ?? ContactDefault.defaultCameraImage
-        }else{
-            navigationItem.rightBarButtonItem?.title = "Add"
+    func setupValidationConditions(){
+        isValidFirstName = {
+            return self.contactAfterUpdate.presentationForFirstName.validation!()
         }
-        navigationItem.rightBarButtonItem?.isEnabled = false
-    }
-     func changeImage(){
-        #if targetEnvironment(simulator)
-        self.chooseImagePickerAction(source: .photoLibrary)
-        #else
-        let alertController = UIAlertController(title: "Photo source", message: nil, preferredStyle: .actionSheet)
-        let cameraAction = UIAlertAction(title: "Camera", style: .default, handler: { (action) in
-            self.chooseImagePickerAction(source: .camera)
-        })
-        let libraryAction = UIAlertAction(title: "Library", style: .default, handler: { (action) in
-            self.chooseImagePickerAction(source: .photoLibrary)
-        })
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cameraAction)
-        alertController.addAction(libraryAction)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true, completion: nil)
-        #endif
+        isValidLastName = {
+            return self.contactAfterUpdate.presentationForLastName.validation!()
+        }
+        isValidEmail = {
+            return self.contactAfterUpdate.presentationForEmail.validation!()
+        }
+        isValidPhoneNumber = {
+            return self.contactAfterUpdate.presentationForPhone.validation!()
+        }
     }
     
-     func assingImage(_ image: UIImage?){
-        contactAfterUpdate.imagePhoto = image
-        imageChanges = .changed
-        photoContactImageView.image = image ?? ContactDefault.defaultCameraImage
-        photoContactImageView.contentMode = .scaleAspectFill
-        photoContactImageView.clipsToBounds = true
+    func setupCells(){
+        cells.append(contactAfterUpdate.presentationForImage)
+        cells.append(contactAfterUpdate.presentationForFirstName)
+        cells.append(contactAfterUpdate.presentationForLastName)
+        cells.append(contactAfterUpdate.presentationForPhone)
+        cells.append(contactAfterUpdate.presentationForEmail)
+        cells.append(contactAfterUpdate.presentationForBirthday)
+        cells.append(contactAfterUpdate.presentationForHeight)
+        cells.append(contactAfterUpdate.presentationForDriverLicense)
+        if contactAfterUpdate.driverLicense != nil && !contactAfterUpdate.driverLicense!.isEmpty{
+            cells.append(contactAfterUpdate.presentationForDriverLicenseText)
+        }
+        cells.append(contactAfterUpdate.presentationForNote)
+    }
+    
+    func setupUI(){
+        if contactBeforeUpdate != nil{
+            navigationItem.title = NSLocalizedString("EDITING_NAVIGATION_TITLE", comment: "Editing")
+            navigationItem.rightBarButtonItem?.title = NSLocalizedString("SAVE_BUTTON_TEXT", comment: "Save")
+        }else{
+            navigationItem.rightBarButtonItem?.title = NSLocalizedString("ADD_BUTTON_TEXT", comment: "Add")
+        }
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        tableView.tableFooterView = UIView(frame: .zero)
+    }
+    
+    func insertCell(at indexPath: IndexPath, with cellPresent: Presentation){
+        cells.insert(cellPresent, at: indexPath.row)
+        tableView.beginUpdates()
+        tableView.insertRows(at: [indexPath], with: .bottom)
+        tableView.endUpdates()
+    }
+    
+    func removeCell(at indexPath: IndexPath){
+        cells.remove(at: indexPath.row)
+        tableView.beginUpdates()
+        tableView.deleteRows(at: [indexPath], with: .top)
+        tableView.endUpdates()
+        
+    }
+    
+    func showNoteViewController(indexPath: IndexPath){
+        if let notesViewController = storyboard?.instantiateViewController(withIdentifier: "NotesViewController") as? NotesViewController{
+            notesViewController.notes = contactAfterUpdate.notes ?? ""
+            notesViewController.returnBackNotes = {[unowned self] text in
+                self.contactAfterUpdate.notes = text
+                self.cells[indexPath.row] = self.contactAfterUpdate.presentationForNote
+                self.tableView.reloadRows(at: [indexPath], with: .right)
+            }
+            navigationController?.pushViewController(notesViewController, animated: true)
+        }
+    }
+    
+    //MARK: Update cells
+    func updateTextFields(text: Any?, cell: ContactFieldTableViewCell){
+        guard let indexPath = tableView.indexPath(for: cell) else{return}
+        contactAfterUpdate.setValue(text, forKey: cell.presentation.cellType.rawValue)
+        cells[indexPath.row] = cell.presentation
+        _ = Validation.isValidTextField(textField: cell.contactPropertyTextField, { (text) -> (Bool) in
+            guard let validation = cell.presentation.validation else{
+                return true
+            }
+            return validation()
+        })
         checkValidation()
     }
     
-     func chooseImagePickerAction(source: UIImagePickerController.SourceType){
+//    func updateHeightField(height: Int, cell: ContactFieldTableViewCell){
+//        contactAfterUpdate.setValue(height, forKey: cell.presentation.cellType.rawValue)
+//    }
+    
+    func updateDriverLicenseSwitch(isOn: Bool, cell: ContactSwitchTableViewCell){
+        guard let indexPath = tableView.indexPath(for: cell) else{return}
+        let newIndexPath = IndexPath(item: indexPath.row+1, section: indexPath.section)
+        if isOn{
+            insertCell(at: newIndexPath, with: contactAfterUpdate.presentationForDriverLicenseText)
+        }else{
+            removeCell(at: newIndexPath)
+            contactAfterUpdate.driverLicense = nil
+        }
+    }
+}
+
+// MARK: Image picker
+extension NewContactViewController: UIImagePickerControllerDelegate{
+    
+    private func pickImageButtonPressed() {
+        if contactAfterUpdate.imagePhoto == nil{
+            changeImage()
+        }
+        else{
+            let alertController = UIAlertController(title: NSLocalizedString("EDIT_ACTION_TITLE", comment: "Edit image"), message: nil, preferredStyle: .actionSheet)
+            let removeAction = UIAlertAction(title: NSLocalizedString("REMOVE_ACTION_BUTTON_TEXT", comment: "Remove"), style: .default) { (action) in
+                self.assignImage(nil)
+            }
+            let changeAction = UIAlertAction(title: NSLocalizedString("CHANGE_ACTION_BUTTON_TEXT", comment: "Change"), style: .default) { (action) in
+                alertController.dismiss(animated: true, completion: nil)
+                self.changeImage()
+            }
+            let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL_ACTION_BUTTON_TEXT", comment: "Cancel"), style: .cancel, handler: nil)
+            alertController.addAction(removeAction)
+            alertController.addAction(changeAction)
+            alertController.addAction(cancelAction)
+            present(alertController, animated: true)
+        }
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.editedImage] as? UIImage{
+            assignImage(image)
+        }
+        dismiss(animated: true, completion: nil)
+    }
+
+     func changeImage(){
+        #if targetEnvironment(simulator)
+            self.chooseImagePickerAction(source: .photoLibrary)
+        #else
+            let alertController = UIAlertController(title: NSLocalizedString("SOURCE_ACTION_TITLE", comment: "Photo source"), message: nil, preferredStyle: .actionSheet)
+            let cameraAction = UIAlertAction(title: NSLocalizedString("CAMERA_ACTION_BUTTON_TEXT", comment: "Camera"), style: .default, handler: { (action) in
+                self.chooseImagePickerAction(source: .camera)
+            })
+            let libraryAction = UIAlertAction(title: NSLocalizedString("LIBRARY_ACTION_BUTTON_TEXT", comment: "Library"), style: .default, handler: { (action) in
+                self.chooseImagePickerAction(source: .photoLibrary)
+            })
+            let cancelAction = UIAlertAction(title: NSLocalizedString("CANCEL_ACTION_BUTTON_TEXT", comment: "Cancel"), style: .cancel, handler: nil)
+            alertController.addAction(cameraAction)
+            alertController.addAction(libraryAction)
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
+        #endif
+    }
+    
+    private func assignImage(_ image: UIImage?){
+        contactAfterUpdate.imagePhoto = image
+        imageChanges = .changed
+        cells[indexPathForImageCell.row] = contactAfterUpdate.presentationForImage
+        tableView.reloadRows(at: [indexPathForImageCell], with: .none)
+        checkValidation()
+    }
+    
+    func chooseImagePickerAction(source: UIImagePickerController.SourceType){
         guard UIImagePickerController.isSourceTypeAvailable(source) else {
             return
         }
@@ -173,89 +258,138 @@ private extension NewContactViewController{
         imagePicker.sourceType = source
         self.present(imagePicker, animated: true, completion: nil)
     }
-    // MARK: Validation
-    
-     func isValidTextField(textField: UITextField, _ validate: (String)->(Bool))->Bool{
-        if let text = textField.text{
-            if validate(text){
-                navigationItem.rightBarButtonItem?.isEnabled = true
-                textField.backgroundColor = ContactDefault.validColor
-                return true
-            }
-        }
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        textField.backgroundColor = ContactDefault.invalidColor
-        return false
-    }
-    
-     func isValidFirstNameTextField() -> Bool{
-        return isValidTextField(textField: firstNameTextField){ (text) -> (Bool) in
-            self.contactAfterUpdate.firstName = text
-            if text.isEmpty {
-                return true
-            }
-            return Validation.isValidName(text)
-        }
-    }
-    
-     func isValidLastNameTextField() -> Bool{
-        return isValidTextField(textField: lastNameTextField){ (text) -> (Bool) in
-            self.contactAfterUpdate.lastName = text
-            if text.isEmpty {
-                return true
-            }
-            return Validation.isValidName(text)
-        }
-    }
-     func isValidEmailTextField() -> Bool{
-        return isValidTextField(textField: emailTextField){ (text) -> (Bool) in
-            self.contactAfterUpdate.email = text
-            if text.isEmpty {
-                return true
-            }
-            return Validation.isValidEmail(text)
-        }
-    }
-    
-     func isValidPhoneTextField() -> Bool{
-        return isValidTextField(textField: phoneTextField){ (text) -> (Bool) in
-            self.contactAfterUpdate.phoneNumber = text
-            if text.isEmpty {
-                return true
-            }
-            return Validation.isValidPhoneNumber(text)
-        }
-    }
-    
-     func isAllTextFieldsEmpty() -> Bool{
-        return firstNameTextField.text!.isEmpty && lastNameTextField.text!.isEmpty && phoneTextField.text!.isEmpty && emailTextField.text!.isEmpty
-    }
-}
-// MARK: Image picker
-extension NewContactViewController: UIImagePickerControllerDelegate{
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[.editedImage] as? UIImage{
-            assingImage(image)
-        }
-        dismiss(animated: true, completion: nil)
-    }
 }
 
 extension NewContactViewController: UINavigationControllerDelegate{
     
 }
 
-//MARK: TextFieldDelegate
-extension NewContactViewController: UITextFieldDelegate{
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+//MARK: TableViewControllerDelegate
+extension NewContactViewController{
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch cells[indexPath.row].cellType {
+        case .imagePhoto:
+            pickImageButtonPressed()
+            indexPathForImageCell = indexPath
+        case .notes:
+            showNoteViewController(indexPath: indexPath)
+        default:
+            break
+        }
+        view.endEditing(true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
+}
 
-   
+//MARK: Contact extension
+private extension Contact{
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+    var presentationForImage: Presentation{
+        return Presentation(keyboardType: nil, placeholder: nil, title: nil, dataType: .image(imagePhoto), cellType: .imagePhoto, validation: nil)
+    }
+    
+    var presentationForFirstName: Presentation{
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("FIRSTNAME_PLACEHOLDER", comment: ""), title: NSLocalizedString("FIRSTNAME_TITLE", comment: ""), dataType: .text(firstName), cellType: .firstName){
+            if self.firstName == nil || self.firstName!.isEmpty {
+                return true
+            }
+            return Validation.isValidName(self.firstName!)
+        }
+    }
+    
+    var presentationForLastName: Presentation{
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("LASTNAME_PLACEHOLDER", comment: ""), title: NSLocalizedString("LASTNAME_TITLE", comment: ""), dataType: .text(lastName), cellType: .lastName){
+            if self.lastName == nil || self.lastName!.isEmpty {
+                return true
+            }
+            return Validation.isValidName(self.lastName!)
+        }
+    }
+    
+    var presentationForEmail: Presentation{
+        return Presentation(keyboardType: .emailAddress, placeholder: NSLocalizedString("EMAIL_PLACEHOLDER", comment: ""), title: NSLocalizedString("EMAIL_TITLE", comment: ""), dataType: .text(email), cellType: .email){
+            if self.email == nil || self.email!.isEmpty{
+                return true
+            }
+            return Validation.isValidEmail(self.email!)
+        }
+    }
+    
+    var presentationForPhone: Presentation{
+        return Presentation(keyboardType: .phonePad, placeholder: NSLocalizedString("PHONE_PLACEHOLDER", comment: ""), title: NSLocalizedString("PHONE_TITLE", comment: ""), dataType: .text(phoneNumber), cellType: .phoneNumber){
+            if self.phoneNumber == nil || self.phoneNumber!.isEmpty {
+                return true
+            }
+            return Validation.isValidPhoneNumber(self.phoneNumber!)
+        }
+    }
+    
+    var presentationForBirthday: Presentation{
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("BIRTHDAY_PLACEHOLDER", comment: ""), title: NSLocalizedString("BIRTHDAY_TITLE", comment: ""), dataType: .date(birthday), cellType: .birthday, validation: nil)
+    }
+    
+    var presentationForHeight: Presentation{
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("HEIGHT_PLACEHOLDER", comment: ""), title: NSLocalizedString("HEIGHT_TITLE", comment: ""), dataType: .height(height), cellType: .height, validation: nil)
+    }
+    
+    var presentationForDriverLicense: Presentation{
+         return Presentation(keyboardType: nil, placeholder: nil, title: NSLocalizedString("EXIST_DRIVER_LICENSE_TITLE", comment: ""), dataType: nil, cellType: .driverLicenseSwitch, validation: nil)
+    }
+    
+    var presentationForDriverLicenseText: Presentation{
+        return Presentation(keyboardType: .numberPad, placeholder: NSLocalizedString("DRIVER_LICENSE_PLACEHOLDER", comment: ""), title: NSLocalizedString("DRIVER_LICENSE_TITLE", comment: ""), dataType: .text(driverLicense), cellType: .driverLicense, validation: nil)
+    }
+    
+    var presentationForNote: Presentation{
+        return Presentation(keyboardType: .default, placeholder: NSLocalizedString("NOTES_PLACEHOLDER", comment: ""), title: NSLocalizedString("NOTES_TITLE", comment: ""), isEnabledTextField: false, dataType: .text(notes), cellType: .notes, validation: nil)
+    }
+    
+    var isAllFieldsEmpty: Bool{
+        return email?.isEmpty ?? true && firstName?.isEmpty ?? true && lastName?.isEmpty ?? true && phoneNumber?.isEmpty ?? true
+    }
+    
+}
+
+//MARK: TableViewDataSource
+extension NewContactViewController{
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return cells.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let present = cells[indexPath.row]
+        switch present.cellType {
+        case .imagePhoto:
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.imageCellId) as! ContactImageTableViewCell
+            cell.presentation = present
+            return cell
+        case .driverLicenseSwitch:
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.switchCellId) as! ContactSwitchTableViewCell
+            cell.presentation = present
+            cell.updateSwitchClosure = {[weak self] isOn, cell in
+                self?.updateDriverLicenseSwitch(isOn: isOn, cell: cell)
+            }
+            if contactAfterUpdate.driverLicense != nil && !contactAfterUpdate.driverLicense!.isEmpty{
+                cell.fieldSwitch.isOn = true
+            }
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellSetings.textFieldCellId) as! ContactFieldTableViewCell
+            cell.presentation = present
+            cell.updateClosure = {[weak self] text, cell in
+                self?.updateTextFields(text: text, cell: cell)
+            }
+            return cell
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let present = cells[indexPath.row]
+        switch present.cellType {
+        case .imagePhoto:
+            return CellSetings.imageCellHeight
+        default:
+            return CellSetings.regularCellHeight
+        }
     }
 }
